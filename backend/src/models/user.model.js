@@ -30,28 +30,48 @@ const User = sequelize.define(
     },
     about: {
       type: DataTypes.TEXT,
+      validate: {
+        len: {
+          args: [0, 150],
+          msg: "About section cannot exceed 150 characters.",
+        },
+      },
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        msg: "Phone number must be unique.",
+      },
       validate: {
-        len: [10, 11],
+        len: {
+          args: [10, 11],
+          msg: "Phone number must be 10 or 11 digits.",
+        },
       },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        msg: "Email is already in use.",
+      },
       validate: {
-        isEmail: true,
-        isLowercase: true,
+        isEmail: {
+          msg: "Please enter a valid email address.",
+        },
+        isLowercase: {
+          msg: "Email must be in lowercase.",
+        },
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [8, 16],
+        len: {
+          args: [8, 16],
+          msg: "Password must be between 8 and 16 characters",
+        },
       },
     },
   },
