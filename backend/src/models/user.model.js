@@ -20,20 +20,23 @@ const User = sequelize.define(
     },
     avatar: {
       type: DataTypes.STRING,
+      validate: {
+        isUrl: true,
+      },
     },
     dateOfBirth: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    About: {
+    about: {
       type: DataTypes.TEXT,
-      validate: {
-        max: 150,
-      },
     },
     phoneNumber: {
-      type: DataTypes.STRING(11),
+      type: DataTypes.STRING,
       unique: true,
+      validate: {
+        len: [10, 11],
+      },
     },
     email: {
       type: DataTypes.STRING,
