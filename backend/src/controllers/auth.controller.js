@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user.model");
 const generateJwtToken = require("../utils/generateJwtToken");
+const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, dateOfBirth, email, password } = req.body;
@@ -37,11 +38,26 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-const loginUser = async (req, res) => {
-  res.status(200).json({
-    message: "User logged in Successfully.",
-  });
-};
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const userExists = await User.findOne({ where: { email: email } });
+
+  if (userExists) {
+    if (await bcrypt.compare(password, userExists.password)) {
+      generateJwtToken(res, userExists.userId);
+
+      res.status(200).json({
+        userId: userExists.userId,
+        fullName: `${userExists.firstName} ${userExists.lastName}`,
+        email: userExists.email,
+      });
+    }
+  } else {
+    res.status(401);
+    throw new Error("Invalid Email or Password.");
+  }
+});
 
 const logoutUser = async (req, res) => {
   res.status(200).json({
