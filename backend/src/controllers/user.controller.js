@@ -20,11 +20,38 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserProfile = (req, res) => {
-  res.status(201).json({
-    message: "User profile updated Successfully.",
-  });
-};
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findByPk(req.user.userId);
+
+  if (user) {
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
+    user.about = req.body.about || user.about;
+    user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
+    user.email = req.body.email || user.email;
+    user.avatar = req.body.avatar || user.avatar;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(201).json({
+      userId: updatedUser.userId,
+      fullName: `${updatedUser.firstName} ${updatedUser.lastName}`,
+      dateOfBirth: updatedUser.dateOfBirth,
+      about: updatedUser.about,
+      phoneNumber: updatedUser.phoneNumber,
+      email: updatedUser.email,
+      avatar: updatedUser.avatar,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User Not Found.");
+  }
+});
 
 module.exports = {
   getUserProfile,
