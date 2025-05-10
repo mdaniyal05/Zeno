@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-app.use(notFound());
-app.use(errorHandler());
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app;
