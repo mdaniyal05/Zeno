@@ -39,9 +39,6 @@ const User = sequelize.define(
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      unique: {
-        msg: "Phone number must be unique.",
-      },
       validate: {
         len: {
           args: [10, 11],
