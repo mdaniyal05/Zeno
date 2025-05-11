@@ -4,7 +4,7 @@ const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, dateOfBirth, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const userExists = await User.findOne({ where: { email: email } });
 
@@ -16,7 +16,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const newUser = await User.create({
     firstName: firstName,
     lastName: lastName,
-    dateOfBirth: dateOfBirth,
     email: email,
     password: password,
   });
@@ -28,7 +27,6 @@ const registerUser = asyncHandler(async (req, res) => {
       userId: newUser.userId,
       firstName: newUser.firstName,
       lastName: newUser.lastName,
-      dateOfBirth: newUser.dateOfBirth,
       email: newUser.email,
       message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
     });

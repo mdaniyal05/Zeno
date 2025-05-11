@@ -27,7 +27,6 @@ const User = sequelize.define(
     },
     dateOfBirth: {
       type: DataTypes.DATE,
-      allowNull: false,
     },
     about: {
       type: DataTypes.TEXT,
