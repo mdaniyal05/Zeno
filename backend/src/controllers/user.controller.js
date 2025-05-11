@@ -2,7 +2,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/user.model");
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.user.userId);
+  const userId = req.params.id;
+  const user = await User.findByPk(userId);
 
   if (user) {
     res.status(200).json({
@@ -21,7 +22,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.user.userId);
+  const userId = req.params.id;
+  const user = await User.findByPk(userId);
 
   if (user) {
     user.firstName = req.body.firstName || user.firstName;
