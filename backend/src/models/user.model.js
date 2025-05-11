@@ -10,7 +10,6 @@ const User = sequelize.define(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      defaultValue: 1,
     },
     firstName: {
       type: DataTypes.STRING,
@@ -88,5 +87,7 @@ User.beforeCreate(async (user, options) => {
   const hashedPassword = await bcrypt.hash(user.password, salt);
   user.password = hashedPassword;
 });
+
+User.sync();
 
 module.exports = User;
