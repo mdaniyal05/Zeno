@@ -9,3 +9,7 @@ const Category = sequelize.define("Category", {
     primaryKey: true,
   },
 });
+
+Category.sync();
+
+module.exports = Category;

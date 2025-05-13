@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
+const Category = require("./category.model");
 
 const Transaction = sequelize.define("Transaction", {
   transactionId: {
@@ -14,6 +15,13 @@ const Transaction = sequelize.define("Transaction", {
     references: {
       model: User,
       key: "userId",
+    },
+  },
+  category: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Category,
+      key: "categoryId",
     },
   },
   transactionDate: {
@@ -35,5 +43,12 @@ const Transaction = sequelize.define("Transaction", {
   paymentMethod: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  notes: {
+    type: DataTypes.TEXT,
   },
 });
