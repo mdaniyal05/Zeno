@@ -16,4 +16,24 @@ const Transaction = sequelize.define("Transaction", {
       key: "userId",
     },
   },
+  transactionDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  transactionTime: {
+    type: DataTypes.TIME,
+    allowNull: false,
+  },
+  transactionAmount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  transactionType: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  paymentMethod: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
