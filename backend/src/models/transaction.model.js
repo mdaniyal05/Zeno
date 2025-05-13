@@ -48,7 +48,8 @@ const Transaction = sequelize.define(
   },
   {
     tableName: "Transactions",
-    createdAt: true,
+    timestamps: true,
+    updatedAt: false,
   }
 );
 
