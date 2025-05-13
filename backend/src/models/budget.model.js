@@ -49,6 +49,26 @@ const Budget = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    amountSpent: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    amountRemaining: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    percentUsed: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM("Active", "Completed", "Exceeded"),
+      allowNull: false,
+    },
+    notificationsEnabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     tableName: "Budgets",
