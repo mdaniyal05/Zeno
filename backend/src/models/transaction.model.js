@@ -52,3 +52,7 @@ const Transaction = sequelize.define("Transaction", {
     type: DataTypes.TEXT,
   },
 });
+
+Transaction.sync();
+
+module.exports = Transaction;
