@@ -29,8 +29,9 @@ const Category = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
       validate: {
-        len: [0, 150],
+        len: [1, 150],
       },
     },
     isActive: {
