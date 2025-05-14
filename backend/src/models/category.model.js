@@ -11,12 +11,13 @@ const Category = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    user: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: User,
         key: "userId",
       },
+      allowNull: false,
     },
     categoryName: {
       type: DataTypes.STRING,
@@ -28,14 +29,19 @@ const Category = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
+      validate: {
+        len: [0, 150],
+      },
     },
     isActive: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     monthlyLimit: {
-      type: DataTypes.DECIMAL,
-      allowNull: false,
+      type: DataTypes.DECIMAL(10, 2),
+      validate: {
+        min: 0,
+      },
     },
   },
   {
@@ -43,5 +49,7 @@ const Category = sequelize.define(
     timestamps: true,
   }
 );
+
+Category.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = Category;
