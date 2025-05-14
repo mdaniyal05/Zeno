@@ -12,35 +12,43 @@ const Transaction = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    user: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: User,
         key: "userId",
       },
+      allowNull: false,
     },
-    category: {
+    categoryId: {
       type: DataTypes.INTEGER,
       references: {
         model: Category,
         key: "categoryId",
       },
+      allowNull: false,
     },
     transactionAmount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
     transactionType: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("Income", "Expense"),
       allowNull: false,
     },
     paymentMethod: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isIn: [["Cash", "Card", "Bank", "Online", "Other"]],
+      },
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        len: [1, 150],
+      },
     },
     notes: {
       type: DataTypes.TEXT,
@@ -52,5 +60,8 @@ const Transaction = sequelize.define(
     updatedAt: false,
   }
 );
+
+Transaction.belongsTo(User, { foreignKey: "userId" });
+Transaction.belongsTo(Category, { foreignKey: "categoryId" });
 
 module.exports = Transaction;
