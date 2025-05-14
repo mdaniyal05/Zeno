@@ -11,12 +11,13 @@ const Account = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    user: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: User,
         key: "userId",
       },
+      allowNull: false,
     },
     accountName: {
       type: DataTypes.STRING,
@@ -27,7 +28,7 @@ const Account = sequelize.define(
       allowNull: false,
     },
     accountBalance: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     accountCurrency: {
@@ -52,5 +53,7 @@ const Account = sequelize.define(
     timestamps: true,
   }
 );
+
+Account.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = Account;
