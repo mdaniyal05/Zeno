@@ -76,6 +76,4 @@ const Budget = sequelize.define(
   }
 );
 
-Budget.sync();
-
 module.exports = Budget;

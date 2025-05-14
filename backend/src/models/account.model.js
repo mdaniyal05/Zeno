@@ -53,6 +53,4 @@ const Account = sequelize.define(
   }
 );
 
-Account.sync();
-
 module.exports = Account;

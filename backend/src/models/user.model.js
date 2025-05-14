@@ -84,6 +84,4 @@ User.beforeCreate(async (user, options) => {
   user.password = hashedPassword;
 });
 
-User.sync();
-
 module.exports = User;

@@ -53,6 +53,4 @@ const Transaction = sequelize.define(
   }
 );
 
-Transaction.sync();
-
 module.exports = Transaction;
