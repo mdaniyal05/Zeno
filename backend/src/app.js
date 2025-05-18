@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/user.route");
 const accountRoutes = require("./routes/account.route");
 const categoryRoutes = require("./routes/category.route");
+const transactionRoutes = require("./routes/transaction.route");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
