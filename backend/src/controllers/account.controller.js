@@ -22,9 +22,18 @@ const getUserAccount = asyncHandler(async (req, res) => {
 });
 
 const getAllUserAccounts = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "All User Accounts",
-  });
+  const userId = req.user.userId;
+  const accounts = await Account.findAll({ where: { userId: userId } });
+
+  if (accounts) {
+    res.status(200).json({
+      accountName: accounts.accountName,
+      accountType: accounts.accountType,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Accounts Available.");
+  }
 });
 
 const createUserAccount = asyncHandler(async (req, res) => {
