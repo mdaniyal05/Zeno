@@ -37,9 +37,49 @@ const getAllUserAccounts = asyncHandler(async (req, res) => {
 });
 
 const createUserAccount = asyncHandler(async (req, res) => {
-  res.status(201).json({
-    message: "User Account Created",
+  const {
+    accountName,
+    accountType,
+    accountBalance,
+    accountCurrency,
+    bankName,
+    accountNumber,
+  } = req.body;
+
+  const accountExists = await Account.findOne({
+    where: { accountName: accountName },
   });
+
+  if (accountExists) {
+    res.status(400);
+    throw new Error("Account Already Exists.");
+  }
+
+  const isActive = true;
+  const userId = req.user.userId;
+
+  const newAccount = await Account.create({
+    userId: userId,
+    accountName: accountName,
+    accountType: accountType,
+    accountBalance: accountBalance,
+    accountCurrency: accountCurrency,
+    bankName: bankName,
+    accountNumber: accountNumber,
+    isActive: isActive,
+  });
+
+  if (newAccount) {
+    res.status(201).json({
+      accountName: accountName,
+      accountType: accountType,
+      isActive: isActive,
+      message: "Account Created Successfully.",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Account Data");
+  }
 });
 
 const updateUserAccount = asyncHandler(async (req, res) => {
