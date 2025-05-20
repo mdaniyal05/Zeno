@@ -47,7 +47,7 @@ const createUserAccount = asyncHandler(async (req, res) => {
   } = req.body;
 
   const accountExists = await Account.findOne({
-    where: { accountName: accountName },
+    where: { accountNumber: accountNumber },
   });
 
   if (accountExists) {
