@@ -82,12 +82,6 @@ const createUserAccount = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserAccount = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "User Account Updated",
-  });
-});
-
 const deleteUserAccount = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: "User Account Deleted",
@@ -98,6 +92,5 @@ module.exports = {
   getUserAccount,
   getAllUserAccounts,
   createUserAccount,
-  updateUserAccount,
   deleteUserAccount,
 };
