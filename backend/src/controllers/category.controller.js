@@ -20,9 +20,18 @@ const getcategory = asyncHandler(async (req, res) => {
 });
 
 const getAllCategories = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "All Categories",
-  });
+  const userId = req.user.userId;
+  const categories = await Category.findAll({ where: { userId: userId } });
+
+  if (categories) {
+    res.status(200).json({
+      categoryName: categories.categoryName,
+      categoryType: categories.categoryType,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Categories Available.");
+  }
 });
 
 const createCategory = asyncHandler(async (req, res) => {
