@@ -23,10 +23,18 @@ const getAllCategories = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const categories = await Category.findAll({ where: { userId: userId } });
 
+  let categoryNames = [];
+  let categoryTypes = [];
+
+  categories.map((categories) => {
+    categoryNames.push(categories.dataValues.categoryName);
+    categoryTypes.push(categories.dataValues.categoryType);
+  });
+
   if (categories) {
     res.status(200).json({
-      categoryName: categories.categoryName,
-      categoryType: categories.categoryType,
+      categoryNames: categoryNames,
+      categoryTypes: categoryTypes,
     });
   } else {
     res.status(404);
