@@ -78,14 +78,20 @@ const createUserAccount = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Invalid Account Data");
+    throw new Error("Invalid Account Data.");
   }
 });
 
 const deleteUserAccount = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "User Account Deleted",
-  });
+  const accountId = req.params.id;
+  const account = await Account.findByPk(accountId);
+
+  if (account) {
+    await Account.destroy({ where: { accountId: accountId } });
+  } else {
+    res.status(404);
+    throw new Error("Account Not Found.");
+  }
 });
 
 module.exports = {
