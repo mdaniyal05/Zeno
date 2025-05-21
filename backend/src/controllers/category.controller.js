@@ -2,9 +2,21 @@ const asyncHandler = require("express-async-handler");
 const Category = require("../models/category.model");
 
 const getcategory = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Category",
-  });
+  const categoryId = req.params.id;
+  const category = await Category.findByPk(categoryId);
+
+  if (category) {
+    res.status(200).json({
+      categoryName: category.categoryName,
+      categoryType: category.categoryType,
+      description: category.description,
+      isActive: category.isActive,
+      monthlyLimit: category.monthlyLimit,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Category Not Found.");
+  }
 });
 
 const getAllCategories = asyncHandler(async (req, res) => {
