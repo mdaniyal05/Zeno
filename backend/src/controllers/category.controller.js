@@ -55,9 +55,15 @@ const updateCategory = asyncHandler(async (req, res) => {
 });
 
 const deleteCategory = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Category Deleted",
-  });
+  const categoryId = req.params.id;
+  const category = await Category.findByPk(categoryId);
+
+  if (category) {
+    await Category.destroy({ where: { categoryId: categoryId } });
+  } else {
+    res.status(404);
+    throw new Error("Category Not Found.");
+  }
 });
 
 module.exports = {
