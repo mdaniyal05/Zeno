@@ -43,9 +43,32 @@ const getAllCategories = asyncHandler(async (req, res) => {
 });
 
 const createCategory = asyncHandler(async (req, res) => {
-  res.status(201).json({
-    message: "Category Created",
+  const { categoryName, categoryType, description } = req.body;
+
+  const isActive = true;
+  const userId = req.user.userId;
+
+  const newCategory = await Category.create({
+    userId: userId,
+    categoryName: categoryName,
+    categoryType: categoryType,
+    description: description,
+    isActive: isActive,
   });
+
+  if (newCategory) {
+    res.status(201).json({
+      userId: userId,
+      categoryName: categoryName,
+      categoryType: categoryType,
+      description: description,
+      isActive: isActive,
+      message: "Category Created Succesfully.",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Category Data.");
+  }
 });
 
 const updateCategory = asyncHandler(async (req, res) => {
