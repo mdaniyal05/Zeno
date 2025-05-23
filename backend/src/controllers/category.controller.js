@@ -49,9 +49,27 @@ const createCategory = asyncHandler(async (req, res) => {
 });
 
 const updateCategory = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Category Updated",
-  });
+  const categoryId = req.params.id;
+  const category = await Category.findByPk(categoryId);
+
+  if (category) {
+    category.categoryName = req.body.categoryName || category.categoryName;
+    category.categoryType = req.body.categoryType || category.categoryType;
+    category.description = req.body.description || category.description;
+    category.monthlyLimit = req.body.monthlyLimit || category.monthlyLimit;
+
+    const updatedCategory = await category.save();
+
+    res.status(200).json({
+      categoryName: updatedCategory.categoryName,
+      categoryType: updatedCategory.categoryType,
+      description: updatedCategory.description,
+      monthlyLimit: updatedCategory.monthlyLimit,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Category Not Found.");
+  }
 });
 
 const deleteCategory = asyncHandler(async (req, res) => {
