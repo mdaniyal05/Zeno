@@ -21,9 +21,23 @@ const getTransaction = asyncHandler(async (req, res) => {
 });
 
 const getAllTransactions = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "All Transactions",
+  const userId = req.user.userId;
+  const transactions = await Transaction.findAll({ where: { userId: userId } });
+
+  let transactionAmounts = [];
+
+  transactions.map((transactions) => {
+    transactionAmounts.push(transactions.dataValues.transactionAmount);
   });
+
+  if (transactions) {
+    res.status(200).json({
+      transactionAmount: transactionAmounts,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Transactions Available.");
+  }
 });
 
 const createTransaction = asyncHandler(async (req, res) => {
