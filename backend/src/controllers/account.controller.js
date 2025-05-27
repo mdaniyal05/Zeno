@@ -96,6 +96,9 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
 
   if (account) {
     await Account.destroy({ where: { accountId: accountId } });
+    res.status(200).json({
+      message: `Account Number: ${account.accountNumber} Deleted Succesfully.`,
+    });
   } else {
     res.status(404);
     throw new Error("Account Not Found.");
