@@ -63,11 +63,10 @@ const createUserAccount = asyncHandler(async (req, res) => {
     throw new Error("Account Already Exists.");
   }
 
-  const isActive = true;
   const userId = req.user.userId;
+  const isActive = true;
 
   const newAccount = await Account.create({
-    userId: userId,
     accountName: accountName,
     accountType: accountType,
     accountBalance: accountBalance,
@@ -75,6 +74,7 @@ const createUserAccount = asyncHandler(async (req, res) => {
     bankName: bankName,
     accountNumber: accountNumber,
     isActive: isActive,
+    userId: userId,
   });
 
   if (newAccount) {
