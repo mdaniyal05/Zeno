@@ -11,14 +11,6 @@ const Account = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-      allowNull: false,
-    },
     accountName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -54,7 +46,10 @@ const Account = sequelize.define(
   }
 );
 
-User.hasOne(Account);
-Account.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(Account, { foreignKey: { name: "userId", allowNull: false } });
+Account.belongsTo(User, {
+  as: "owner",
+  foreignKey: { name: "userId" },
+});
 
 module.exports = Account;
