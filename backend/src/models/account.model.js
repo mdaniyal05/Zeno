@@ -16,7 +16,7 @@ const Account = sequelize.define(
       allowNull: false,
     },
     accountType: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("Current", "Default", "Savings"),
       allowNull: false,
     },
     accountBalance: {
