@@ -11,14 +11,6 @@ const Category = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-      allowNull: false,
-    },
     categoryName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -51,6 +43,10 @@ const Category = sequelize.define(
   }
 );
 
-Category.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(Category, { foreignKey: { name: "userId", allowNull: false } });
+Category.belongsTo(User, {
+  as: "owner",
+  foreignKey: { name: "userId" },
+});
 
 module.exports = Category;
