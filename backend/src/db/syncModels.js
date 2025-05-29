@@ -8,8 +8,8 @@ const syncModels = () => {
   User.sync();
   Account.sync();
   Category.sync();
-  // Transaction.sync();
-  // Budget.sync();
+  Transaction.sync();
+  Budget.sync();
 };
 
 module.exports = syncModels;
