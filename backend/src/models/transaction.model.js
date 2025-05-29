@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
-const User = require("./user.model");
 const Category = require("./category.model");
 const Account = require("./account.model");
 
@@ -12,30 +11,6 @@ const Transaction = sequelize.define(
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-      allowNull: false,
-    },
-    accountId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Account,
-        key: "accountId",
-      },
-      allowNull: false,
-    },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Category,
-        key: "categoryId",
-      },
-      allowNull: false,
     },
     transactionAmount: {
       type: DataTypes.DECIMAL(10, 2),
@@ -59,9 +34,6 @@ const Transaction = sequelize.define(
         len: [1, 150],
       },
     },
-    notes: {
-      type: DataTypes.TEXT,
-    },
   },
   {
     tableName: "Transactions",
@@ -70,8 +42,20 @@ const Transaction = sequelize.define(
   }
 );
 
-Transaction.belongsTo(User, { foreignKey: "userId" });
-Transaction.belongsTo(Category, { foreignKey: "categoryId" });
-Transaction.belongsTo(Account, { foreignKey: "accountId" });
+Account.hasMany(Transaction, {
+  foreignKey: { name: "accountId", allowNull: false },
+});
+Transaction.belongsTo(Account, {
+  as: "srcAccount",
+  foreignKey: { name: "accountId" },
+});
+
+Category.hasMany(Transaction, {
+  foreignKey: { name: "categoryId", allowNull: false },
+});
+Transaction.belongsTo(Category, {
+  as: "fromCategory",
+  foreignKey: { name: "categoryId" },
+});
 
 module.exports = Transaction;
