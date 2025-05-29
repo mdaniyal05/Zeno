@@ -42,20 +42,19 @@ const getAllCategories = asyncHandler(async (req, res) => {
 const createCategory = asyncHandler(async (req, res) => {
   const { categoryName, categoryType, description } = req.body;
 
-  const isActive = true;
   const userId = req.user.userId;
+  const isActive = true;
 
   const newCategory = await Category.create({
-    userId: userId,
     categoryName: categoryName,
     categoryType: categoryType,
     description: description,
     isActive: isActive,
+    userId: userId,
   });
 
   if (newCategory) {
     res.status(201).json({
-      userId: userId,
       categoryName: categoryName,
       categoryType: categoryType,
       description: description,
