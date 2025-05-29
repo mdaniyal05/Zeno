@@ -97,6 +97,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
   if (category) {
     await Category.destroy({ where: { categoryId: categoryId } });
+    res.status(200).json({
+      message: `Category ${category.categoryName} Deleted Successfully.`,
+    });
   } else {
     res.status(404);
     throw new Error("Category Not Found.");
