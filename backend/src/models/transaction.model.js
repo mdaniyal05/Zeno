@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const Category = require("./category.model");
 const Account = require("./account.model");
+const User = require("./user.model");
 
 const Transaction = sequelize.define(
   "Transaction",
@@ -41,6 +42,14 @@ const Transaction = sequelize.define(
     updatedAt: false,
   }
 );
+
+User.hasMany(Transaction, {
+  foreignKey: { name: "userId", allowNull: false },
+});
+Transaction.belongsTo(User, {
+  as: "owner",
+  foreignKey: { name: "userId" },
+});
 
 Account.hasMany(Transaction, {
   foreignKey: { name: "accountId", allowNull: false },

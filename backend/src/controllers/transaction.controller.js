@@ -11,8 +11,6 @@ const getTransaction = asyncHandler(async (req, res) => {
       transactionType: transaction.transactionType,
       paymentMethod: transaction.paymentMethod,
       description: transaction,
-      description,
-      notes: transaction.notes,
     });
   } else {
     res.status(404);
@@ -26,8 +24,8 @@ const getAllTransactions = asyncHandler(async (req, res) => {
 
   let transactionAmounts = [];
 
-  transactions.map((transactions) => {
-    transactionAmounts.push(transactions.dataValues.transactionAmount);
+  transactions.map((transaction) => {
+    transactionAmounts.push(transaction.dataValues.transactionAmount);
   });
 
   if (transactions) {
