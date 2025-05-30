@@ -12,22 +12,6 @@ const Budget = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "userId",
-      },
-      allowNull: false,
-    },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Category,
-        key: "categoryId",
-      },
-      allowNull: false,
-    },
     budgetName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -82,7 +66,20 @@ const Budget = sequelize.define(
   }
 );
 
-Budget.belongsTo(User, { foreignKey: "userId" });
-Budget.belongsTo(Category, { foreignKey: "categoryId" });
+User.hasMany(Budget, {
+  foreignKey: { name: "userId", allowNull: false },
+});
+Budget.belongsTo(User, {
+  as: "owner",
+  foreignKey: { name: "userId" },
+});
+
+Category.hasOne(Budget, {
+  foreignKey: { name: "categoryId", allowNull: false },
+});
+Budget.belongsTo(Category, {
+  as: "ofCategory",
+  foreignKey: { name: "categoryId" },
+});
 
 module.exports = Budget;
