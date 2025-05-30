@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
+const Account = require("../models/account.model");
+const Category = require("../models/category.model");
 
 const getTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
@@ -39,9 +41,57 @@ const getAllTransactions = asyncHandler(async (req, res) => {
 });
 
 const createTransaction = asyncHandler(async (req, res) => {
-  res.status(201).json({
-    message: "Transaction Created",
+  const {
+    transactionAmount,
+    transactionType,
+    paymentMethod,
+    description,
+    accountNumber,
+    categoryName,
+  } = req.body;
+
+  const userId = req.user.userId;
+  const account = await Account.findOne({
+    where: { accountNumber: accountNumber },
   });
+  const category = await Category.findOne({
+    where: { categoryName: categoryName },
+  });
+
+  if (account && category) {
+    if (transactionAmount < account.accountBalance) {
+      const updatedAccountBalance = account.accountBalance - transactionAmount;
+
+      await Account.update({ accountBalance: updatedAccountBalance });
+
+      const newTransaction = await Transaction.create({
+        transactionAmount: transactionAmount,
+        transactionType: transactionType,
+        paymentMethod: paymentMethod,
+        description: description,
+        userId: userId,
+        accountId: account.accountId,
+        categoryId: category.categoryId,
+      });
+
+      if (newTransaction) {
+        res.status(201).json({
+          message: `Transaction Of Amount: ${transactionAmount} Has Been Done Successfully.`,
+        });
+      } else {
+        res.status(400);
+        throw new Error("Invalid Transaction Data.");
+      }
+    } else {
+      res.status(400);
+      throw new Error(
+        "Transaction Amount Cannot Be Greater Than Account Balance."
+      );
+    }
+  } else {
+    res.status(404);
+    throw new Error("Account or Category Not Found.");
+  }
 });
 
 module.exports = {
