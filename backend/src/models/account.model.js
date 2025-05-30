@@ -34,6 +34,7 @@ const Account = sequelize.define(
     accountNumber: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     isActive: {
       type: DataTypes.BOOLEAN,
