@@ -19,12 +19,6 @@ const createBudget = asyncHandler(async (req, res) => {
   });
 });
 
-const updateBudget = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Budget Updated",
-  });
-});
-
 const deleteBudget = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: "Budget Deleted",
@@ -35,6 +29,5 @@ module.exports = {
   getBudget,
   getAllBudgets,
   createBudget,
-  updateBudget,
   deleteBudget,
 };
