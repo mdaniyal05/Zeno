@@ -2,9 +2,26 @@ const asyncHandler = require("express-async-handler");
 const Budget = require("../models/budget.model");
 
 const getBudget = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Budget",
-  });
+  const budgetId = req.params.id;
+  const budget = await Budget.findByPk(budgetId);
+
+  if (budget) {
+    res.status(200).json({
+      budgetAmount: budget.budgetAmount,
+      budgetPeriod: budget.budgetPeriod,
+      description: budget.description,
+      startDate: budget.startDate,
+      endDate: budget.endDate,
+      amountSpent: budget.amountSpent,
+      amountRemaining: budget.amountRemaining,
+      percentUsed: budget.percentUsed,
+      status: budget.status,
+      notificationsEnabled: budget.notificationsEnabled,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Budget Not Found.");
+  }
 });
 
 const getAllBudgets = asyncHandler(async (req, res) => {
