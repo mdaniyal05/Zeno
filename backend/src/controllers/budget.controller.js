@@ -37,9 +37,18 @@ const createBudget = asyncHandler(async (req, res) => {
 });
 
 const deleteBudget = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "Budget Deleted",
-  });
+  const budgetId = req.params.id;
+  const budget = await Budget.findByPk(budgetId);
+
+  if (budget) {
+    await Budget.destroy({ where: { budgetId: budgetId } });
+    res.status(200).json({
+      message: `Budget Of Amount: ${budget.budgetAmount} Deleted Successfully.`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Budget Not Found.");
+  }
 });
 
 module.exports = {
