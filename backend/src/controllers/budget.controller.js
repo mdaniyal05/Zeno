@@ -25,9 +25,23 @@ const getBudget = asyncHandler(async (req, res) => {
 });
 
 const getAllBudgets = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: "All Budgets",
+  const userId = req.params.id;
+  const budgets = await Budget.findAll({ where: { userId: userId } });
+
+  let budgetAmounts = [];
+
+  budgets.map((budget) => {
+    budgetAmounts.push(budget.dataValues.budgetAmount);
   });
+
+  if (budgets) {
+    res.status(200).json({
+      budgetAmounts: budgetAmounts,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Budgets Available.");
+  }
 });
 
 const createBudget = asyncHandler(async (req, res) => {
