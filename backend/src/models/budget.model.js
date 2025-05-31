@@ -12,10 +12,6 @@ const Budget = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    budgetName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     budgetAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
