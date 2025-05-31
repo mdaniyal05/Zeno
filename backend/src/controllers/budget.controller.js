@@ -28,13 +28,13 @@ const getAllBudgets = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const budgets = await Budget.findAll({ where: { userId: userId } });
 
-  let budgetAmounts = [];
-
-  budgets.map((budget) => {
-    budgetAmounts.push(budget.dataValues.budgetAmount);
-  });
-
   if (budgets) {
+    let budgetAmounts = [];
+
+    budgets.map((budget) => {
+      budgetAmounts.push(budget.dataValues.budgetAmount);
+    });
+
     res.status(200).json({
       budgetAmounts: budgetAmounts,
     });

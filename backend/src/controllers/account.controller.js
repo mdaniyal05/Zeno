@@ -25,13 +25,13 @@ const getAllUserAccounts = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const accounts = await Account.findAll({ where: { userId: userId } });
 
-  let accountNames = [];
-
-  accounts.map((account) => {
-    accountNames.push(account.dataValues.accountName);
-  });
-
   if (accounts) {
+    let accountNames = [];
+
+    accounts.map((account) => {
+      accountNames.push(account.dataValues.accountName);
+    });
+
     res.status(200).json({
       accountNames: accountNames,
     });

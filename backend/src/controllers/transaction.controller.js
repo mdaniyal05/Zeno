@@ -24,13 +24,13 @@ const getAllTransactions = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const transactions = await Transaction.findAll({ where: { userId: userId } });
 
-  let transactionAmounts = [];
-
-  transactions.map((transaction) => {
-    transactionAmounts.push(transaction.dataValues.transactionAmount);
-  });
-
   if (transactions) {
+    let transactionAmounts = [];
+
+    transactions.map((transaction) => {
+      transactionAmounts.push(transaction.dataValues.transactionAmount);
+    });
+
     res.status(200).json({
       transactionAmount: transactionAmounts,
     });
