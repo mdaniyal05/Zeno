@@ -3,7 +3,7 @@ const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
 const Category = require("../models/category.model");
 
-const getTransaction = asyncHandler(async (req, res) => {
+const getUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
 
@@ -21,7 +21,7 @@ const getTransaction = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllTransactions = asyncHandler(async (req, res) => {
+const getAllUserTransactions = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const transactions = await Transaction.findAll({ where: { userId: userId } });
 
@@ -35,7 +35,7 @@ const getAllTransactions = asyncHandler(async (req, res) => {
   }
 });
 
-const createTransaction = asyncHandler(async (req, res) => {
+const createUserTransaction = asyncHandler(async (req, res) => {
   const {
     transactionAmount,
     transactionType,
@@ -96,7 +96,7 @@ const createTransaction = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getTransaction,
-  getAllTransactions,
-  createTransaction,
+  getUserTransaction,
+  getAllUserTransactions,
+  createUserTransaction,
 };

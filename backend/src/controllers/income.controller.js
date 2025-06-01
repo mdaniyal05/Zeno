@@ -13,7 +13,7 @@ const deleteUserIncome = asyncHandler(async (req, res) => {});
 
 module.exports = {
   getUserIncome,
-  getAllUserIncome,
+  getAllUserIncomes,
   createUserIncome,
   updateUserIncome,
   deleteUserIncome,

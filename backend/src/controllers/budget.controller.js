@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Budget = require("../models/budget.model");
 const Category = require("../models/category.model");
 
-const getBudget = asyncHandler(async (req, res) => {
+const getUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
   const budget = await Budget.findByPk(budgetId);
 
@@ -26,7 +26,7 @@ const getBudget = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllBudgets = asyncHandler(async (req, res) => {
+const getAllUserBudgets = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const budgets = await Budget.findAll({ where: { userId: userId } });
 
@@ -40,7 +40,7 @@ const getAllBudgets = asyncHandler(async (req, res) => {
   }
 });
 
-const createBudget = asyncHandler(async (req, res) => {
+const createUserBudget = asyncHandler(async (req, res) => {
   const {
     budgetAmount,
     budgetPeriod,
@@ -88,7 +88,7 @@ const createBudget = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteBudget = asyncHandler(async (req, res) => {
+const deleteUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
   const budget = await Budget.findByPk(budgetId);
 
@@ -104,8 +104,8 @@ const deleteBudget = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getBudget,
-  getAllBudgets,
-  createBudget,
-  deleteBudget,
+  getUserBudget,
+  getAllUserBudgets,
+  createUserBudget,
+  deleteUserBudget,
 };

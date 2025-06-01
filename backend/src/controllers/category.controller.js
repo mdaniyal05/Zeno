@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Category = require("../models/category.model");
 
-const getcategory = asyncHandler(async (req, res) => {
+const getUsercategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
@@ -20,7 +20,7 @@ const getcategory = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllCategories = asyncHandler(async (req, res) => {
+const getAllUserCategories = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const categories = await Category.findAll({ where: { userId: userId } });
 
@@ -34,7 +34,7 @@ const getAllCategories = asyncHandler(async (req, res) => {
   }
 });
 
-const createCategory = asyncHandler(async (req, res) => {
+const createUserCategory = asyncHandler(async (req, res) => {
   const { categoryName, categoryType, description } = req.body;
 
   const userId = req.user.userId;
@@ -62,7 +62,7 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const updateCategory = asyncHandler(async (req, res) => {
+const updateUserCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
@@ -86,7 +86,7 @@ const updateCategory = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteCategory = asyncHandler(async (req, res) => {
+const deleteUserCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
@@ -102,9 +102,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getcategory,
-  getAllCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory,
+  getUsercategory,
+  getAllUserCategories,
+  createUserCategory,
+  updateUserCategory,
+  deleteUserCategory,
 };
