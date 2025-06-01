@@ -3,7 +3,7 @@ const Income = require("../models/income.model");
 
 const getUserIncome = asyncHandler(async (req, res) => {});
 
-const getAllUserIncome = asyncHandler(async (req, res) => {});
+const getAllUserIncomes = asyncHandler(async (req, res) => {});
 
 const createUserIncome = asyncHandler(async (req, res) => {});
 
