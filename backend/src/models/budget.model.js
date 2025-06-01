@@ -15,21 +15,48 @@ const Budget = sequelize.define(
     budgetAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        min: {
+          args: 1,
+          msg: "Amount must be greater than 0.",
+        },
+      },
     },
     budgetPeriod: {
-      type: DataTypes.ENUM("Daily", "Weekly", "Monthly", "Quarterly", "Yearly"),
+      type: DataTypes.ENUM("Daily", "Weekly", "Monthly", "Yearly"),
       allowNull: false,
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [0, 150],
+          msg: "Description cannot exceed 150 characters.",
+        },
+      },
     },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        validator(value) {
+          if (value > this.startDate) {
+            throw new Error("Start date must be in the past.");
+          }
+        },
+      },
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        validator(value) {
+          if (value < this.startDate) {
+            throw new Error("End date must be after the start date.");
+          }
+        },
+      },
     },
     amountSpent: {
       type: DataTypes.DECIMAL(10, 2),
