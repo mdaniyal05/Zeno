@@ -22,17 +22,14 @@ const Transaction = sequelize.define(
       allowNull: false,
     },
     paymentMethod: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("Cash", "Card", "Bank", "Online", "Other"),
       allowNull: false,
-      validate: {
-        isIn: [["Cash", "Card", "Bank", "Online", "Other"]],
-      },
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [1, 150],
+        len: [0, 150],
       },
     },
   },
