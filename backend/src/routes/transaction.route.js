@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getTransaction,
-  getAllTransactions,
-  createTransaction,
+  getUserTransaction,
+  getAllUserTransactions,
+  createUserTransaction,
 } = require("../controllers/transaction.controller");
 const protectRoute = require("../middlewares/protectRoute");
 
-router.get("/", protectRoute, getAllTransactions);
-router.get("/transaction/:id", protectRoute, getTransaction);
-router.post("/create-transaction", protectRoute, createTransaction);
+router.get("/", protectRoute, getAllUserTransactions);
+router.get("/transaction/:id", protectRoute, getUserTransaction);
+router.post("/create-transaction", protectRoute, createUserTransaction);
 
 module.exports = router;

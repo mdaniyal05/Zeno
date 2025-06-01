@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getBudget,
-  getAllBudgets,
-  createBudget,
-  deleteBudget,
+  getUserBudget,
+  getAllUserBudgets,
+  createUserBudget,
+  deleteUserBudget,
 } = require("../controllers/budget.controller");
 const protectRoute = require("../middlewares/protectRoute");
 
-router.get("/", protectRoute, getAllBudgets);
-router.post("/create-budget", protectRoute, createBudget);
+router.get("/", protectRoute, getAllUserBudgets);
+router.post("/create-budget", protectRoute, createUserBudget);
 router
   .route("/budget/:id")
-  .get(protectRoute, getBudget)
-  .delete(protectRoute, deleteBudget);
+  .get(protectRoute, getUserBudget)
+  .delete(protectRoute, deleteUserBudget);
 
 module.exports = router;
