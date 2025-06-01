@@ -7,6 +7,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(200).json({
+      userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
       avatar: user.avatar,
