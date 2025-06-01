@@ -46,47 +46,53 @@ const createTransaction = asyncHandler(async (req, res) => {
     transactionType,
     paymentMethod,
     description,
-    accountNumber,
-    categoryName,
+    accountId,
+    categoryId,
   } = req.body;
 
   const userId = req.user.userId;
   const account = await Account.findOne({
-    where: { accountNumber: accountNumber },
+    where: { accountId: accountId },
   });
   const category = await Category.findOne({
-    where: { categoryName: categoryName },
+    where: { categoryId: categoryId },
   });
 
   if (account && category) {
-    if (transactionAmount < account.accountBalance) {
-      const updatedAccountBalance = account.accountBalance - transactionAmount;
+    let updatedAccountBalance;
 
-      await Account.update({ accountBalance: updatedAccountBalance });
-
-      const newTransaction = await Transaction.create({
-        transactionAmount: transactionAmount,
-        transactionType: transactionType,
-        paymentMethod: paymentMethod,
-        description: description,
-        userId: userId,
-        accountId: account.accountId,
-        categoryId: category.categoryId,
-      });
-
-      if (newTransaction) {
-        res.status(201).json({
-          message: `Transaction Of Amount: ${transactionAmount} Has Been Done Successfully.`,
-        });
+    if (category.categoryType === "Expense") {
+      if (transactionAmount < account.accountBalance) {
+        updatedAccountBalance = account.accountBalance - transactionAmount;
+        await Account.update({ accountBalance: updatedAccountBalance });
       } else {
         res.status(400);
-        throw new Error("Invalid Transaction Data.");
+        throw new Error(
+          "Transaction Amount Cannot Be Greater Than Account Balance."
+        );
       }
+    } else if (category.categoryType === "Income") {
+      updatedAccountBalance = account.accountBalance + transactionAmount;
+      await Account.update({ accountBalance: updatedAccountBalance });
+    }
+
+    const newTransaction = await Transaction.create({
+      transactionAmount: transactionAmount,
+      transactionType: transactionType,
+      paymentMethod: paymentMethod,
+      description: description,
+      userId: userId,
+      accountId: account.accountId,
+      categoryId: category.categoryId,
+    });
+
+    if (newTransaction) {
+      res.status(201).json({
+        message: `Transaction Of Amount: ${transactionAmount} Has Been Done Successfully.`,
+      });
     } else {
       res.status(400);
-      throw new Error(
-        "Transaction Amount Cannot Be Greater Than Account Balance."
-      );
+      throw new Error("Invalid Transaction Data.");
     }
   } else {
     res.status(404);
