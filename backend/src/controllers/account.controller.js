@@ -7,6 +7,7 @@ const getUserAccount = asyncHandler(async (req, res) => {
 
   if (account) {
     res.status(200).json({
+      accountId: account.accountId,
       accountName: account.accountName,
       accountType: account.accountType,
       accountBalance: account.accountBalance,

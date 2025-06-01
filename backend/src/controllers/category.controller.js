@@ -7,6 +7,7 @@ const getcategory = asyncHandler(async (req, res) => {
 
   if (category) {
     res.status(200).json({
+      categoryId: category.categoryId,
       categoryName: category.categoryName,
       categoryType: category.categoryType,
       description: category.description,

@@ -9,10 +9,11 @@ const getTransaction = asyncHandler(async (req, res) => {
 
   if (transaction) {
     res.status(200).json({
+      transactionId: transaction.transactionId,
       transactionAmount: transaction.transactionAmount,
       transactionType: transaction.transactionType,
       paymentMethod: transaction.paymentMethod,
-      description: transaction,
+      description: transaction.description,
     });
   } else {
     res.status(404);
