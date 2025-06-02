@@ -33,7 +33,32 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
   }
 });
 
-const createUserExpense = asyncHandler(async (req, res) => {});
+const createUserExpense = asyncHandler(async (req, res) => {
+  const { expenseAmount, currency, expenseDate, merchant } = req.body;
+
+  const userId = req.user.userId;
+
+  const newExpense = await Expense.create({
+    expenseAmount: expenseAmount,
+    currency: currency,
+    expenseDate: expenseDate,
+    merchant: merchant,
+    userId: userId,
+  });
+
+  if (newExpense) {
+    res.status(201).json({
+      expenseAmount: newExpense.expenseAmount,
+      currency: newExpense.currency,
+      expenseDate: newExpense.expenseDate,
+      merchant: newExpense.merchant,
+      message: "Expense Created Successfully.",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Expense Data.");
+  }
+});
 
 const deleteUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
