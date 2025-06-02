@@ -7,14 +7,24 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {});
 
 const createUserExpense = asyncHandler(async (req, res) => {});
 
-const updateUserExpense = asyncHandler(async (req, res) => {});
+const deleteUserExpense = asyncHandler(async (req, res) => {
+  const expenseId = req.params.id;
+  const expense = await Expense.findByPk(expenseId);
 
-const deleteUserExpense = asyncHandler(async (req, res) => {});
+  if (expense) {
+    await Expense.destroy({ where: { expenseId: expenseId } });
+    res.status(200).json({
+      message: `Expense Of Amount: ${expense.expenseAmount} Deleted Successfully.`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Expense Not Found.");
+  }
+});
 
 module.exports = {
   getUserExpense,
   getAllUserExpenses,
   createUserExpense,
-  updateUserExpense,
   deleteUserExpense,
 };
