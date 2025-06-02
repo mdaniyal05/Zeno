@@ -8,6 +8,8 @@ const accountRoutes = require("./routes/account.route");
 const categoryRoutes = require("./routes/category.route");
 const transactionRoutes = require("./routes/transaction.route");
 const budgetRoutes = require("./routes/budget.route");
+const incomeRoutes = require("./routes/income.route");
+const expenseRoutes = require("./routes/expense.route");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 app.use(cors());
@@ -21,6 +23,8 @@ app.use("/api/accounts", accountRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
+app.use("/api/incomes", incomeRoutes);
+app.use("/api/expenses", expenseRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
