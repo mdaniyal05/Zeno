@@ -1,7 +1,23 @@
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
 
-const getUserExpense = asyncHandler(async (req, res) => {});
+const getUserExpense = asyncHandler(async (req, res) => {
+  const expenseId = req.params.id;
+  const expense = await Expense.findByPk(expenseId);
+
+  if (expense) {
+    res.status(200).json({
+      expenseId: expense.expenseId,
+      expenseAmount: expense.expenseAmount,
+      currency: expense.currency,
+      expenseDate: expense.expenseDate,
+      merchant: expense.merchant,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Expense Not Found.");
+  }
+});
 
 const getAllUserExpenses = asyncHandler(async (req, res) => {});
 
