@@ -19,7 +19,19 @@ const getUserExpense = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllUserExpenses = asyncHandler(async (req, res) => {});
+const getAllUserExpenses = asyncHandler(async (req, res) => {
+  const userId = req.user.userId;
+  const expenses = await Expense.findAll({ where: { userId: userId } });
+
+  if (expenses) {
+    res.status(200).json({
+      expensesData: expenses,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Expenses Available.");
+  }
+});
 
 const createUserExpense = asyncHandler(async (req, res) => {});
 
