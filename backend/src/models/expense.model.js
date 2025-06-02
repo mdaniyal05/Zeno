@@ -37,6 +37,7 @@ const Expense = sequelize.define(
 
 User.hasMany(Expense, {
   foreignKey: { name: "userId", allowNull: false },
+  onDelete: "CASCADE",
 });
 Expense.belongsTo(User, {
   as: "owner",

@@ -33,6 +33,7 @@ const Income = sequelize.define(
 
 User.hasMany(Income, {
   foreignKey: { name: "userId", allowNull: false },
+  onDelete: "CASCADE",
 });
 Income.belongsTo(User, {
   as: "owner",

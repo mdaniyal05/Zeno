@@ -47,7 +47,10 @@ const Account = sequelize.define(
   }
 );
 
-User.hasMany(Account, { foreignKey: { name: "userId", allowNull: false } });
+User.hasMany(Account, {
+  foreignKey: { name: "userId", allowNull: false },
+  onDelete: "CASCADE",
+});
 Account.belongsTo(User, {
   as: "owner",
   foreignKey: { name: "userId" },

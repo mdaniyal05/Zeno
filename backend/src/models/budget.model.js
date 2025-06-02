@@ -91,6 +91,7 @@ const Budget = sequelize.define(
 
 User.hasMany(Budget, {
   foreignKey: { name: "userId", allowNull: false },
+  onDelete: "CASCADE",
 });
 Budget.belongsTo(User, {
   as: "owner",
@@ -99,6 +100,7 @@ Budget.belongsTo(User, {
 
 Category.hasOne(Budget, {
   foreignKey: { name: "categoryId", allowNull: false },
+  onDelete: "CASCADE",
 });
 Budget.belongsTo(Category, {
   as: "ofCategory",
