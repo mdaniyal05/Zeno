@@ -33,7 +33,32 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
   }
 });
 
-const createUserIncome = asyncHandler(async (req, res) => {});
+const createUserIncome = asyncHandler(async (req, res) => {
+  const { incomeAmount, currency, incomeDate, incomeSource } = req.body;
+
+  const userId = req.user.userId;
+
+  const newIncome = await Income.create({
+    incomeAmount: incomeAmount,
+    currency: currency,
+    incomeDate: incomeDate,
+    incomeSource: incomeSource,
+    userId: userId,
+  });
+
+  if (newIncome) {
+    res.status(201).json({
+      incomeAmount: newIncome.incomeAmount,
+      currency: newIncome.currency,
+      incomeDate: newIncome.incomeDate,
+      incomeSource: newIncome.incomeSource,
+      message: "Income Created Successfully.",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Income Data.");
+  }
+});
 
 const deleteUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
