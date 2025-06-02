@@ -35,7 +35,20 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
 
 const createUserIncome = asyncHandler(async (req, res) => {});
 
-const deleteUserIncome = asyncHandler(async (req, res) => {});
+const deleteUserIncome = asyncHandler(async (req, res) => {
+  const incomeId = req.params.id;
+  const income = await Income.findByPk(incomeId);
+
+  if (income) {
+    await Income.destroy({ where: { incomeId: incomeId } });
+    res.status(200).json({
+      message: `Income Of Amount: ${income.incomeAmount} Deleted Successfully.`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Income Not Found.");
+  }
+});
 
 module.exports = {
   getUserIncome,
