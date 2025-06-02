@@ -19,7 +19,19 @@ const getUserIncome = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllUserIncomes = asyncHandler(async (req, res) => {});
+const getAllUserIncomes = asyncHandler(async (req, res) => {
+  const userId = req.user.userId;
+  const incomes = await Income.findAll({ where: { userId: userId } });
+
+  if (incomes) {
+    res.status(200).json({
+      incomesData: incomes,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Incomes Available.");
+  }
+});
 
 const createUserIncome = asyncHandler(async (req, res) => {});
 
