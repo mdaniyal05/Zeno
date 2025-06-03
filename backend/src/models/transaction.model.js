@@ -43,28 +43,37 @@ const Transaction = sequelize.define(
 User.hasMany(Transaction, {
   foreignKey: { name: "userId", allowNull: false },
   onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 Transaction.belongsTo(User, {
   as: "owner",
   foreignKey: { name: "userId" },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Account.hasMany(Transaction, {
   foreignKey: { name: "accountId", allowNull: false },
-  onDelete: "CASCADE",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 Transaction.belongsTo(Account, {
   as: "srcAccount",
   foreignKey: { name: "accountId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 
 Category.hasMany(Transaction, {
   foreignKey: { name: "categoryId", allowNull: false },
-  onDelete: "CASCADE",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 Transaction.belongsTo(Category, {
   as: "fromCategory",
   foreignKey: { name: "categoryId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 
 module.exports = Transaction;

@@ -92,19 +92,25 @@ const Budget = sequelize.define(
 User.hasMany(Budget, {
   foreignKey: { name: "userId", allowNull: false },
   onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 Budget.belongsTo(User, {
   as: "owner",
   foreignKey: { name: "userId" },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 Category.hasOne(Budget, {
   foreignKey: { name: "categoryId", allowNull: false },
-  onDelete: "CASCADE",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 Budget.belongsTo(Category, {
   as: "ofCategory",
   foreignKey: { name: "categoryId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 
 module.exports = Budget;

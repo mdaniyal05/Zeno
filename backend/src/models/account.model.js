@@ -50,10 +50,13 @@ const Account = sequelize.define(
 User.hasMany(Account, {
   foreignKey: { name: "userId", allowNull: false },
   onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 Account.belongsTo(User, {
   as: "owner",
   foreignKey: { name: "userId" },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 });
 
 module.exports = Account;
