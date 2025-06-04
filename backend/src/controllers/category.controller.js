@@ -35,7 +35,7 @@ const getAllUserCategories = asyncHandler(async (req, res) => {
 });
 
 const createUserCategory = asyncHandler(async (req, res) => {
-  const { categoryName, categoryType, description } = req.body;
+  const { categoryName, categoryType, description, monthlyLimit } = req.body;
 
   const userId = req.user.userId;
   const isActive = true;
@@ -45,6 +45,7 @@ const createUserCategory = asyncHandler(async (req, res) => {
     categoryType: categoryType,
     description: description,
     isActive: isActive,
+    monthlyLimit: monthlyLimit,
     userId: userId,
   });
 
@@ -54,6 +55,7 @@ const createUserCategory = asyncHandler(async (req, res) => {
       categoryType: categoryType,
       description: description,
       isActive: isActive,
+      monthlyLimit: monthlyLimit,
       message: "Category Created Succesfully.",
     });
   } else {
