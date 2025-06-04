@@ -16,7 +16,7 @@ const Category = sequelize.define(
       allowNull: false,
     },
     categoryType: {
-      type: DataTypes.ENUM("Expense", "Income"),
+      type: DataTypes.ENUM("Needs", "Wants", "Savings"),
       allowNull: false,
     },
     description: {

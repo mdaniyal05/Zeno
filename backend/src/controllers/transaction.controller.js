@@ -56,19 +56,25 @@ const createUserTransaction = asyncHandler(async (req, res) => {
   if (account && category) {
     let updatedAccountBalance;
 
-    if (category.categoryType === "Expense") {
+    if (transactionType === "Expense") {
       if (transactionAmount < account.accountBalance) {
         updatedAccountBalance = account.accountBalance - transactionAmount;
-        await Account.update({ accountBalance: updatedAccountBalance });
+        await Account.update(
+          { accountBalance: updatedAccountBalance },
+          { where: { accountId: accountId } }
+        );
       } else {
         res.status(400);
         throw new Error(
           "Transaction Amount Cannot Be Greater Than Account Balance."
         );
       }
-    } else if (category.categoryType === "Income") {
+    } else if (transactionType === "Income") {
       updatedAccountBalance = account.accountBalance + transactionAmount;
-      await Account.update({ accountBalance: updatedAccountBalance });
+      await Account.update(
+        { accountBalance: updatedAccountBalance },
+        { where: { accountId: accountId } }
+      );
     }
 
     const newTransaction = await Transaction.create({
