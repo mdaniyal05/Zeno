@@ -15,6 +15,10 @@ const Expense = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    expenseType: {
+      type: DataTypes.ENUM("Needs", "Wants", "Savings"),
+      allowNull: false,
+    },
     currency: {
       type: DataTypes.STRING(3),
       allowNull: false,
