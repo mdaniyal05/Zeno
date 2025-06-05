@@ -9,6 +9,7 @@ const getUserExpense = asyncHandler(async (req, res) => {
     res.status(200).json({
       expenseId: expense.expenseId,
       expenseAmount: expense.expenseAmount,
+      expenseType: expense.expenseType,
       currency: expense.currency,
       expenseDate: expense.expenseDate,
       merchant: expense.merchant,
@@ -34,12 +35,14 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
 });
 
 const createUserExpense = asyncHandler(async (req, res) => {
-  const { expenseAmount, currency, expenseDate, merchant } = req.body;
+  const { expenseAmount, expenseType, currency, expenseDate, merchant } =
+    req.body;
 
   const userId = req.user.userId;
 
   const newExpense = await Expense.create({
     expenseAmount: expenseAmount,
+    expenseType: expenseType,
     currency: currency,
     expenseDate: expenseDate,
     merchant: merchant,
@@ -49,6 +52,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
   if (newExpense) {
     res.status(201).json({
       expenseAmount: newExpense.expenseAmount,
+      expenseType: newExpense.expenseType,
       currency: newExpense.currency,
       expenseDate: newExpense.expenseDate,
       merchant: newExpense.merchant,
