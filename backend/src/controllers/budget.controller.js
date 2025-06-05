@@ -27,7 +27,7 @@ const getUserBudget = asyncHandler(async (req, res) => {
 });
 
 const getAllUserBudgets = asyncHandler(async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.userId;
   const budgets = await Budget.findAll({ where: { userId: userId } });
 
   if (budgets) {
