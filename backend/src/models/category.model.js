@@ -35,6 +35,7 @@ const Category = sequelize.define(
       validate: {
         min: 0,
       },
+      allowNull: false,
     },
   },
   {
