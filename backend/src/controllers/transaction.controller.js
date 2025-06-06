@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
-const Category = require("../models/category.model");
 
 const getUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
@@ -92,7 +91,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
   } else {
     res.status(404);
-    throw new Error("Account or Category Not Found.");
+    throw new Error("Account Not Found.");
   }
 });
 
