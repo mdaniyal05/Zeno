@@ -59,6 +59,7 @@ Category.hasMany(Expense, {
 });
 
 Expense.belongsTo(Category, {
+  foreignKey: { name: "categoryId", allowNull: false },
   as: "fromCategory",
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
