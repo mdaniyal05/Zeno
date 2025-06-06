@@ -42,18 +42,14 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     paymentMethod,
     description,
     accountId,
-    categoryId,
   } = req.body;
 
   const userId = req.user.userId;
   const account = await Account.findOne({
     where: { accountId: accountId },
   });
-  const category = await Category.findOne({
-    where: { categoryId: categoryId },
-  });
 
-  if (account && category) {
+  if (account) {
     let updatedAccountBalance;
 
     if (transactionType === "Expense") {
@@ -84,7 +80,6 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       description: description,
       userId: userId,
       accountId: account.accountId,
-      categoryId: category.categoryId,
     });
 
     if (newTransaction) {

@@ -64,16 +64,4 @@ Transaction.belongsTo(Account, {
   onUpdate: "CASCADE",
 });
 
-Category.hasMany(Transaction, {
-  foreignKey: { name: "categoryId", allowNull: false },
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
-Transaction.belongsTo(Category, {
-  as: "fromCategory",
-  foreignKey: { name: "categoryId" },
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
-
 module.exports = Transaction;
