@@ -1,8 +1,13 @@
-const LandingPage = () => {
+import CssBaseline from "@mui/material/CssBaseline";
+import AppTheme from "../components/shared-theme/AppTheme";
+import NavBar from "../components/NavBar";
+
+const LandingPage = (props) => {
   return (
-    <>
-      <h1>Landing Page</h1>
-    </>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <NavBar />
+    </AppTheme>
   );
 };
 
