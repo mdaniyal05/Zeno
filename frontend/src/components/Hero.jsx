@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -38,9 +38,12 @@ export default function Hero() {
             variant="h1"
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
+              flexDirection: { xs: "column" },
               alignItems: "center",
-              fontSize: "clamp(3rem, 10vw, 3.5rem)",
+              fontSize: {
+                xs: "clamp(2rem, 10vw, 2.5rem)",
+                md: "clamp(3rem, 10vw, 3.5rem)",
+              },
             }}
           >
             Take&nbsp;Control&nbsp;Of&nbsp;Your&nbsp;
@@ -69,33 +72,24 @@ export default function Hero() {
             top of your financial goals with simple, powerful tools designed to
             make budgeting effortless.
           </Typography>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: "100%", sm: "350px" } }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              fullWidth
-              sx={{ minWidth: "fit-content" }}
+          <Link to={"/signin"} style={{ textDecoration: "none" }}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={1}
+              useFlexGap
+              sx={{ pt: 2, width: { xs: "100%", sm: "350px" } }}
             >
-              Start now
-            </Button>
-          </Stack>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
-          >
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
-            <Link href="#" color="primary">
-              Terms & Conditions
-            </Link>
-            .
-          </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                fullWidth
+                sx={{ minWidth: "fit-content" }}
+              >
+                Start now
+              </Button>
+            </Stack>
+          </Link>
         </Stack>
       </Container>
     </Box>
