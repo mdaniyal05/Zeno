@@ -46,7 +46,7 @@ export default function Hero() {
               fontSize: "clamp(3rem, 10vw, 3.5rem)",
             }}
           >
-            Our&nbsp;latest&nbsp;
+            Take&nbsp;Control&nbsp;Of&nbsp;Your&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -58,7 +58,7 @@ export default function Hero() {
                 }),
               })}
             >
-              products
+              Finances
             </Typography>
           </Typography>
           <Typography
@@ -68,9 +68,9 @@ export default function Hero() {
               width: { sm: "100%", md: "80%" },
             }}
           >
-            Explore our cutting-edge dashboard, delivering high-quality
-            solutions tailored to your needs. Elevate your experience with
-            top-tier features and services.
+            Track your income, expenses, and savings all in one place. Stay on
+            top of your financial goals with simple, powerful tools designed to
+            make budgeting effortless.
           </Typography>
           <Stack
             direction={{ xs: "column", sm: "row" }}
@@ -78,28 +78,11 @@ export default function Hero() {
             useFlexGap
             sx={{ pt: 2, width: { xs: "100%", sm: "350px" } }}
           >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              fullWidth
-              slotProps={{
-                htmlInput: {
-                  autoComplete: "off",
-                  "aria-label": "Enter your email address",
-                },
-              }}
-            />
             <Button
               variant="contained"
               color="primary"
               size="small"
+              fullWidth
               sx={{ minWidth: "fit-content" }}
             >
               Start now
