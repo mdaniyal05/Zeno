@@ -13,6 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ColorModeIconDropdown from "./shared-theme/ColorModeIconDropdown";
 import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -53,50 +54,22 @@ export default function AppAppBar() {
           <Box
             sx={{ flexGrow: 1, display: "flex", alignItems: "center", px: 0 }}
           >
-            <Typography
-              component="span"
-              variant="h1"
-              sx={(theme) => ({
-                fontSize: "inherit",
-                marginRight: 1,
-                color: "primary.main",
-                ...theme.applyStyles("dark", {
-                  color: "primary.light",
-                }),
-              })}
-            >
-              ZENO
-            </Typography>
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Button variant="text" color="info" size="small">
-                Features
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Testimonials
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Highlights
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Pricing
-              </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                sx={{ minWidth: 0 }}
+            <Link to={"/"} style={{ textDecoration: "none" }}>
+              <Typography
+                component="span"
+                variant="h1"
+                sx={(theme) => ({
+                  fontSize: "inherit",
+                  marginLeft: 1,
+                  color: "primary.main",
+                  ...theme.applyStyles("dark", {
+                    color: "primary.light",
+                  }),
+                })}
               >
-                FAQ
-              </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                sx={{ minWidth: 0 }}
-              >
-                Blog
-              </Button>
-            </Box>
+                ZENO
+              </Typography>
+            </Link>
           </Box>
           <Box
             sx={{
@@ -105,12 +78,16 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            <Button color="primary" variant="text" size="small">
-              Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small">
-              Sign up
-            </Button>
+            <Link to={"/signin"} style={{ textDecoration: "none" }}>
+              <Button color="primary" variant="text" size="small">
+                Sign in
+              </Button>
+            </Link>
+            <Link to={"/signup"} style={{ textDecoration: "none" }}>
+              <Button color="primary" variant="contained" size="small">
+                Sign up
+              </Button>
+            </Link>
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
@@ -139,24 +116,21 @@ export default function AppAppBar() {
                     <CloseRoundedIcon />
                   </IconButton>
                 </Box>
-
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
                 <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                <Link to={"/signup"} style={{ textDecoration: "none" }}>
+                  <MenuItem>
+                    <Button color="primary" variant="contained" fullWidth>
+                      Sign up
+                    </Button>
+                  </MenuItem>
+                </Link>
+                <Link to={"/signin"} style={{ textDecoration: "none" }}>
+                  <MenuItem>
+                    <Button color="primary" variant="outlined" fullWidth>
+                      Sign in
+                    </Button>
+                  </MenuItem>
+                </Link>
               </Box>
             </Drawer>
           </Box>
