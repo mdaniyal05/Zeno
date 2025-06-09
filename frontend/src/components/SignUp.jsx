@@ -74,6 +74,8 @@ export default function SignUp(props) {
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState("");
 
+  let isValid = true;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -93,6 +95,7 @@ export default function SignUp(props) {
     if (confirmPassword !== password) {
       setPasswordError(true);
       setPasswordErrorMessage("Confirm password does not match password.");
+      isValid = false;
     } else {
       setNameError(false);
       setNameErrorMessage("");
@@ -116,8 +119,6 @@ export default function SignUp(props) {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
     const name = document.getElementById("name");
-
-    let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
