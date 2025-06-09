@@ -11,13 +11,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getProfile: builder.mutation({
-      query: () => ({
-        url: `${USER_URL}/profile/:id`,
+    getProfile: builder.query({
+      query: (id) => ({
+        url: `${USER_URL}/profile/${id}`,
         method: "GET",
       }),
     }),
   }),
 });
 
-export const { useGetProfileMutation, useUpdateProfileMutation } = userApiSlice;
+export const { useGetProfileQuery, useUpdateProfileMutation } = userApiSlice;

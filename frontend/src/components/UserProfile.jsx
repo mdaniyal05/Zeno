@@ -1,13 +1,13 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
+import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "../redux/slices/userApiSlice";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -33,7 +33,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
-  maxWidth: "90%",
   padding: theme.spacing(2),
   [theme.breakpoints.up("sm")]: {
     padding: theme.spacing(4),
@@ -55,17 +54,40 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function UserProfile(props) {
+  const { userInfo } = useSelector((state) => state.auth);
+  const { data } = useGetProfileQuery(userInfo.userId);
+
+  let dateOfBirth;
+
+  if (data) {
+    dateOfBirth = data.dateOfBirth.slice(0, 10);
+  }
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
+            component="span"
+            variant="h1"
+            sx={(theme) => ({
+              fontSize: "1.2rem",
+              marginRight: 1,
+              color: "primary.main",
+              ...theme.applyStyles("dark", {
+                color: "primary.light",
+              }),
+            })}
+          >
+            USER PROFILE
+          </Typography>
+          <Typography
             component="h1"
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            User Profile
+            {data && `${data.firstName} ${data.lastName}`}
           </Typography>
           <Typography
             component="span"
@@ -79,7 +101,7 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            ZENO
+            {dateOfBirth}
           </Typography>
           <Typography
             component="span"
@@ -93,7 +115,7 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            ZENO
+            {data && data.about}
           </Typography>
           <Typography
             component="span"
@@ -107,7 +129,7 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            ZENO
+            {data && data.phoneNumber}
           </Typography>
           <Typography
             component="span"
@@ -121,7 +143,7 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            ZENO
+            {data && data.email}
           </Typography>
           <Box
             component="form"
