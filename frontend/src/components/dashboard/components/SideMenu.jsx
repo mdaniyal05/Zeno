@@ -38,10 +38,26 @@ export default function SideMenu() {
       <Box
         sx={{
           display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           mt: "calc(var(--template-frame-height, 0px) + 4px)",
           p: 1.5,
         }}
-      ></Box>
+      >
+        <Typography
+          component="span"
+          variant="h1"
+          sx={(theme) => ({
+            fontSize: "inherit",
+            color: "primary.main",
+            ...theme.applyStyles("dark", {
+              color: "primary.light",
+            }),
+          })}
+        >
+          ZENO
+        </Typography>
+      </Box>
       <Divider />
       <Box
         sx={{
