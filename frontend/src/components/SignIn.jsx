@@ -7,15 +7,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
-import ForgotPassword from "./ForgotPassword";
 import AppTheme from "./shared-theme/AppTheme";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../redux/slices/authApiSlice";
+import { setCredentials } from "../redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -60,30 +62,35 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [login] = useLoginMutation();
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const { userInfo } = useSelector((state) => state.auth);
+
+  React.useEffect(() => {
+    if (userInfo) {
+      navigate("/");
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  }, [navigate, userInfo]);
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate("/home");
+    } catch (error) {
+      console.error(error?.data?.message || error.error);
+    }
   };
 
   const validateInputs = () => {
@@ -144,7 +151,7 @@ export default function SignIn(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={submitHandler}
             noValidate
             sx={{
               display: "flex",
@@ -163,6 +170,8 @@ export default function SignIn(props) {
                 name="email"
                 placeholder="your@email.com"
                 autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 autoFocus
                 required
                 fullWidth
@@ -180,6 +189,8 @@ export default function SignIn(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 autoFocus
                 required
                 fullWidth
@@ -191,7 +202,6 @@ export default function SignIn(props) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
             <Button
               type="submit"
               fullWidth
@@ -200,26 +210,16 @@ export default function SignIn(props) {
             >
               Sign in
             </Button>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: "center" }}
-            >
-              Forgot your password?
-            </Link>
           </Box>
           <Divider>or</Divider>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Typography sx={{ textAlign: "center" }}>
               Don&apos;t have an account?{" "}
               <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
+                to={"/signup"}
+                style={{ textDecoration: "none", color: "white" }}
               >
-                Sign up
+                Sign Up
               </Link>
             </Typography>
           </Box>
