@@ -78,7 +78,7 @@ export default function SignIn(props) {
 
   React.useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate("/home");
     }
   }, [navigate, userInfo]);
 

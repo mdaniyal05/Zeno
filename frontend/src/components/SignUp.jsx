@@ -1,13 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -15,12 +12,18 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
+import { useDispatch, useSelector } from "react-redux";
+import { useRegisterMutation } from "../redux/slices/authApiSlice";
+import { setCredentials } from "../redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignSelf: "center",
   width: "100%",
+  maxHeight: "100%",
+  overflowY: "auto",
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: "auto",
@@ -59,12 +62,55 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp(props) {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [register] = useRegisterMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  React.useEffect(() => {
+    if (userInfo) {
+      navigate("/home");
+    }
+  }, [navigate, userInfo]);
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+
+    if (confirmPassword !== password) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Confirm password does not match password.");
+    } else {
+      setNameError(false);
+      setNameErrorMessage("");
+
+      try {
+        const res = await register({
+          firstName,
+          lastName,
+          email,
+          password,
+        }).unwrap();
+        dispatch(setCredentials({ ...res }));
+        navigate("/home");
+      } catch (error) {
+        console.error(error?.data?.message || error.error);
+      }
+    }
+  };
 
   const validateInputs = () => {
     const email = document.getElementById("email");
@@ -103,20 +149,6 @@ export default function SignUp(props) {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
@@ -146,11 +178,11 @@ export default function SignUp(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={submitHandler}
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="name">First name</FormLabel>
               <TextField
                 autoComplete="name"
                 name="name"
@@ -158,6 +190,24 @@ export default function SignUp(props) {
                 fullWidth
                 id="name"
                 placeholder="Jon Snow"
+                value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
+                error={nameError}
+                helperText={nameErrorMessage}
+                color={nameError ? "error" : "primary"}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="name">Last name</FormLabel>
+              <TextField
+                autoComplete="name"
+                name="name"
+                required
+                fullWidth
+                id="name"
+                placeholder="Jon Snow"
+                value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
                 error={nameError}
                 helperText={nameErrorMessage}
                 color={nameError ? "error" : "primary"}
@@ -173,6 +223,8 @@ export default function SignUp(props) {
                 name="email"
                 autoComplete="email"
                 variant="outlined"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 error={emailError}
                 helperText={emailErrorMessage}
                 color={passwordError ? "error" : "primary"}
@@ -189,15 +241,31 @@ export default function SignUp(props) {
                 id="password"
                 autoComplete="new-password"
                 variant="outlined"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 color={passwordError ? "error" : "primary"}
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive updates via email."
-            />
+            <FormControl>
+              <FormLabel htmlFor="password">Confirm password</FormLabel>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                placeholder="••••••"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                variant="outlined"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                error={passwordError}
+                helperText={passwordErrorMessage}
+                color={passwordError ? "error" : "primary"}
+              />
+            </FormControl>
             <Button
               type="submit"
               fullWidth
@@ -214,9 +282,8 @@ export default function SignUp(props) {
             <Typography sx={{ textAlign: "center" }}>
               Already have an account?{" "}
               <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
+                to={"/signin"}
+                style={{ textDecoration: "none", color: "white" }}
               >
                 Sign in
               </Link>
