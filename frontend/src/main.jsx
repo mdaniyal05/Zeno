@@ -14,14 +14,17 @@ import SignInPage from "./pages/SignInPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<LandingPage />} />
-      <Route path="/home" element={<HomePage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/signin" element={<SignInPage />} />
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/home" element={<HomePage />} />
+      </Route>
     </Route>
   )
 );
