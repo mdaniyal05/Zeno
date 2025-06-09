@@ -1,4 +1,3 @@
-import * as React from "react";
 import PropTypes from "prop-types";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -10,10 +9,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import MenuButton from "./MenuButton";
 import MenuContent from "./MenuContent";
-import CardAlert from "./CardAlert";
 import { useLogoutMutation } from "../../../redux/slices/authApiSlice";
 import { logout } from "../../../redux/slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function SideMenuMobile({ open, toggleDrawer }) {
@@ -21,6 +19,8 @@ function SideMenuMobile({ open, toggleDrawer }) {
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const logoutHandler = async () => {
     try {
@@ -58,12 +58,11 @@ function SideMenuMobile({ open, toggleDrawer }) {
           >
             <Avatar
               sizes="small"
-              alt="Riley Carter"
-              src="/static/images/avatar/7.jpg"
-              sx={{ width: 24, height: 24 }}
+              alt={userInfo.fullName}
+              sx={{ width: 25, height: 25 }}
             />
             <Typography component="p" variant="h6">
-              Riley Carter
+              {userInfo.fullName}
             </Typography>
           </Stack>
           <MenuButton showBadge>
@@ -75,7 +74,6 @@ function SideMenuMobile({ open, toggleDrawer }) {
           <MenuContent />
           <Divider />
         </Stack>
-        <CardAlert />
         <Stack sx={{ p: 2 }}>
           <Button
             variant="outlined"
