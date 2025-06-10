@@ -10,12 +10,10 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
-import ColorModeSelect from "./shared-theme/ColorModeSelect";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "../redux/slices/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -41,7 +39,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const updateProfileContainer = styled(Stack)(({ theme }) => ({
+const UpdateProfileContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
   padding: theme.spacing(2),
@@ -156,7 +154,7 @@ export default function SignUp(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <updateProfileContainer direction="column" justifyContent="space-between">
+      <UpdateProfileContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
             component="span"
@@ -317,7 +315,7 @@ export default function SignUp(props) {
             </Button>
           </Box>
         </Card>
-      </updateProfileContainer>
+      </UpdateProfileContainer>
     </AppTheme>
   );
 }
