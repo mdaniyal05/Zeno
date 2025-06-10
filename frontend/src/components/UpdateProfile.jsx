@@ -18,8 +18,9 @@ import {
   useGetProfileQuery,
   useUpdateProfileMutation,
 } from "../redux/slices/userApiSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -94,6 +95,10 @@ export default function UpdateProfile(props) {
   const submitHandler = async (event) => {
     event.preventDefault();
 
+    if (confirmPassword !== password) {
+      toast.error("Confirm password does not match password.");
+    }
+
     try {
       await updateUserProfile({
         id: userInfo.userId,
@@ -107,7 +112,7 @@ export default function UpdateProfile(props) {
       }).unwrap();
       navigate(`/profile/${userInfo.userId}`);
     } catch (error) {
-      console.error(error?.data?.message || error.error);
+      toast.error(error?.data?.message || error.error);
     }
   };
 

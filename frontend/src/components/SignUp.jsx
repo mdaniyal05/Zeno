@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "../redux/slices/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -93,13 +94,8 @@ export default function SignUp(props) {
     event.preventDefault();
 
     if (confirmPassword !== password) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Confirm password does not match password.");
-      isValid = false;
+      toast.error("Confirm password does not match password.");
     } else {
-      setNameError(false);
-      setNameErrorMessage("");
-
       try {
         const res = await register({
           firstName,
@@ -110,7 +106,7 @@ export default function SignUp(props) {
         dispatch(setCredentials({ ...res }));
         navigate("/home");
       } catch (error) {
-        console.error(error?.data?.message || error.error);
+        toast.error(error?.data?.message || error.error);
       }
     }
   };
@@ -129,9 +125,9 @@ export default function SignUp(props) {
       setEmailErrorMessage("");
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password.value || password.value.length < 8) {
       setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
+      setPasswordErrorMessage("Password must be at least 8 characters long.");
       isValid = false;
     } else {
       setPasswordError(false);
