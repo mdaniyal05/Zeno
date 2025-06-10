@@ -36,7 +36,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const UpdateProfileContainer = styled(Stack)(({ theme }) => ({
+const CreateBankAccountContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
   padding: theme.spacing(2),
@@ -59,7 +59,7 @@ const UpdateProfileContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function UpdateProfile(props) {
+export default function CreateBankAccount(props) {
   const { userInfo } = useSelector((state) => state.auth);
   const [accountName, setAccountName] = React.useState("");
   const [accountType, setAccountType] = React.useState("");
@@ -94,7 +94,10 @@ export default function UpdateProfile(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <UpdateProfileContainer direction="column" justifyContent="space-between">
+      <CreateBankAccountContainer
+        direction="column"
+        justifyContent="space-between"
+      >
         <Card variant="outlined">
           <Typography
             component="span"
@@ -199,7 +202,7 @@ export default function UpdateProfile(props) {
             </Button>
           </Box>
         </Card>
-      </UpdateProfileContainer>
+      </CreateBankAccountContainer>
     </AppTheme>
   );
 }
