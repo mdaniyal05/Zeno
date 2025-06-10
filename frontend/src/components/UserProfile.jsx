@@ -14,15 +14,14 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: "column",
   alignSelf: "center",
   width: "100%",
-  maxHeight: "100%",
-  overflowY: "auto",
   padding: theme.spacing(4),
-  gap: theme.spacing(2),
+  gap: theme.spacing(4),
   margin: "auto",
   boxShadow:
     "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("sm")]: {
-    width: "450px",
+  [theme.breakpoints.up("md")]: {
+    width: "600px",
+    height: "600px",
   },
   ...theme.applyStyles("dark", {
     boxShadow:
@@ -30,7 +29,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const SignUpContainer = styled(Stack)(({ theme }) => ({
+const ProfileContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
   padding: theme.spacing(2),
@@ -66,13 +65,13 @@ export default function UserProfile(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <SignUpContainer direction="column" justifyContent="space-between">
+      <ProfileContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "1.2rem",
+              fontSize: "1.5rem",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -93,7 +92,7 @@ export default function UserProfile(props) {
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "inherit",
+              fontSize: "1.2rem",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -101,13 +100,13 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            {dateOfBirth}
+            {`Date of Birth : ${dateOfBirth}`}
           </Typography>
           <Typography
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "inherit",
+              fontSize: "1.2rem",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -115,13 +114,13 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            {data && data.about}
+            {data && `About : ${data.about}`}
           </Typography>
           <Typography
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "inherit",
+              fontSize: "1.2rem",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -129,13 +128,13 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            {data && data.phoneNumber}
+            {data && `Phone number : ${data.phoneNumber}`}
           </Typography>
           <Typography
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "inherit",
+              fontSize: "1.2rem",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -143,18 +142,23 @@ export default function UserProfile(props) {
               }),
             })}
           >
-            {data && data.email}
+            {data && `Email : ${data.email}`}
           </Typography>
           <Box
             component="form"
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              width: "20rem",
+            }}
           >
-            <Button type="submit" fullWidth variant="contained">
+            <Button type="submit" variant="contained">
               Update Profile
             </Button>
           </Box>
         </Card>
-      </SignUpContainer>
+      </ProfileContainer>
     </AppTheme>
   );
 }
