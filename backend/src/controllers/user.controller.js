@@ -10,7 +10,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
-      avatar: user.avatar,
       dateOfBirth: user.dateOfBirth,
       about: user.about,
       phoneNumber: user.phoneNumber,
@@ -33,7 +32,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.about = req.body.about || user.about;
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     user.email = req.body.email || user.email;
-    user.avatar = req.body.avatar || user.avatar;
 
     if (req.body.password) {
       user.password = req.body.password;
@@ -48,7 +46,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       about: updatedUser.about,
       phoneNumber: updatedUser.phoneNumber,
       email: updatedUser.email,
-      avatar: updatedUser.avatar,
     });
   } else {
     res.status(404);
