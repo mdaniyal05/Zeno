@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import MainGrid from "./components/MainGrid";
 import SideMenu from "./components/SideMenu";
 import AppTheme from "../shared-theme/AppTheme";
+import UpdateUserProfile from "../UpdateUserProfile";
 
 export default function Dashboard(props) {
   return (
@@ -35,7 +36,8 @@ export default function Dashboard(props) {
             }}
           >
             <Header />
-            <MainGrid />
+            {/* <MainGrid /> */}
+            <UpdateUserProfile />
           </Stack>
         </Box>
       </Box>
