@@ -5,10 +5,10 @@ const USER_URL = "/api/users";
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     updateProfile: builder.mutation({
-      query: (data) => ({
-        url: `${USER_URL}/profile/:id`,
+      query: ({ id, ...patch }) => ({
+        url: `${USER_URL}/profile/${id}`,
         method: "PUT",
-        body: data,
+        body: patch,
       }),
     }),
     getProfile: builder.query({

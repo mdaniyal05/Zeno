@@ -14,7 +14,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useSelector } from "react-redux";
-import { useGetProfileQuery } from "../redux/slices/userApiSlice";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "../redux/slices/userApiSlice";
+import { Link, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -73,15 +78,38 @@ export default function UpdateProfile(props) {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  const navigate = useNavigate();
+
+  const [updateUserProfile] = useUpdateProfileMutation();
+
   React.useEffect(() => {
-    setFirstName(data && data.firstName);
-    setLastName(data && data.lastName);
-    setAbout(data && data.about);
-    setPhoneNumber(data && data.phoneNumber);
-    setEmail(data && data.email);
+    setFirstName((data && data.firstName) || "");
+    setLastName((data && data.lastName) || "");
+    setDateOfBirth((data && dayjs(data.dateOfBirth)) || null);
+    setAbout((data && data.about) || "");
+    setPhoneNumber((data && data.phoneNumber) || "");
+    setEmail((data && data.email) || "");
   }, [data]);
 
-  console.log(dateOfBirth);
+  const submitHandler = async (event) => {
+    event.preventDefault();
+
+    try {
+      await updateUserProfile({
+        id: userInfo.userId,
+        firstName,
+        lastName,
+        dateOfBirth,
+        about,
+        phoneNumber,
+        email,
+        password,
+      }).unwrap();
+      navigate(`/profile/${userInfo.userId}`);
+    } catch (error) {
+      console.error(error?.data?.message || error.error);
+    }
+  };
 
   return (
     <AppTheme {...props}>
@@ -111,7 +139,7 @@ export default function UpdateProfile(props) {
           </Typography>
           <Box
             component="form"
-            // onSubmit={submitHandler}
+            onSubmit={submitHandler}
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
             <FormControl>
@@ -119,7 +147,6 @@ export default function UpdateProfile(props) {
               <TextField
                 autoComplete="name"
                 name="name"
-                required
                 fullWidth
                 id="name"
                 placeholder="Mike"
@@ -132,7 +159,6 @@ export default function UpdateProfile(props) {
               <TextField
                 autoComplete="name"
                 name="name"
-                required
                 fullWidth
                 id="name"
                 placeholder="Tyson"
@@ -146,14 +172,13 @@ export default function UpdateProfile(props) {
                 <DatePicker
                   label="Date of birth"
                   value={dateOfBirth}
-                  onChange={(event) => setDateOfBirth(event.target.value)}
+                  onChange={(value) => setDateOfBirth(value)}
                 />
               </LocalizationProvider>
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="about">About</FormLabel>
               <TextField
-                required
                 fullWidth
                 id="about"
                 placeholder="I'm Awesome!"
@@ -167,7 +192,6 @@ export default function UpdateProfile(props) {
             <FormControl>
               <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
               <TextField
-                required
                 fullWidth
                 id="phoneNumber"
                 placeholder="03343567419"
@@ -181,7 +205,6 @@ export default function UpdateProfile(props) {
             <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
-                required
                 fullWidth
                 id="email"
                 placeholder="your@email.com"
@@ -195,7 +218,6 @@ export default function UpdateProfile(props) {
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
-                required
                 fullWidth
                 name="password"
                 placeholder="••••••"
@@ -210,7 +232,6 @@ export default function UpdateProfile(props) {
             <FormControl>
               <FormLabel htmlFor="password">Confirm password</FormLabel>
               <TextField
-                required
                 fullWidth
                 name="password"
                 placeholder="••••••"
@@ -222,12 +243,7 @@ export default function UpdateProfile(props) {
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              // onClick={validateInputs}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Update
             </Button>
           </Box>
