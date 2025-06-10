@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, UUIDV4 } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const bcrypt = require("bcryptjs");
 
