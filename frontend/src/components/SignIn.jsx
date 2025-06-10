@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../redux/slices/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -89,7 +90,7 @@ export default function SignIn(props) {
       dispatch(setCredentials({ ...res }));
       navigate("/home");
     } catch (error) {
-      console.error(error?.data?.message || error.error);
+      toast.error(error?.data?.message || error.error);
     }
   };
 

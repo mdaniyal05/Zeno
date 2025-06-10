@@ -6,9 +6,9 @@ const Account = sequelize.define(
   "Account",
   {
     accountId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
     },
     accountName: {

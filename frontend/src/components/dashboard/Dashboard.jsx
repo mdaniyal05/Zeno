@@ -7,7 +7,7 @@ import Header from "./components/Header";
 import MainGrid from "./components/MainGrid";
 import SideMenu from "./components/SideMenu";
 import AppTheme from "../shared-theme/AppTheme";
-import UpdateProfile from "../UpdateProfile";
+import CreateBankAccount from "../CreateBankAccount";
 
 export default function Dashboard(props) {
   return (
@@ -37,7 +37,7 @@ export default function Dashboard(props) {
           >
             <Header />
             {/* <MainGrid /> */}
-            <UpdateProfile />
+            <CreateBankAccount />
           </Stack>
         </Box>
       </Box>

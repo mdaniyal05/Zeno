@@ -8,7 +8,7 @@ const Expense = require("../models/expense.model");
 
 const syncModels = () => {
   User.sync();
-  // Account.sync();
+  Account.sync();
   // Category.sync();
   // Transaction.sync();
   // Budget.sync();
