@@ -85,7 +85,7 @@ export default function UpdateProfile(props) {
   React.useEffect(() => {
     setFirstName((data && data.firstName) || "");
     setLastName((data && data.lastName) || "");
-    setDateOfBirth((data && dayjs(data.dateOfBirth)) || null);
+    setDateOfBirth(data && dayjs(data.dateOfBirth));
     setAbout((data && data.about) || "");
     setPhoneNumber((data && data.phoneNumber) || "");
     setEmail((data && data.email) || "");
