@@ -1,3 +1,4 @@
+import * as React from "react";
 import { alpha } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -10,11 +11,20 @@ import AppTheme from "../shared-theme/AppTheme";
 import CreateBankAccount from "../CreateBankAccount";
 
 export default function Dashboard(props) {
+  const [activeItem, setActiveItem] = React.useState("Home");
+
+  const handleMenuItemClick = (item) => {
+    setActiveItem(item);
+  };
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex" }}>
-        <SideMenu />
+        <SideMenu
+          onMenuItemClick={handleMenuItemClick}
+          activeItem={activeItem}
+        />
         <AppNavbar />
         <Box
           component="main"
@@ -36,7 +46,7 @@ export default function Dashboard(props) {
             }}
           >
             <Header />
-            {/* <MainGrid /> */}
+            <MainGrid activeItem={activeItem} />
             <CreateBankAccount />
           </Stack>
         </Box>

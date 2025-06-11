@@ -49,7 +49,18 @@ const data = [
   },
 ];
 
-export default function MainGrid() {
+export default function MainGrid({ activeItem }) {
+  const changeActiveItem = () => {
+    switch (activeItem) {
+      case :
+        
+        break;
+    
+      default:
+        break;
+    }
+  }
+
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
       {/* cards */}
