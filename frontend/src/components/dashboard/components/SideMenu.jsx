@@ -22,7 +22,7 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export default function SideMenu({ onMenuItemClick }) {
+export default function SideMenu({ onMenuItemClick, activeItem }) {
   const { userInfo } = useSelector((state) => state.auth);
 
   return (
@@ -67,7 +67,10 @@ export default function SideMenu({ onMenuItemClick }) {
           flexDirection: "column",
         }}
       >
-        <MenuContent onMenuItemClick={onMenuItemClick} />
+        <MenuContent
+          onMenuItemClick={onMenuItemClick}
+          activeItem={activeItem}
+        />
       </Box>
       <Stack
         direction="row"

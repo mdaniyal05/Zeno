@@ -14,7 +14,7 @@ import { logout } from "../../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-function SideMenuMobile({ open, toggleDrawer }) {
+function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -71,7 +71,10 @@ function SideMenuMobile({ open, toggleDrawer }) {
         </Stack>
         <Divider />
         <Stack sx={{ flexGrow: 1 }}>
-          <MenuContent />
+          <MenuContent
+            onMenuItemClick={onMenuItemClick}
+            activeItem={activeItem}
+          />
           <Divider />
         </Stack>
         <Stack sx={{ p: 2 }}>

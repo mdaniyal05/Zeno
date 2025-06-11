@@ -1,9 +1,9 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import PageViewsBarChart from "./PageViewsBarChart";
-import SessionsChart from "./SessionsChart";
-import StatCard from "./StatCard";
+import PageViewsBarChart from "./dashboard/components/PageViewsBarChart";
+import SessionsChart from "./dashboard/components/SessionsChart";
+import StatCard from "./dashboard/components/StatCard";
 
 const data = [
   {

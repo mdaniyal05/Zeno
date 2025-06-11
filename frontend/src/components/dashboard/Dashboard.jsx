@@ -8,7 +8,6 @@ import Header from "./components/Header";
 import MainGrid from "./components/MainGrid";
 import SideMenu from "./components/SideMenu";
 import AppTheme from "../shared-theme/AppTheme";
-import CreateBankAccount from "../CreateBankAccount";
 
 export default function Dashboard(props) {
   const [activeItem, setActiveItem] = React.useState("Home");
@@ -25,7 +24,10 @@ export default function Dashboard(props) {
           onMenuItemClick={handleMenuItemClick}
           activeItem={activeItem}
         />
-        <AppNavbar />
+        <AppNavbar
+          onMenuItemClick={handleMenuItemClick}
+          activeItem={activeItem}
+        />
         <Box
           component="main"
           sx={(theme) => ({
@@ -47,7 +49,6 @@ export default function Dashboard(props) {
           >
             <Header />
             <MainGrid activeItem={activeItem} />
-            <CreateBankAccount />
           </Stack>
         </Box>
       </Box>

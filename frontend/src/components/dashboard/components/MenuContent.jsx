@@ -24,14 +24,14 @@ const mainListItems = [
   { text: "Budgets", icon: <MoneyIcon /> },
 ];
 
-export default function MenuContent({ onMenuItemClick }) {
+export default function MenuContent({ onMenuItemClick, activeItem }) {
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              selected={index === 0}
+              selected={item.text === activeItem}
               onClick={() => onMenuItemClick(item.text)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
