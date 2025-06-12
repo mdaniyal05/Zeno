@@ -7,7 +7,8 @@ const Budget = sequelize.define(
   "Budget",
   {
     budgetId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,

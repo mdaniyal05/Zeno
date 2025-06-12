@@ -8,7 +8,8 @@ const Transaction = sequelize.define(
   "Transaction",
   {
     transactionId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
