@@ -1,10 +1,14 @@
 const asyncHandler = require("express-async-handler");
 
 const calculateBudget = asyncHandler(async (budget) => {
-  if (expenseType === "Needs" || expenseType === "Wants") {
+  if (
+    expenseType === "Needs" ||
+    expenseType === "Wants" ||
+    expenseType === "Savings"
+  ) {
     budget.amountSpent = budget.amountSpent + expenseAmount;
     budget.amountRemaining = budget.amountRemaining - expenseAmount;
-    budget.percentUsed = (budget.amountRemaining / budget.budgetAmount) * 100;
+    budget.percentUsed = (budget.amountSpent / budget.budgetAmount) * 100;
 
     let currentDate = new Date();
 
