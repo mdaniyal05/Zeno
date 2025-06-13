@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Budget = require("../models/budget.model");
-const Category = require("../models/category.model");
 
 const getUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
@@ -41,18 +40,9 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
 });
 
 const createUserBudget = asyncHandler(async (req, res) => {
-  const {
-    budgetAmount,
-    budgetPeriod,
-    description,
-    startDate,
-    endDate,
-    categoryName,
-  } = req.body;
+  const { budgetAmount, budgetPeriod, description, startDate, endDate } =
+    req.body;
 
-  const category = await Category.findOne({
-    where: { categoryName: categoryName },
-  });
   const userId = req.user.userId;
   const notificationsEnabled = true;
   const status = "Active";
@@ -69,7 +59,6 @@ const createUserBudget = asyncHandler(async (req, res) => {
     status: status,
     notificationsEnabled: notificationsEnabled,
     userId: userId,
-    categoryId: category.categoryId,
   });
 
   if (newBudget) {
