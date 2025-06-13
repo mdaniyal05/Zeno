@@ -9,7 +9,6 @@ const Income = sequelize.define(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
     },
     incomeAmount: {
