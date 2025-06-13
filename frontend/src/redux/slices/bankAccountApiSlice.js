@@ -4,15 +4,15 @@ const ACCOUNT_URL = "/api/accounts";
 
 export const bankAccountApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserAccounts: builder.mutation({
+    getAllUserAccounts: builder.query({
       query: () => ({
         url: `${ACCOUNT_URL}/`,
         method: "GET",
       }),
     }),
-    getUserAccount: builder.mutation({
-      query: () => ({
-        url: `${ACCOUNT_URL}/account/:id`,
+    getUserAccount: builder.query({
+      query: (id) => ({
+        url: `${ACCOUNT_URL}/account/${id}`,
         method: "GET",
       }),
     }),
@@ -24,8 +24,8 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     deleteUserAccount: builder.mutation({
-      query: () => ({
-        url: `${ACCOUNT_URL}/account/:id`,
+      query: (id) => ({
+        url: `${ACCOUNT_URL}/account/${id}`,
         method: "DELETE",
       }),
     }),
@@ -33,8 +33,8 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserAccountsMutation,
-  useGetUserAccountMutation,
+  useGetAllUserAccountsQuery,
+  useGetUserAccountQuery,
   useCreateUserAccountMutation,
   useDeleteUserAccountMutation,
 } = bankAccountApiSlice;

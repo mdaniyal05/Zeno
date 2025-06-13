@@ -4,15 +4,15 @@ const BUDGET_URL = "/api/budgets";
 
 export const budgetApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserBudgets: builder.mutation({
+    getAllUserBudgets: builder.query({
       query: () => ({
         url: `${BUDGET_URL}/`,
         method: "GET",
       }),
     }),
-    getUserBudget: builder.mutation({
-      query: () => ({
-        url: `${BUDGET_URL}/budget/:id`,
+    getUserBudget: builder.query({
+      query: (id) => ({
+        url: `${BUDGET_URL}/budget/${id}`,
         method: "GET",
       }),
     }),
@@ -24,8 +24,8 @@ export const budgetApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     deleteUserBudget: builder.mutation({
-      query: () => ({
-        url: `${BUDGET_URL}/budget/:id`,
+      query: (id) => ({
+        url: `${BUDGET_URL}/budget/${id}`,
         method: "DELETE",
       }),
     }),
@@ -33,8 +33,8 @@ export const budgetApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserBudgetsMutation,
-  useGetUserBudgetMutation,
+  useGetAllUserBudgetsQuery,
+  useGetUserBudgetQuery,
   useCreateUserBudgetMutation,
   useDeleteUserBudgetMutation,
 } = budgetApiSlice;

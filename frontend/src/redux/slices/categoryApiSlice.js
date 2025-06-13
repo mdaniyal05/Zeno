@@ -4,15 +4,15 @@ const CATEGORY_URL = "/api/categories";
 
 export const categoryApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserCategories: builder.mutation({
+    getAllUserCategories: builder.query({
       query: () => ({
         url: `${CATEGORY_URL}/`,
         method: "GET",
       }),
     }),
-    getUserCategory: builder.mutation({
-      query: () => ({
-        url: `${CATEGORY_URL}/category/:id`,
+    getUserCategory: builder.query({
+      query: (id) => ({
+        url: `${CATEGORY_URL}/category/${id}`,
         method: "GET",
       }),
     }),
@@ -24,15 +24,15 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updateUserCategory: builder.mutation({
-      query: (data) => ({
-        url: `${CATEGORY_URL}/category/:id`,
+      query: ({ id, ...patch }) => ({
+        url: `${CATEGORY_URL}/category/${id}`,
         method: "PUT",
-        body: data,
+        body: patch,
       }),
     }),
     deleteUserCategory: builder.mutation({
-      query: () => ({
-        url: `${CATEGORY_URL}/category/:id`,
+      query: (id) => ({
+        url: `${CATEGORY_URL}/category/${id}`,
         method: "DELETE",
       }),
     }),
@@ -40,8 +40,8 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserCategoriesMutation,
-  useGetUserCategoryMutation,
+  useGetAllUserCategoriesQuery,
+  useGetUserCategoryQuery,
   useCreateUserCategoryMutation,
   useUpdateUserCategoryMutation,
   useDeleteUserCategoryMutation,

@@ -4,15 +4,15 @@ const TRANSACTION_URL = "/api/transactions";
 
 export const transactionApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserTransactions: builder.mutation({
+    getAllUserTransactions: builder.query({
       query: () => ({
         url: `${TRANSACTION_URL}/`,
         method: "GET",
       }),
     }),
-    getUserTransaction: builder.mutation({
-      query: () => ({
-        url: `${TRANSACTION_URL}/transaction/:id`,
+    getUserTransaction: builder.query({
+      query: (id) => ({
+        url: `${TRANSACTION_URL}/transaction/${id}`,
         method: "GET",
       }),
     }),
@@ -27,7 +27,7 @@ export const transactionApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserTransactionsMutation,
-  useGetUserTransactionMutation,
+  useGetAllUserTransactionsQuery,
+  useGetUserTransactionQuery,
   useCreateUserTransactionMutation,
 } = transactionApiSlice;
