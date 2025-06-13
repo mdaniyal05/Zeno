@@ -4,7 +4,7 @@ const INCOME_URL = "/api/incomes";
 
 export const incomeApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserIncomes: builder.mutation({
+    getAllUserIncomes: builder.query({
       query: () => ({
         url: `${INCOME_URL}/`,
         method: "GET",
@@ -33,7 +33,7 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserIncomesMutation,
+  useGetAllUserIncomesQuery,
   useGetUserIncomeMutation,
   useCreateUserIncomeMutation,
   useDeleteUserIncomeMutation,
