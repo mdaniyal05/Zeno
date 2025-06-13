@@ -16,6 +16,10 @@ const calculateBudget = asyncHandler(async (budget) => {
       budget.amountSpent = budget.amountSpent + expenseAmount;
       budget.amountRemaining = budget.amountRemaining - expenseAmount;
       budget.percentUsed = (budget.amountSpent / budget.budgetAmount) * 100;
+    } else {
+      throw new Error(
+        "The Budget Is Either Completed Or Exceeded. Select Or Create Another Budget."
+      );
     }
 
     if (budget.endDate < `${year}-${month}-${day}`) {

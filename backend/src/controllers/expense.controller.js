@@ -61,7 +61,12 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
     if (category.monthlyLimitRemainingAmount === 0) {
       category.isMonthlyLimitExceeded = true;
+      category.isActive === false;
     }
+  } else {
+    throw new Error(
+      "The Category Is Not Active Anymore Due To Exceeded Monthly Limit. Select Another Category Or Create A New One."
+    );
   }
 
   const newExpense = await Expense.create({
