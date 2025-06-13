@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 const Category = require("./category.model");
+const Budget = require("./budget.model");
 
 const Expense = sequelize.define(
   "Expense",
@@ -61,6 +62,19 @@ Category.hasMany(Expense, {
 Expense.belongsTo(Category, {
   foreignKey: { name: "categoryId", allowNull: false },
   as: "fromCategory",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
+
+Budget.hasMany(Expense, {
+  foreignKey: { name: "budgetId", allowNull: false },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
+
+Expense.belongsTo(Budget, {
+  foreignKey: { name: "budgetId", allowNull: false },
+  as: "ofBudget",
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
 });
