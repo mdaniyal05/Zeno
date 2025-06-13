@@ -10,9 +10,9 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
-    getUserIncome: builder.mutation({
-      query: () => ({
-        url: `${INCOME_URL}/income/:id`,
+    getUserIncome: builder.query({
+      query: (id) => ({
+        url: `${INCOME_URL}/income/${id}`,
         method: "GET",
       }),
     }),
@@ -24,8 +24,8 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     deleteUserIncome: builder.mutation({
-      query: () => ({
-        url: `${INCOME_URL}/income/:id`,
+      query: (id) => ({
+        url: `${INCOME_URL}/income/${id}`,
         method: "DELETE",
       }),
     }),
@@ -34,7 +34,7 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetAllUserIncomesQuery,
-  useGetUserIncomeMutation,
+  useGetUserIncomeQuery,
   useCreateUserIncomeMutation,
   useDeleteUserIncomeMutation,
 } = incomeApiSlice;

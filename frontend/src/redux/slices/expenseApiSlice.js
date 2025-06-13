@@ -4,15 +4,15 @@ const EXPENSE_URL = "/api/expenses";
 
 export const expenseApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserExpenses: builder.mutation({
+    getAllUserExpenses: builder.query({
       query: () => ({
         url: `${EXPENSE_URL}/`,
         method: "GET",
       }),
     }),
-    getUserExpense: builder.mutation({
-      query: () => ({
-        url: `${EXPENSE_URL}/expense/:id`,
+    getUserExpense: builder.query({
+      query: (id) => ({
+        url: `${EXPENSE_URL}/expense/${id}`,
         method: "GET",
       }),
     }),
@@ -24,8 +24,8 @@ export const expenseApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     deleteUserExpense: builder.mutation({
-      query: () => ({
-        url: `${EXPENSE_URL}/expense/:id`,
+      query: (id) => ({
+        url: `${EXPENSE_URL}/expense/${id}`,
         method: "DELETE",
       }),
     }),
@@ -33,8 +33,8 @@ export const expenseApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetAllUserExpensesMutation,
-  useGetUserExpenseMutation,
+  useGetAllUserExpensesQuery,
+  useGetUserExpenseQuery,
   useCreateUserExpenseMutation,
   useDeleteUserExpenseMutation,
 } = expenseApiSlice;
