@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
 const Budget = require("../models/budget.model");
 const calculateBudget = require("./budgetCalculation.controller");
+const Category = require("../models/category.model");
 
 const getUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
@@ -43,14 +44,22 @@ const createUserExpense = asyncHandler(async (req, res) => {
     currency,
     expenseDate,
     merchant,
+    categoryId,
     budgetId,
   } = req.body;
 
   const userId = req.user.userId;
 
+  const category = await Category.findByPk(categoryId);
   const budget = await Budget.findByPk(budgetId);
 
   calculateBudget(budget);
+
+  category.monthlyLimitRemainingAmount = category.monthlyLimit - expenseAmount;
+
+  if (category.monthlyLimitRemainingAmount === 0) {
+    category.isMonthlyLimitExceeded = true;
+  }
 
   const newExpense = await Expense.create({
     expenseAmount: expenseAmount,

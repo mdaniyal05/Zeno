@@ -37,6 +37,14 @@ const Category = sequelize.define(
       },
       allowNull: false,
     },
+    monthlyLimitRemainingAmount: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    isMonthlyLimitExceeded: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     tableName: "Categories",
