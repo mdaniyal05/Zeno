@@ -17,11 +17,11 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell>Expense Amount</TableCell>
-            <TableCell align="right">Expense Type</TableCell>
-            <TableCell align="right">Currency</TableCell>
-            <TableCell align="right">Expense Date</TableCell>
-            <TableCell align="right">Merchant</TableCell>
-            <TableCell align="right">Created At</TableCell>
+            <TableCell align="left">Expense Type</TableCell>
+            <TableCell align="left">Currency</TableCell>
+            <TableCell align="left">Expense Date</TableCell>
+            <TableCell align="left">Merchant</TableCell>
+            <TableCell align="left">Created At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -34,11 +34,11 @@ export default function BasicTable() {
                 <TableCell component="th" scope="row">
                   {row.expenseAmount} Rs
                 </TableCell>
-                <TableCell align="right">{row.expenseType}</TableCell>
-                <TableCell align="right">{row.currency}</TableCell>
-                <TableCell align="right">{row.expenseDate}</TableCell>
-                <TableCell align="right">{row.merchant}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{row.expenseType}</TableCell>
+                <TableCell align="left">{row.currency}</TableCell>
+                <TableCell align="left">{row.expenseDate}</TableCell>
+                <TableCell align="left">{row.merchant}</TableCell>
+                <TableCell align="left">
                   {row.createdAt.slice(0, 10)}
                 </TableCell>
               </TableRow>

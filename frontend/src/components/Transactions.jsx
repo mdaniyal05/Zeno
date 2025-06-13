@@ -17,10 +17,10 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell>Transaction Amount</TableCell>
-            <TableCell align="right">Transaction Type</TableCell>
-            <TableCell align="right">Payment Method</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Created At</TableCell>
+            <TableCell align="left">Transaction Type</TableCell>
+            <TableCell align="left">Payment Method</TableCell>
+            <TableCell align="left">Description</TableCell>
+            <TableCell align="left">Created At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,12 +33,10 @@ export default function BasicTable() {
                 <TableCell component="th" scope="row">
                   {row.transactionAmount} Rs
                 </TableCell>
-                <TableCell align="right">{row.transactionType}</TableCell>
-                <TableCell align="right">{row.paymentMethod}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">
-                  {row.createdAt.slice(0, 10)}
-                </TableCell>
+                <TableCell align="left">{row.transactionType}</TableCell>
+                <TableCell align="left">{row.paymentMethod}</TableCell>
+                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="left">{row.createdAt.slice(0, 10)}</TableCell>
               </TableRow>
             ))}
         </TableBody>

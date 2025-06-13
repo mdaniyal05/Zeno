@@ -17,10 +17,10 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell>Income Amount</TableCell>
-            <TableCell align="right">Currency</TableCell>
-            <TableCell align="right">Income Date</TableCell>
-            <TableCell align="right">Income Source</TableCell>
-            <TableCell align="right">Created At</TableCell>
+            <TableCell align="left">Currency</TableCell>
+            <TableCell align="left">Income Date</TableCell>
+            <TableCell align="left">Income Source</TableCell>
+            <TableCell align="left">Created At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,10 +33,10 @@ export default function BasicTable() {
                 <TableCell component="th" scope="row">
                   {row.incomeAmount} Rs
                 </TableCell>
-                <TableCell align="right">{row.currency}</TableCell>
-                <TableCell align="right">{row.incomeDate}</TableCell>
-                <TableCell align="right">{row.incomeSource}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{row.currency}</TableCell>
+                <TableCell align="left">{row.incomeDate}</TableCell>
+                <TableCell align="left">{row.incomeSource}</TableCell>
+                <TableCell align="left">
                   {row.createdAt.slice(0, 10)}
                 </TableCell>
               </TableRow>

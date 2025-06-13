@@ -17,13 +17,13 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell>Account Name</TableCell>
-            <TableCell align="right">Account Type</TableCell>
-            <TableCell align="right">Account Balance</TableCell>
-            <TableCell align="right">Account Currency</TableCell>
-            <TableCell align="right">Bank Name</TableCell>
-            <TableCell align="right">Account Number</TableCell>
-            <TableCell align="right">Active Status</TableCell>
-            <TableCell align="right">Created At</TableCell>
+            <TableCell align="left">Account Type</TableCell>
+            <TableCell align="left">Account Balance</TableCell>
+            <TableCell align="left">Account Currency</TableCell>
+            <TableCell align="left">Bank Name</TableCell>
+            <TableCell align="left">Account Number</TableCell>
+            <TableCell align="left">Active Status</TableCell>
+            <TableCell align="left">Created At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -36,13 +36,13 @@ export default function BasicTable() {
                 <TableCell component="th" scope="row">
                   {row.accountName}
                 </TableCell>
-                <TableCell align="right">{row.accountType}</TableCell>
-                <TableCell align="right">{row.accountBalance}</TableCell>
-                <TableCell align="right">{row.accountCurrency}</TableCell>
-                <TableCell align="right">{row.bankName}</TableCell>
-                <TableCell align="right">{row.accountNumber}</TableCell>
-                <TableCell align="right">{row.isActive}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{row.accountType}</TableCell>
+                <TableCell align="left">{row.accountBalance}</TableCell>
+                <TableCell align="left">{row.accountCurrency}</TableCell>
+                <TableCell align="left">{row.bankName}</TableCell>
+                <TableCell align="left">{row.accountNumber}</TableCell>
+                <TableCell align="left">{row.isActive}</TableCell>
+                <TableCell align="left">
                   {row.createdAt.slice(0, 10)}
                 </TableCell>
               </TableRow>

@@ -17,13 +17,13 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell>Category Name</TableCell>
-            <TableCell align="right">Category Type</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Active Status</TableCell>
-            <TableCell align="right">Monthly Limit</TableCell>
-            <TableCell align="right">Monthly Limit Remaining Amount</TableCell>
-            <TableCell align="right">Monthl Limit Exceeded Status</TableCell>
-            <TableCell align="right">Created At</TableCell>
+            <TableCell align="left">Category Type</TableCell>
+            <TableCell align="left">Description</TableCell>
+            <TableCell align="left">Active Status</TableCell>
+            <TableCell align="left">Monthly Limit</TableCell>
+            <TableCell align="left">Monthly Limit Remaining Amount</TableCell>
+            <TableCell align="left">Monthl Limit Exceeded Status</TableCell>
+            <TableCell align="left">Created At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -36,19 +36,19 @@ export default function BasicTable() {
                 <TableCell component="th" scope="row">
                   {row.categoryName}
                 </TableCell>
-                <TableCell align="right">{row.categoryType}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.isActive}</TableCell>
-                <TableCell align="right">{row.monthlyLimit}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">{row.categoryType}</TableCell>
+                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="left">{row.isActive}</TableCell>
+                <TableCell align="left">{row.monthlyLimit}</TableCell>
+                <TableCell align="left">
                   {row.monthlyLimitRemainingAmount}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="left">
                   {row.isMonthlyLimitExceeded === false
                     ? "Not Exceeded"
                     : "Exceeded"}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="left">
                   {row.createdAt.slice(0, 10)}
                 </TableCell>
               </TableRow>
