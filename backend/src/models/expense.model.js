@@ -67,13 +67,13 @@ Expense.belongsTo(Category, {
 });
 
 Budget.hasMany(Expense, {
-  foreignKey: { name: "budgetId", allowNull: false },
+  foreignKey: { name: "budgetId" },
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
 });
 
 Expense.belongsTo(Budget, {
-  foreignKey: { name: "budgetId", allowNull: false },
+  foreignKey: { name: "budgetId" },
   as: "ofBudget",
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
