@@ -55,10 +55,13 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
   calculateBudget(budget);
 
-  category.monthlyLimitRemainingAmount = category.monthlyLimit - expenseAmount;
+  if (category.isActive === true) {
+    category.monthlyLimitRemainingAmount =
+      category.monthlyLimit - expenseAmount;
 
-  if (category.monthlyLimitRemainingAmount === 0) {
-    category.isMonthlyLimitExceeded = true;
+    if (category.monthlyLimitRemainingAmount === 0) {
+      category.isMonthlyLimitExceeded = true;
+    }
   }
 
   const newExpense = await Expense.create({
