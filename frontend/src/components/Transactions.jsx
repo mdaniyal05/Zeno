@@ -16,10 +16,10 @@ export default function BasicTable() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Income Amount</TableCell>
-            <TableCell align="right">Currency</TableCell>
-            <TableCell align="right">Income Date</TableCell>
-            <TableCell align="right">Income Source</TableCell>
+            <TableCell>Transaction Amount</TableCell>
+            <TableCell align="right">Transaction Type</TableCell>
+            <TableCell align="right">Payment Method</TableCell>
+            <TableCell align="right">Description</TableCell>
             <TableCell align="right">Created At</TableCell>
           </TableRow>
         </TableHead>

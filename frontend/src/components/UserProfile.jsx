@@ -87,7 +87,7 @@ export default function UserProfile(props) {
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            {data && `${data.firstName} ${data.lastName}`}
+            {userInfo.fullName}
           </Typography>
           <Typography
             component="span"
