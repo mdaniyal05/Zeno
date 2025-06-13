@@ -110,7 +110,8 @@ export default function UpdateProfile(props) {
         email,
         password,
       }).unwrap();
-      navigate(`/profile/${userInfo.userId}`);
+      navigate(`/home`);
+      toast.success("Profile updated successfully.");
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }

@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import { useSelector } from "react-redux";
 import { useGetProfileQuery } from "../redux/slices/userApiSlice";
+import { Link } from "react-router-dom";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -21,7 +22,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
     "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
   [theme.breakpoints.up("md")]: {
     width: "600px",
-    height: "600px",
+    height: "500px",
   },
   ...theme.applyStyles("dark", {
     boxShadow:
@@ -153,9 +154,11 @@ export default function UserProfile(props) {
               width: "20rem",
             }}
           >
-            <Button type="submit" variant="contained">
-              Update Profile
-            </Button>
+            <Link to={`/update-profile/${userInfo.userId}`}>
+              <Button type="submit" variant="contained">
+                Update Profile
+              </Button>
+            </Link>
           </Box>
         </Card>
       </ProfileContainer>

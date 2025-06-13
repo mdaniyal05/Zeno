@@ -1,5 +1,11 @@
+import UserProfile from "./UserProfile";
+
 const Profile = () => {
-  return <div>Profile</div>;
+  return (
+    <>
+      <UserProfile />
+    </>
+  );
 };
 
 export default Profile;
