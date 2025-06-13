@@ -9,11 +9,11 @@ const Expense = require("../models/expense.model");
 const syncModels = () => {
   User.sync();
   Account.sync();
-  // Category.sync();
-  // Transaction.sync();
-  // Budget.sync();
-  // Income.sync();
-  // Expense.sync();
+  Category.sync();
+  Transaction.sync();
+  Budget.sync();
+  Income.sync();
+  Expense.sync();
 };
 
 module.exports = syncModels;

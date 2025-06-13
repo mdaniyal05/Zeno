@@ -24,7 +24,7 @@ const Budget = sequelize.define(
       },
     },
     budgetPeriod: {
-      type: DataTypes.ENUM("Daily", "Weekly", "Monthly", "Yearly"),
+      type: DataTypes.ENUM("Weekly", "Monthly", "Yearly"),
       allowNull: false,
     },
     description: {
@@ -38,18 +38,24 @@ const Budget = sequelize.define(
       },
     },
     startDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         validator(value) {
-          if (value > this.startDate) {
-            throw new Error("Start date must be in the past.");
+          let currentDate = new Date();
+
+          let year = currentDate.getFullYear();
+          let month = currentDate.getMonth() + 1;
+          let day = currentDate.getDate();
+
+          if (value > `${year}-${month}-${day}`) {
+            throw new Error("Start date must be current date.");
           }
         },
       },
     },
     endDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         validator(value) {
@@ -102,16 +108,16 @@ Budget.belongsTo(User, {
   onUpdate: "CASCADE",
 });
 
-Category.hasOne(Budget, {
-  foreignKey: { name: "categoryId", allowNull: false },
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
-Budget.belongsTo(Category, {
-  as: "ofCategory",
-  foreignKey: { name: "categoryId" },
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
+// Category.hasOne(Budget, {
+//   foreignKey: { name: "categoryId", allowNull: false },
+//   onDelete: "NO ACTION",
+//   onUpdate: "CASCADE",
+// });
+// Budget.belongsTo(Category, {
+//   as: "ofCategory",
+//   foreignKey: { name: "categoryId" },
+//   onDelete: "NO ACTION",
+//   onUpdate: "CASCADE",
+// });
 
 module.exports = Budget;
