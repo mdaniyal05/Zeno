@@ -26,7 +26,7 @@ const Expense = sequelize.define(
       allowNull: false,
     },
     expenseDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     merchant: {
