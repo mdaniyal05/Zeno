@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
+const Budget = require("../models/budget.model");
+const calculateBudget = require("./budgetCalculation.controller");
 
 const getUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
@@ -35,10 +37,20 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
 });
 
 const createUserExpense = asyncHandler(async (req, res) => {
-  const { expenseAmount, expenseType, currency, expenseDate, merchant } =
-    req.body;
+  const {
+    expenseAmount,
+    expenseType,
+    currency,
+    expenseDate,
+    merchant,
+    budgetId,
+  } = req.body;
 
   const userId = req.user.userId;
+
+  const budget = await Budget.findByPk(budgetId);
+
+  calculateBudget(budget);
 
   const newExpense = await Expense.create({
     expenseAmount: expenseAmount,
@@ -47,6 +59,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
     expenseDate: expenseDate,
     merchant: merchant,
     userId: userId,
+    budgetId: budget.budgetId,
   });
 
   if (newExpense) {
