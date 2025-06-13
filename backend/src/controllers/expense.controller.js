@@ -53,11 +53,35 @@ const createUserExpense = asyncHandler(async (req, res) => {
   const category = await Category.findByPk(categoryId);
   const budget = await Budget.findByPk(budgetId);
 
-  calculateBudget(budget);
+  if (category.isActive === true && budget.status === "Active") {
+    calculateBudget(budget);
 
-  if (category.isActive === true) {
     category.monthlyLimitRemainingAmount =
       category.monthlyLimit - expenseAmount;
+
+    const newExpense = await Expense.create({
+      expenseAmount: expenseAmount,
+      expenseType: expenseType,
+      currency: currency,
+      expenseDate: expenseDate,
+      merchant: merchant,
+      userId: userId,
+      budgetId: budget.budgetId,
+    });
+
+    if (newExpense) {
+      res.status(201).json({
+        expenseAmount: newExpense.expenseAmount,
+        expenseType: newExpense.expenseType,
+        currency: newExpense.currency,
+        expenseDate: newExpense.expenseDate,
+        merchant: newExpense.merchant,
+        message: "Expense Created Successfully.",
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid Expense Data.");
+    }
 
     if (category.monthlyLimitRemainingAmount === 0) {
       category.isMonthlyLimitExceeded = true;
@@ -67,30 +91,6 @@ const createUserExpense = asyncHandler(async (req, res) => {
     throw new Error(
       "The Category Is Not Active Anymore Due To Exceeded Monthly Limit. Select Another Category Or Create A New One."
     );
-  }
-
-  const newExpense = await Expense.create({
-    expenseAmount: expenseAmount,
-    expenseType: expenseType,
-    currency: currency,
-    expenseDate: expenseDate,
-    merchant: merchant,
-    userId: userId,
-    budgetId: budget.budgetId,
-  });
-
-  if (newExpense) {
-    res.status(201).json({
-      expenseAmount: newExpense.expenseAmount,
-      expenseType: newExpense.expenseType,
-      currency: newExpense.currency,
-      expenseDate: newExpense.expenseDate,
-      merchant: newExpense.merchant,
-      message: "Expense Created Successfully.",
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid Expense Data.");
   }
 });
 

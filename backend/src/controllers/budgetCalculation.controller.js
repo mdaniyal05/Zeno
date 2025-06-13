@@ -32,6 +32,8 @@ const calculateBudget = asyncHandler(async (budget) => {
     ) {
       budget.status = "Exceeded";
     }
+  } else {
+    throw new Error("Invalid Expense Type.");
   }
 });
 
