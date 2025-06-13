@@ -6,21 +6,26 @@ const calculateBudget = asyncHandler(async (budget) => {
     expenseType === "Wants" ||
     expenseType === "Savings"
   ) {
-    budget.amountSpent = budget.amountSpent + expenseAmount;
-    budget.amountRemaining = budget.amountRemaining - expenseAmount;
-    budget.percentUsed = (budget.amountSpent / budget.budgetAmount) * 100;
-
     let currentDate = new Date();
 
     let year = currentDate.getFullYear();
     let month = currentDate.getMonth() + 1;
     let day = currentDate.getDate();
 
+    if (budget.status === "Active") {
+      budget.amountSpent = budget.amountSpent + expenseAmount;
+      budget.amountRemaining = budget.amountRemaining - expenseAmount;
+      budget.percentUsed = (budget.amountSpent / budget.budgetAmount) * 100;
+    }
+
     if (budget.endDate < `${year}-${month}-${day}`) {
       budget.status = "Completed";
     }
 
-    if (budget.amountSpent > budget.budgetAmount) {
+    if (
+      budget.amountSpent > budget.budgetAmount &&
+      budget.endDate > `${year}-${month}-${day}`
+    ) {
       budget.status = "Exceeded";
     }
   }
