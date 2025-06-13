@@ -59,6 +59,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
     category.monthlyLimitRemainingAmount =
       category.monthlyLimit - expenseAmount;
 
+    if (category.monthlyLimitRemainingAmount <= 0) {
+      category.isMonthlyLimitExceeded = true;
+      category.isActive === false;
+    }
+
     const newExpense = await Expense.create({
       expenseAmount: expenseAmount,
       expenseType: expenseType,
@@ -66,6 +71,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
       expenseDate: expenseDate,
       merchant: merchant,
       userId: userId,
+      categoryId: category.categoryId,
       budgetId: budget.budgetId,
     });
 
@@ -82,14 +88,9 @@ const createUserExpense = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Invalid Expense Data.");
     }
-
-    if (category.monthlyLimitRemainingAmount === 0) {
-      category.isMonthlyLimitExceeded = true;
-      category.isActive === false;
-    }
   } else {
     throw new Error(
-      "The Category Is Not Active Anymore Due To Exceeded Monthly Limit. Select Another Category Or Create A New One."
+      "The Category Or Budget Is Not Active Anymore Due To Exceeded Factor. Select Another Category Or Budget Or Create A New One."
     );
   }
 });
