@@ -5,23 +5,56 @@ import Typography from "@mui/material/Typography";
 import StatCard from "./dashboard/components/StatCard";
 import { useGetAllUserIncomesQuery } from "../redux/slices/incomeApiSlice";
 import { useGetAllUserExpensesQuery } from "../redux/slices/expenseApiSlice";
+import { useGetAllUserAccountsQuery } from "../redux/slices/bankAccountApiSlice";
+import { useGetAllUserTransactionsQuery } from "../redux/slices/transactionApiSlice";
 
 export default function Home() {
   const [incomes, setIncomes] = React.useState([]);
   const [totalIncome, setTotalIncome] = React.useState(0);
   const [expenses, setExpenses] = React.useState([]);
   const [totalExpense, setTotalExpense] = React.useState(0);
+  const [balances, setBalances] = React.useState([]);
+  const [totalBalances, setTotalBalances] = React.useState(0);
+  const [transactions, setTransactions] = React.useState([]);
+  const [totalTransactions, setTotalTransactions] = React.useState(0);
 
   const { data: income } = useGetAllUserIncomesQuery();
   const { data: expense } = useGetAllUserExpensesQuery();
+  const { data: balance } = useGetAllUserAccountsQuery();
+  const { data: transaction } = useGetAllUserTransactionsQuery();
 
   React.useEffect(() => {
     let incomeAmounts = [];
     let expenseAmounts = [];
+    let balanceAmounts = [];
+    let transactionAmounts = [];
     let incomeTotal = 0;
     let expenseTotal = 0;
+    let balanceTotal = 0;
+    let transactionTotal = 0;
 
-    if (income && expense) {
+    if (income && expense && balance && transaction) {
+      transaction.transactionsData.map((transaction) =>
+        transactionAmounts.push(transaction.transactionAmount)
+      );
+      setTransactions(transactionAmounts);
+
+      transaction.transactionsData.map(
+        (transaction) =>
+          (transactionTotal = transactionTotal + transaction.transactionAmount)
+      );
+      setTotalTransactions(transactionTotal);
+
+      balance.accountsData.map((balance) =>
+        balanceAmounts.push(balance.accountBalance)
+      );
+      setBalances(balanceAmounts);
+
+      balance.accountsData.map(
+        (balance) => (balanceTotal = balanceTotal + balance.accountBalance)
+      );
+      setTotalBalances(balanceTotal);
+
       income.incomesData.map((income) =>
         incomeAmounts.push(income.incomeAmount)
       );
@@ -42,7 +75,7 @@ export default function Home() {
       );
       setTotalExpense(expenseTotal);
     }
-  }, [income, expense]);
+  }, [income, expense, balance, transaction]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
@@ -58,40 +91,40 @@ export default function Home() {
       >
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <StatCard
-            title={"Incomes"}
+            title={"Total Incomes"}
             value={totalIncome}
             interval={"Last 30 Days"}
-            trend={"down"}
+            trend={"neutral"}
             data={incomes}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <StatCard
-            title={"Expenses"}
+            title={"Total Expenses"}
             value={totalExpense}
             interval={"Last 30 Days"}
-            trend={"up"}
+            trend={"neutral"}
             data={expenses}
           />
         </Grid>
-        {/* <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <StatCard
-            title={"Incomes"}
-            value={totalIncome}
-            interval={"Last 20 Days"}
-            trend={"down"}
-            data={incomes}
+            title={"Total Accounts Balance"}
+            value={totalBalances}
+            interval={"Last 30 Days"}
+            trend={"neutral"}
+            data={balances}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <StatCard
-            title={"Incomes"}
-            value={totalIncome}
-            interval={"Last 20 Days"}
-            trend={"down"}
-            data={incomes}
+            title={"Total Transactions"}
+            value={totalTransactions}
+            interval={"Last 30 Days"}
+            trend={"neutral"}
+            data={transactions}
           />
-        </Grid> */}
+        </Grid>
       </Grid>
     </Box>
   );
