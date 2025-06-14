@@ -38,7 +38,9 @@ export default function BasicTable() {
                 </TableCell>
                 <TableCell align="left">{row.categoryType}</TableCell>
                 <TableCell align="left">{row.description}</TableCell>
-                <TableCell align="left">{row.isActive}</TableCell>
+                <TableCell align="left">
+                  {row.isActive === false ? "Not Active" : "Active"}
+                </TableCell>
                 <TableCell align="left">{row.monthlyLimit}</TableCell>
                 <TableCell align="left">
                   {row.monthlyLimitRemainingAmount}
@@ -48,9 +50,7 @@ export default function BasicTable() {
                     ? "Not Exceeded"
                     : "Exceeded"}
                 </TableCell>
-                <TableCell align="left">
-                  {row.createdAt.slice(0, 10)}
-                </TableCell>
+                <TableCell align="left">{row.createdAt.slice(0, 10)}</TableCell>
               </TableRow>
             ))}
         </TableBody>

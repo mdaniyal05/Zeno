@@ -41,10 +41,10 @@ export default function BasicTable() {
                 <TableCell align="left">{row.accountCurrency}</TableCell>
                 <TableCell align="left">{row.bankName}</TableCell>
                 <TableCell align="left">{row.accountNumber}</TableCell>
-                <TableCell align="left">{row.isActive}</TableCell>
                 <TableCell align="left">
-                  {row.createdAt.slice(0, 10)}
+                  {row.isActive === false ? "Not Active" : "Active"}
                 </TableCell>
+                <TableCell align="left">{row.createdAt.slice(0, 10)}</TableCell>
               </TableRow>
             ))}
         </TableBody>
