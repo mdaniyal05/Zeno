@@ -31,16 +31,6 @@ const User = sequelize.define(
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
       },
-      // set(value) {
-      //   if (!value) {
-      //     this.setDataValue("dateOfBirth", null);
-      //     return;
-      //   }
-
-      //   const [day, month, year] = value.split("-");
-      //   const formattedDate = `${year}-${month}-${day}`;
-      //   this.setDataValue("dateOfBirth", formattedDate);
-      // },
     },
     about: {
       type: DataTypes.TEXT,

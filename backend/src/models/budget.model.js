@@ -107,16 +107,16 @@ Budget.belongsTo(User, {
   onUpdate: "CASCADE",
 });
 
-// Category.hasOne(Budget, {
-//   foreignKey: { name: "categoryId", allowNull: false },
-//   onDelete: "NO ACTION",
-//   onUpdate: "CASCADE",
-// });
-// Budget.belongsTo(Category, {
-//   as: "ofCategory",
-//   foreignKey: { name: "categoryId" },
-//   onDelete: "NO ACTION",
-//   onUpdate: "CASCADE",
-// });
+Category.hasOne(Budget, {
+  foreignKey: { name: "categoryId", allowNull: false },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
+Budget.belongsTo(Category, {
+  as: "ofCategory",
+  foreignKey: { name: "categoryId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
 
 module.exports = Budget;
