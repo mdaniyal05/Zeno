@@ -57,12 +57,6 @@ export default function Profile(props) {
   const { userInfo } = useSelector((state) => state.auth);
   const { data } = useGetProfileQuery(userInfo.userId);
 
-  let dateOfBirth;
-
-  if (data) {
-    dateOfBirth = data.dateOfBirth.slice(0, 10);
-  }
-
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
@@ -101,7 +95,7 @@ export default function Profile(props) {
               }),
             })}
           >
-            {`Date of Birth : ${dateOfBirth}`}
+            {data && `Date of Birth : ${data.dateOfBirth}`}
           </Typography>
           <Typography
             component="span"
