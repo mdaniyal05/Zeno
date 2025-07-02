@@ -41,22 +41,17 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const userExists = await User.findOne({ where: { email: email } });
 
-  if (userExists) {
-    if (await bcrypt.compare(password, userExists.password)) {
-      generateJwtToken(res, userExists.userId);
+  if (userExists && (await bcrypt.compare(password, userExists.password))) {
+    generateJwtToken(res, userExists.userId);
 
-      res.status(200).json({
-        userId: userExists.userId,
-        fullName: `${userExists.firstName} ${userExists.lastName}`,
-        email: userExists.email,
-      });
-    } else {
-      res.status(401);
-      throw new Error("Invalid Email or Password.");
-    }
+    res.status(200).json({
+      userId: userExists.userId,
+      fullName: `${userExists.firstName} ${userExists.lastName}`,
+      email: userExists.email,
+    });
   } else {
-    res.status(404);
-    throw new Error("User Not Found.");
+    res.status(401);
+    throw new Error("Invalid Password or Email.");
   }
 });
 
