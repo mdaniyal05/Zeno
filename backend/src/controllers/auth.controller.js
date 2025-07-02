@@ -50,10 +50,13 @@ const loginUser = asyncHandler(async (req, res) => {
         fullName: `${userExists.firstName} ${userExists.lastName}`,
         email: userExists.email,
       });
+    } else {
+      res.status(401);
+      throw new Error("Invalid Email or Password.");
     }
   } else {
-    res.status(401);
-    throw new Error("Invalid Email or Password.");
+    res.status(404);
+    throw new Error("User Not Found.");
   }
 });
 
