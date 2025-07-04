@@ -19,7 +19,6 @@ import {
   useUpdateProfileMutation,
 } from "../redux/slices/userApiSlice";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -72,7 +71,7 @@ export default function UpdateProfile(props) {
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
-  const [dateOfBirth, setDateOfBirth] = React.useState(null);
+  const [dateOfBirth, setDateOfBirth] = React.useState();
   const [about, setAbout] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -86,7 +85,6 @@ export default function UpdateProfile(props) {
   React.useEffect(() => {
     setFirstName((data && data.firstName) || "");
     setLastName((data && data.lastName) || "");
-    setDateOfBirth(data && dayjs(data.dateOfBirth));
     setAbout((data && data.about) || "");
     setPhoneNumber((data && data.phoneNumber) || "");
     setEmail((data && data.email) || "");
