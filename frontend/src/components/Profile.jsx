@@ -9,6 +9,7 @@ import AppTheme from "./shared-theme/AppTheme";
 import { useSelector } from "react-redux";
 import { useGetProfileQuery } from "../redux/slices/userApiSlice";
 import { Link } from "react-router-dom";
+import ButtonComponent from "../components/ButtonComponent";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -148,11 +149,10 @@ export default function Profile(props) {
               width: "20rem",
             }}
           >
-            <Link to={`/update-profile/${userInfo.userId}`}>
-              <Button type="submit" variant="contained">
-                Update Profile
-              </Button>
-            </Link>
+            <ButtonComponent
+              link={`/update-profile/${userInfo.userId}`}
+              text={"Update Profile"}
+            />
           </Box>
         </Card>
       </ProfileContainer>
