@@ -16,6 +16,12 @@ import store from "./redux/store.js";
 import { Provider } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import UpdateProfilePage from "./pages/UpdateProfilePage.jsx";
+import CreateBankAccountPage from "./pages/CreateBankAccountPage.jsx";
+import CreateBudgetPage from "./pages/CreateBudgetPage.jsx";
+import CreateCategoryPage from "./pages/CreateCategoryPage.jsx";
+import CreateExpensePage from "./pages/CreateExpensePage.jsx";
+import CreateIncomePage from "./pages/CreateIncomePage.jsx";
+import CreateTransactionPage from "./pages/CreateTransactionPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +32,12 @@ const router = createBrowserRouter(
       <Route path="" element={<PrivateRoute />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/update-profile/:id" element={<UpdateProfilePage />} />
+        <Route path="/create-account" element={<CreateBankAccountPage />} />
+        <Route path="/create-budget" element={<CreateBudgetPage />} />
+        <Route path="/create-category" element={<CreateCategoryPage />} />
+        <Route path="/create-expense" element={<CreateExpensePage />} />
+        <Route path="/create-income" element={<CreateIncomePage />} />
+        <Route path="/create-transaction" element={<CreateTransactionPage />} />
       </Route>
     </Route>
   )
