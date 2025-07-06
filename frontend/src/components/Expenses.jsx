@@ -14,7 +14,7 @@ export default function BasicTable() {
   return (
     <>
       <div style={{ textAlign: "end", margin: "1rem" }}>
-        <ButtonComponent link={``} text={"Create Expense"} />
+        <ButtonComponent link={`/create-expense`} text={"Create Expense"} />
       </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
