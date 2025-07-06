@@ -1,11 +1,11 @@
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-const ButtonComponent = ({ link, text }) => {
+const ButtonComponent = ({ link = "", text, type = "button" }) => {
   return (
     <>
       <Link to={link}>
-        <Button type="button" variant="contained">
+        <Button type={type} variant="contained">
           {text}
         </Button>
       </Link>

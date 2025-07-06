@@ -2,20 +2,20 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
-import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useCreateUserAccountMutation } from "../redux/slices/bankAccountApiSlice";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -62,7 +62,35 @@ const CreateBankAccountContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function CreateBankAccount(props) {
+  const [accountName, setAccountName] = React.useState("");
   const [accountType, setAccountType] = React.useState("");
+  const [accountBalance, setAccountBalance] = React.useState("");
+  const [accountCurrency, setAccountCurrency] = React.useState("");
+  const [bankName, setBankName] = React.useState("");
+  const [accountNumber, setAccountNumber] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const [createAccount] = useCreateUserAccountMutation();
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+
+    try {
+      await createAccount({
+        accountName,
+        accountType,
+        accountBalance,
+        accountCurrency,
+        bankName,
+        accountNumber,
+      }).unwrap();
+      navigate("/home");
+      toast.success("Bank account created successfully.");
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  };
 
   return (
     <AppTheme {...props}>
@@ -96,7 +124,7 @@ export default function CreateBankAccount(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={""}
+            onSubmit={submitHandler}
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
             <FormControl>
@@ -108,6 +136,8 @@ export default function CreateBankAccount(props) {
                 fullWidth
                 id="name"
                 placeholder="Crypto account"
+                value={accountName}
+                onChange={(event) => setAccountName(event.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -117,8 +147,8 @@ export default function CreateBankAccount(props) {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={accountType}
                     label="Account Type"
+                    value={accountType}
                     onChange={(event) => setAccountType(event.target.value)}
                   >
                     <MenuItem value={"Current"}>Current</MenuItem>
@@ -137,6 +167,8 @@ export default function CreateBankAccount(props) {
                 placeholder="2000000"
                 name="accountBalance"
                 variant="outlined"
+                value={accountBalance}
+                onChange={(event) => setAccountBalance(event.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -148,6 +180,8 @@ export default function CreateBankAccount(props) {
                 placeholder="PKR"
                 id="accountCurrency"
                 variant="outlined"
+                value={accountCurrency}
+                onChange={(event) => setAccountCurrency(event.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -159,6 +193,8 @@ export default function CreateBankAccount(props) {
                 placeholder="Meezan Bank"
                 id="bankName"
                 variant="outlined"
+                value={bankName}
+                onChange={(event) => setBankName(event.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -170,6 +206,8 @@ export default function CreateBankAccount(props) {
                 placeholder="4786235490"
                 id="accountNumber"
                 variant="outlined"
+                value={accountNumber}
+                onChange={(event) => setAccountNumber(event.target.value)}
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
