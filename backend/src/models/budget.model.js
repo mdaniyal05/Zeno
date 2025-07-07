@@ -66,15 +66,12 @@ const Budget = sequelize.define(
     },
     amountSpent: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
     },
     amountRemaining: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
     },
     percentUsed: {
       type: DataTypes.DECIMAL(5, 2),
-      allowNull: false,
       validate: {
         min: 0,
         max: 100,
@@ -82,11 +79,9 @@ const Budget = sequelize.define(
     },
     status: {
       type: DataTypes.ENUM("Active", "Completed", "Exceeded"),
-      allowNull: false,
     },
     notificationsEnabled: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
     },
   },
   {
