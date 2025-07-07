@@ -3,6 +3,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useGetAllUserExpensesQuery } from "../redux/slices/expenseApiSlice";
@@ -26,6 +29,7 @@ export default function BasicTable() {
               <TableCell align="left">Expense Date</TableCell>
               <TableCell align="left">Merchant</TableCell>
               <TableCell align="left">Created At</TableCell>
+              <TableCell align="left">Options</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -44,6 +48,14 @@ export default function BasicTable() {
                   <TableCell align="left">{row.merchant}</TableCell>
                   <TableCell align="left">
                     {row.createdAt.slice(0, 10)}
+                  </TableCell>
+                  <TableCell align="left">
+                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete">
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
