@@ -145,8 +145,8 @@ export default function CreateBankAccount(props) {
               <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth>
                   <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
+                    labelId="accountType"
+                    id="accountType"
                     label="Account Type"
                     value={accountType}
                     onChange={(event) => setAccountType(event.target.value)}
