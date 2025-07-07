@@ -171,10 +171,9 @@ export default function UpdateProfile(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="dob">DOB</FormLabel>
+              <FormLabel htmlFor="dob">Date of Birth</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Date of birth"
                   value={dateOfBirth}
                   onChange={(value) => setDateOfBirth(value)}
                 />
