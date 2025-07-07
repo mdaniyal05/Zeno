@@ -5,6 +5,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useGetAllUserIncomesQuery } from "../redux/slices/incomeApiSlice.js";
 import ButtonComponent from "../components/ButtonComponent";
 
@@ -25,6 +28,7 @@ export default function BasicTable() {
               <TableCell align="left">Income Date</TableCell>
               <TableCell align="left">Income Source</TableCell>
               <TableCell align="left">Created At</TableCell>
+              <TableCell align="left">Options</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -42,6 +46,14 @@ export default function BasicTable() {
                   <TableCell align="left">{row.incomeSource}</TableCell>
                   <TableCell align="left">
                     {row.createdAt.slice(0, 10)}
+                  </TableCell>
+                  <TableCell align="left">
+                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete">
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
