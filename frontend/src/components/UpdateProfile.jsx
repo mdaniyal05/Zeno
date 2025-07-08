@@ -124,7 +124,7 @@ export default function UpdateProfile(props) {
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "1.2rem",
+              fontSize: "inherit",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -132,7 +132,7 @@ export default function UpdateProfile(props) {
               }),
             })}
           >
-            {userInfo.fullName}
+            ZENO
           </Typography>
           <Typography
             component="h1"
