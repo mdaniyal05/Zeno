@@ -1,6 +1,10 @@
+import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
@@ -8,7 +12,6 @@ import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import { useSelector } from "react-redux";
 import { useGetProfileQuery } from "../redux/slices/userApiSlice";
-import { Link } from "react-router-dom";
 import ButtonComponent from "../components/ButtonComponent";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -16,14 +19,15 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: "column",
   alignSelf: "center",
   width: "100%",
+  maxHeight: "100%",
+  overflowY: "auto",
   padding: theme.spacing(4),
-  gap: theme.spacing(4),
+  gap: theme.spacing(2),
   margin: "auto",
   boxShadow:
     "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("md")]: {
-    width: "600px",
-    height: "500px",
+  [theme.breakpoints.up("sm")]: {
+    width: "450px",
   },
   ...theme.applyStyles("dark", {
     boxShadow:
@@ -67,7 +71,7 @@ export default function Profile(props) {
             component="span"
             variant="h1"
             sx={(theme) => ({
-              fontSize: "1.5rem",
+              fontSize: "inherit",
               marginRight: 1,
               color: "primary.main",
               ...theme.applyStyles("dark", {
@@ -75,80 +79,59 @@ export default function Profile(props) {
               }),
             })}
           >
-            USER PROFILE
+            ZENO
           </Typography>
           <Typography
             component="h1"
             variant="h4"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            {userInfo.fullName}
-          </Typography>
-          <Typography
-            component="span"
-            variant="h1"
-            sx={(theme) => ({
-              fontSize: "1.2rem",
-              marginRight: 1,
-              color: "primary.main",
-              ...theme.applyStyles("dark", {
-                color: "primary.light",
-              }),
-            })}
-          >
-            {data && `Date of Birth : ${data.dateOfBirth}`}
-          </Typography>
-          <Typography
-            component="span"
-            variant="h1"
-            sx={(theme) => ({
-              fontSize: "1.2rem",
-              marginRight: 1,
-              color: "primary.main",
-              ...theme.applyStyles("dark", {
-                color: "primary.light",
-              }),
-            })}
-          >
-            {data && `About : ${data.about}`}
-          </Typography>
-          <Typography
-            component="span"
-            variant="h1"
-            sx={(theme) => ({
-              fontSize: "1.2rem",
-              marginRight: 1,
-              color: "primary.main",
-              ...theme.applyStyles("dark", {
-                color: "primary.light",
-              }),
-            })}
-          >
-            {data && `Phone number : ${data.phoneNumber}`}
-          </Typography>
-          <Typography
-            component="span"
-            variant="h1"
-            sx={(theme) => ({
-              fontSize: "1.2rem",
-              marginRight: 1,
-              color: "primary.main",
-              ...theme.applyStyles("dark", {
-                color: "primary.light",
-              }),
-            })}
-          >
-            {data && `Email : ${data.email}`}
+            User Details
           </Typography>
           <Box
             component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              width: "20rem",
-            }}
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
+            <FormControl>
+              <FormLabel htmlFor="name">Full Name</FormLabel>
+              <TextField
+                disabled
+                defaultValue={userInfo.fullName}
+                variant="outlined"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="dob">Date of Birth</FormLabel>
+              <TextField
+                disabled
+                defaultValue={data && data.dateOfBirth}
+                variant="outlined"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="about">About</FormLabel>
+              <TextField
+                disabled
+                defaultValue={data && data.about}
+                variant="outlined"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="phoneNumber">Phone Number</FormLabel>
+              <TextField
+                disabled
+                defaultValue={data && data.phoneNumber}
+                variant="outlined"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                disabled
+                defaultValue={data && data.email}
+                variant="outlined"
+              />
+            </FormControl>
             <ButtonComponent
               link={`/update-profile/${userInfo.userId}`}
               text={"Update Profile"}
