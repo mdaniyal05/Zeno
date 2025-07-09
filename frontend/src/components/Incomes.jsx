@@ -8,11 +8,28 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useGetAllUserIncomesQuery } from "../redux/slices/incomeApiSlice.js";
+import {
+  useGetAllUserIncomesQuery,
+  useDeleteUserIncomeMutation,
+} from "../redux/slices/incomeApiSlice.js";
 import ButtonComponent from "../components/ButtonComponent";
 
 export default function BasicTable() {
   const { data } = useGetAllUserIncomesQuery();
+
+  const [deleteIncome] = useDeleteUserIncomeMutation();
+
+  const deleteIncomeHandler = async (event) => {
+    event.preventDefault();
+
+    try {
+      if (data) {
+        await deleteIncome().unwrap();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -48,7 +65,11 @@ export default function BasicTable() {
                     {row.createdAt.slice(0, 10)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
+                    <IconButton
+                      aria-label="delete"
+                      sx={{ mr: 1 }}
+                      onClick={deleteIncomeHandler}
+                    >
                       <DeleteIcon />
                     </IconButton>
                     <IconButton aria-label="delete">
