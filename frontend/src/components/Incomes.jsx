@@ -19,18 +19,6 @@ export default function BasicTable() {
 
   const [deleteIncome] = useDeleteUserIncomeMutation();
 
-  const deleteIncomeHandler = async (event) => {
-    event.preventDefault();
-
-    try {
-      if (data) {
-        await deleteIncome().unwrap();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <div style={{ textAlign: "end", margin: "1rem" }}>
@@ -68,7 +56,7 @@ export default function BasicTable() {
                     <IconButton
                       aria-label="delete"
                       sx={{ mr: 1 }}
-                      onClick={deleteIncomeHandler}
+                      onClick={() => deleteIncome(row.incomeId)}
                     >
                       <DeleteIcon />
                     </IconButton>
