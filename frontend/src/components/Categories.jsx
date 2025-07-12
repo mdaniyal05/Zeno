@@ -4,15 +4,19 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import Paper from "@mui/material/Paper";
-import { useGetAllUserCategoriesQuery } from "../redux/slices/categoryApiSlice";
+import {
+  useGetAllUserCategoriesQuery,
+  useDeleteUserCategoryMutation,
+} from "../redux/slices/categoryApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
+import AlertDialog from "./AlertDialog.jsx";
 
 export default function BasicTable() {
   const { data } = useGetAllUserCategoriesQuery();
+
+  const [deleteCategory] = useDeleteUserCategoryMutation();
 
   return (
     <>
@@ -62,12 +66,14 @@ export default function BasicTable() {
                     {row.createdAt.slice(0, 10)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                      <EditIcon />
-                    </IconButton>
+                    <AlertDialog
+                      icon={<DeleteIcon />}
+                      contentText={
+                        "Are you sure you want to delete this category?"
+                      }
+                      title={"Confirmation"}
+                      mutation={() => deleteCategory(row.categoryId)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
