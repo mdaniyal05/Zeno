@@ -4,15 +4,19 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import Paper from "@mui/material/Paper";
-import { useGetAllUserAccountsQuery } from "../redux/slices/bankAccountApiSlice";
+import {
+  useGetAllUserAccountsQuery,
+  useDeleteUserAccountMutation,
+} from "../redux/slices/bankAccountApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
+import AlertDialog from "./AlertDialog.jsx";
 
 export default function BasicTable() {
   const { data } = useGetAllUserAccountsQuery();
+
+  const [deleteBankAccount] = useDeleteUserAccountMutation();
 
   return (
     <>
@@ -56,12 +60,14 @@ export default function BasicTable() {
                     {row.createdAt.slice(0, 10)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                      <EditIcon />
-                    </IconButton>
+                    <AlertDialog
+                      icon={<DeleteIcon />}
+                      contentText={
+                        "Are you sure you want to delete this bank account?"
+                      }
+                      title={"Confirmation"}
+                      mutation={() => deleteBankAccount(row.accountId)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
