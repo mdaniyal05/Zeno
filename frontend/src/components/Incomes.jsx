@@ -1,3 +1,4 @@
+import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,6 +14,7 @@ import {
   useDeleteUserIncomeMutation,
 } from "../redux/slices/incomeApiSlice.js";
 import ButtonComponent from "../components/ButtonComponent";
+import AlertDialog from "./AlertDialog.jsx";
 
 export default function BasicTable() {
   const { data } = useGetAllUserIncomesQuery();
@@ -53,16 +55,14 @@ export default function BasicTable() {
                     {row.createdAt.slice(0, 10)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton
-                      aria-label="delete"
-                      sx={{ mr: 1 }}
-                      onClick={() => deleteIncome(row.incomeId)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                      <EditIcon />
-                    </IconButton>
+                    <AlertDialog
+                      icon={<DeleteIcon />}
+                      contentText={
+                        "Are you sure you want to delete this income?"
+                      }
+                      title={"Confirmation"}
+                      mutation={() => deleteIncome(row.incomeId)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

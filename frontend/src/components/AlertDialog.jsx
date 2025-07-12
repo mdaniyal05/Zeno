@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialog({ icon, contentText, title }) {
+export default function AlertDialog({ icon, contentText, title, mutation }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -41,7 +41,13 @@ export default function AlertDialog({ icon, contentText, title }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
+          <Button
+            onClick={() => {
+              mutation().then(handleClose);
+            }}
+          >
+            Agree
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
