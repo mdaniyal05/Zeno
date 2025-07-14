@@ -45,3 +45,5 @@ const generateOtp = asyncHandler(async (req, res) => {
     throw new Error("Something Went Wrong.");
   }
 });
+
+module.exports = generateOtp;
