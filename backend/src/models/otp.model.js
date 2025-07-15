@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
-const verifyEmail = require("../utils/verificationEmail");
 
 const Otp = sequelize.define(
   "Otp",
@@ -8,25 +7,34 @@ const Otp = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        msg: "Email is already in use.",
+      },
+      validate: {
+        isEmail: {
+          msg: "Please enter a valid email address.",
+        },
+        isLowercase: {
+          msg: "Email must be in lowercase.",
+        },
+      },
     },
     otp: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
-    expiresIn: {
+    otpAttempts: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    isBlocked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    blockUntil: {
       type: DataTypes.DATE,
-      defaultValue: () => new Date(Date.now() + 5 * 60 * 1000),
     },
   },
   { timestamps: true, updatedAt: false }
 );
-
-Otp.afterCreate(async (otp, options) => {
-  console.log("New record saved to the database");
-
-  if (otp.isNewRecord) {
-    await verifyEmail(otp.email, otp.otp);
-  }
-});
 
 module.exports = Otp;
