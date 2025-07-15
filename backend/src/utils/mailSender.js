@@ -14,7 +14,7 @@ const mailSender = (email, title, body) => {
 
     transporter.sendMail(
       {
-        from: process.env.MAIL_USER,
+        from: process.env.FROM_MAIL,
         to: email,
         subject: title,
         html: body,
