@@ -1,48 +1,51 @@
-const otpGenerator = require("otp-generator");
 const asyncHandler = require("express-async-handler");
 const Otp = require("../models/otp.model");
-const User = require("../models/user.model");
+const generateOtp = require("../utils/generateOtp");
+const verifyEmail = require("../utils/verificationEmail");
 
 const generateOtp = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  const userExists = await User.findOne({ where: { email: email } });
+  let otp = await Otp.findOne({ where: { email: email } });
 
-  if (userExists) {
-    res.status(400);
-    throw new Error("User Already Exists.");
+  if (!otp) {
+    otp = await Otp.create({ email: email });
   }
 
-  let otp = otpGenerator.generate(6, {
-    upperCaseAlphabets: false,
-    lowerCaseAlphabets: false,
-    specialChars: false,
-  });
-
-  let result = await Otp.findOne({ where: { otp: otp } });
-
-  while (result) {
-    otp = otpGenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    });
-    result = await Otp.findOne({ where: { otp: otp } });
+  if (otp.isBlocked) {
+    const currentTime = new Date();
+    if (currentTime < otp.blockUntil) {
+      res.status(403);
+      throw new Error("You Are Blocked. Try After Some Time.");
+    } else {
+      otp.isBlocked = false;
+      otp.OtpAttempts = 0;
+    }
   }
 
-  const newOtp = await Otp.create({
-    email: email,
-    otp: otp,
-  });
+  const lastOtpTime = otp.createdAt;
+  const currentTime = new Date();
 
-  if (newOtp) {
-    res.status(201).json({
-      otp: newOtp.otp,
+  if (lastOtpTime && currentTime - lastOtpTime < 60000) {
+    res.status(403);
+    throw new Error("One Minute Gap Required Between OTP Requests.");
+  }
+
+  const OTP = generateOtp();
+  otp.otp = OTP;
+  otp.createdAt = currentTime;
+
+  await otp.save();
+
+  const verify = verifyEmail(email, OTP);
+
+  if (verify) {
+    res.status(200).json({
       message: "OTP Sent Successfully.",
     });
   } else {
     res.status(500);
-    throw new Error("Something Went Wrong.");
+    throw new Error("Serverr Error.");
   }
 });
 
