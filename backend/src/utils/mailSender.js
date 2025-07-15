@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const mailSender = async (email, title, body) => {
+const mailSender = (email, title, body) => {
   try {
     let transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
@@ -10,17 +10,23 @@ const mailSender = async (email, title, body) => {
       },
     });
 
-    let info = await transporter.sendMail({
-      from: "Zeno",
-      to: email,
-      subject: title,
-      html: body,
-    });
-
-    console.log(`Email info: ${info}`);
-    return info;
+    transporter.sendMail(
+      {
+        from: process.env.MAIL_USER,
+        to: email,
+        subject: title,
+        html: body,
+      },
+      (error, info) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log(`Email sent: ${info.response}`);
+        }
+      }
+    );
   } catch (error) {
-    console.error(error.message);
+    throw new Error(`Something Went Wrong: ${error}`);
   }
 };
 
