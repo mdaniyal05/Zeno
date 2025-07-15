@@ -47,7 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const currentTime = new Date();
 
   if (currentTime - otpCreatedTime > 3 * 60 * 1000) {
-    await Otp.destroy({ where: { email: newUser.email } });
+    await Otp.destroy({ where: { email: email } });
     res.status(403);
     throw new Error("OTP Expired.");
   }
