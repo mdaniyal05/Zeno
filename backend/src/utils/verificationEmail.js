@@ -6,7 +6,8 @@ const verifyEmail = async (email, otp) => {
                 <p>Here is your OTP code: ${otp}</p>`;
 
   try {
-    await mailSender(email, title, body);
+    mailSender(email, title, body);
+    return true;
   } catch (error) {
     throw new Error(`Error occured while sending email: ${error}`);
   }
