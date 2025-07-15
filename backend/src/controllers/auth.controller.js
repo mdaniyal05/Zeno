@@ -5,11 +5,7 @@ const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, password } = req.body;
-});
-
-const verifyOtp = asyncHandler(async (req, res) => {
-  const { email, OTP } = req.body;
+  const { firstName, lastName, email, password, OTP } = req.body;
 
   const userExists = await User.findOne({ where: { email: email } });
 
@@ -64,6 +60,8 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
   if (newUser) {
     generateJwtToken(res, newUser.userId);
+
+    await Otp.destroy({ where: { email: newUser.email } });
 
     res.status(201).json({
       userId: newUser.userId,
