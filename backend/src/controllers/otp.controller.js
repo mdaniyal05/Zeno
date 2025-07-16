@@ -3,7 +3,7 @@ const Otp = require("../models/otp.model");
 const generateOtp = require("../utils/generateOtp");
 const verifyEmail = require("../utils/verificationEmail");
 
-const generateOtp = asyncHandler(async (req, res) => {
+const generateOTP = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
   let otp = await Otp.findOne({ where: { email: email } });
@@ -45,8 +45,8 @@ const generateOtp = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(500);
-    throw new Error("Serverr Error.");
+    throw new Error("Server Error.");
   }
 });
 
-module.exports = generateOtp;
+module.exports = generateOTP;
