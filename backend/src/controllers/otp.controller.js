@@ -33,7 +33,7 @@ const generateOTP = asyncHandler(async (req, res) => {
 
   const OTP = generateOtp();
   otp.otp = OTP;
-  otp.createdAt = currentTime;
+  otp.setDataValue("createdAt", new Date(currentTime));
 
   await otp.save();
 
