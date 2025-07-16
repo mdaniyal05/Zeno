@@ -27,6 +27,15 @@ const registerUser = asyncHandler(async (req, res) => {
     }
   }
 
+  const otpCreatedTime = otp.createdAt;
+  const currentTime = new Date();
+
+  if (currentTime - otpCreatedTime > 3 * 60 * 1000) {
+    await Otp.destroy({ where: { email: email } });
+    res.status(403);
+    throw new Error("OTP Expired.");
+  }
+
   if (otp.otp !== OTP) {
     otp.OtpAttempts++;
 
@@ -41,39 +50,30 @@ const registerUser = asyncHandler(async (req, res) => {
 
     res.status(403);
     throw new Error("Invalid OTP.");
-  }
-
-  const otpCreatedTime = otp.createdAt;
-  const currentTime = new Date();
-
-  if (currentTime - otpCreatedTime > 3 * 60 * 1000) {
-    await Otp.destroy({ where: { email: email } });
-    res.status(403);
-    throw new Error("OTP Expired.");
-  }
-
-  const newUser = await User.create({
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    password: password,
-  });
-
-  if (newUser) {
-    generateJwtToken(res, newUser.userId);
-
-    await Otp.destroy({ where: { email: newUser.email } });
-
-    res.status(201).json({
-      userId: newUser.userId,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      email: newUser.email,
-      message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
-    });
   } else {
-    res.status(400);
-    throw new Error("Invalid User Data.");
+    const newUser = await User.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    });
+
+    if (newUser) {
+      generateJwtToken(res, newUser.userId);
+
+      await Otp.destroy({ where: { email: newUser.email } });
+
+      res.status(201).json({
+        userId: newUser.userId,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid User Data.");
+    }
   }
 });
 
