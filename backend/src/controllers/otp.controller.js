@@ -26,7 +26,7 @@ const generateOTP = asyncHandler(async (req, res) => {
   const lastOtpTime = otp.createdAt;
   const currentTime = new Date();
 
-  if (lastOtpTime && currentTime - lastOtpTime < 60000) {
+  if (otp.email === email && lastOtpTime && currentTime - lastOtpTime < 60000) {
     res.status(403);
     throw new Error("One Minute Gap Required Between OTP Requests.");
   }
