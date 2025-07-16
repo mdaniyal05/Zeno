@@ -5,6 +5,7 @@ const Transaction = require("../models/transaction.model");
 const Budget = require("../models/budget.model");
 const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
+const Otp = require("../models/otp.model");
 
 const syncModels = () => {
   User.sync();
@@ -14,6 +15,7 @@ const syncModels = () => {
   Budget.sync();
   Income.sync();
   Expense.sync();
+  Otp.sync();
 };
 
 module.exports = syncModels;
