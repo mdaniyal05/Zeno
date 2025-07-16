@@ -1,12 +1,16 @@
+const fs = require("fs");
+const path = require("path");
 const mailSender = require("./mailSender");
 
 const verifyEmail = async (email, otp) => {
+  const templatePath = path.join(__dirname, "../html", "otpVerification.html");
+  let html = fs.readFileSync(templatePath, "utf-8");
+
   const title = "Email Verification";
-  const body = `<h1>Please confirm your otp</h1>
-                <p>Here is your OTP code: ${otp}</p>`;
+  html = html.replace("{{OTP}}", otp);
 
   try {
-    mailSender(email, title, body);
+    mailSender(email, title, html);
     return true;
   } catch (error) {
     throw new Error(`Error occured while sending email: ${error}`);
