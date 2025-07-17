@@ -50,30 +50,30 @@ const registerUser = asyncHandler(async (req, res) => {
 
     res.status(403);
     throw new Error("Invalid OTP.");
-  } else {
-    const newUser = await User.create({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
+  }
+
+  const newUser = await User.create({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  });
+
+  if (newUser) {
+    generateJwtToken(res, newUser.userId);
+
+    await Otp.destroy({ where: { email: newUser.email } });
+
+    res.status(201).json({
+      userId: newUser.userId,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
     });
-
-    if (newUser) {
-      generateJwtToken(res, newUser.userId);
-
-      await Otp.destroy({ where: { email: newUser.email } });
-
-      res.status(201).json({
-        userId: newUser.userId,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
-      });
-    } else {
-      res.status(400);
-      throw new Error("Invalid User Data.");
-    }
+  } else {
+    res.status(400);
+    throw new Error("Invalid User Data.");
   }
 });
 
