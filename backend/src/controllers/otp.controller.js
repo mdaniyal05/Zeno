@@ -27,7 +27,7 @@ const generateOTP = asyncHandler(async (req, res) => {
   const currentTime = new Date();
 
   if (
-    otp.OtpAttempts !== 0 &&
+    otp.otpAttempts !== 0 &&
     otp.email === email &&
     lastOtpTime &&
     currentTime - lastOtpTime < 60000
