@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
       throw new Error("You Are Blocked. Try After Some Time.");
     } else {
       otp.isBlocked = false;
-      otp.OtpAttempts = 0;
+      otp.otpAttempts = 0;
     }
   }
 
@@ -31,15 +31,14 @@ const registerUser = asyncHandler(async (req, res) => {
   const currentTime = new Date();
 
   if (currentTime - otpCreatedTime > 3 * 60 * 1000) {
-    await Otp.destroy({ where: { email: email } });
     res.status(403);
     throw new Error("OTP Expired.");
   }
 
   if (otp.otp !== OTP) {
-    otp.OtpAttempts++;
+    otp.otpAttempts++;
 
-    if (otp.OtpAttempts >= 3) {
+    if (otp.otpAttempts >= 3) {
       otp.isBlocked = true;
       let blockUntil = new Date();
       blockUntil.setHours(blockUntil.getHours() + 1);
