@@ -94,7 +94,7 @@ export default function Profile(props) {
               <FormLabel htmlFor="name">Full Name</FormLabel>
               <TextField
                 disabled
-                defaultValue={userInfo.fullName}
+                defaultValue={data && data.firstName + " " + data.lastName}
                 variant="outlined"
               />
             </FormControl>
@@ -111,14 +111,6 @@ export default function Profile(props) {
               <TextField
                 disabled
                 defaultValue={data && data.about}
-                variant="outlined"
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="phoneNumber">Phone Number</FormLabel>
-              <TextField
-                disabled
-                defaultValue={data && data.phoneNumber}
                 variant="outlined"
               />
             </FormControl>

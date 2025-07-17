@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import MenuContent from "./MenuContent";
 import OptionsMenu from "./OptionsMenu";
 import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "../redux/slices/userApiSlice";
 
 const drawerWidth = 240;
 
@@ -24,6 +25,7 @@ const Drawer = styled(MuiDrawer)({
 
 export default function SideMenu({ onMenuItemClick, activeItem }) {
   const { userInfo } = useSelector((state) => state.auth);
+  const { data } = useGetProfileQuery(userInfo.userId);
 
   return (
     <Drawer
@@ -84,7 +86,7 @@ export default function SideMenu({ onMenuItemClick, activeItem }) {
       >
         <Avatar
           sizes="small"
-          alt={userInfo.fullName}
+          alt={data && data.firstName + " " + data.lastName}
           sx={{ width: 25, height: 25 }}
         />
         <Box sx={{ mr: "auto" }}>
@@ -92,10 +94,10 @@ export default function SideMenu({ onMenuItemClick, activeItem }) {
             variant="body2"
             sx={{ fontWeight: 500, lineHeight: "16px" }}
           >
-            {userInfo.fullName}
+            {data && data.firstName + " " + data.lastName}
           </Typography>
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            {userInfo.email}
+            {data && data.email}
           </Typography>
         </Box>
         <OptionsMenu />
