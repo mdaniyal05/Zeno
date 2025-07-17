@@ -65,7 +65,6 @@ export default function CreateBankAccount(props) {
   const [accountName, setAccountName] = React.useState("");
   const [accountType, setAccountType] = React.useState("");
   const [accountBalance, setAccountBalance] = React.useState("");
-  const [accountCurrency, setAccountCurrency] = React.useState("");
   const [bankName, setBankName] = React.useState("");
   const [accountNumber, setAccountNumber] = React.useState("");
 
@@ -81,7 +80,6 @@ export default function CreateBankAccount(props) {
         accountName,
         accountType,
         accountBalance,
-        accountCurrency,
         bankName,
         accountNumber,
       }).unwrap();
@@ -169,19 +167,6 @@ export default function CreateBankAccount(props) {
                 variant="outlined"
                 value={accountBalance}
                 onChange={(event) => setAccountBalance(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="accountCurrency">Account Currency</FormLabel>
-              <TextField
-                required
-                fullWidth
-                name="accountCurrency"
-                placeholder="PKR"
-                id="accountCurrency"
-                variant="outlined"
-                value={accountCurrency}
-                onChange={(event) => setAccountCurrency(event.target.value)}
               />
             </FormControl>
             <FormControl>

@@ -23,10 +23,6 @@ const Account = sequelize.define(
       type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
-    accountCurrency: {
-      type: DataTypes.STRING(3),
-      allowNull: false,
-    },
     bankName: {
       type: DataTypes.STRING,
       allowNull: false,

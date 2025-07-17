@@ -11,7 +11,6 @@ const getUserAccount = asyncHandler(async (req, res) => {
       accountName: account.accountName,
       accountType: account.accountType,
       accountBalance: account.accountBalance,
-      accountCurrency: account.accountCurrency,
       bankName: account.bankName,
       accountNumber: account.accountNumber,
       isActive: account.isActive,
@@ -37,14 +36,8 @@ const getAllUserAccounts = asyncHandler(async (req, res) => {
 });
 
 const createUserAccount = asyncHandler(async (req, res) => {
-  const {
-    accountName,
-    accountType,
-    accountBalance,
-    accountCurrency,
-    bankName,
-    accountNumber,
-  } = req.body;
+  const { accountName, accountType, accountBalance, bankName, accountNumber } =
+    req.body;
 
   const accountExists = await Account.findOne({
     where: { accountNumber: accountNumber },
@@ -62,7 +55,6 @@ const createUserAccount = asyncHandler(async (req, res) => {
     accountName: accountName,
     accountType: accountType,
     accountBalance: accountBalance,
-    accountCurrency: accountCurrency,
     bankName: bankName,
     accountNumber: accountNumber,
     isActive: isActive,
