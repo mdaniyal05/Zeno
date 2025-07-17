@@ -41,15 +41,6 @@ const User = sequelize.define(
         },
       },
     },
-    phoneNumber: {
-      type: DataTypes.STRING,
-      validate: {
-        len: {
-          args: [10, 11],
-          msg: "Phone number must be 10 or 11 digits.",
-        },
-      },
-    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,

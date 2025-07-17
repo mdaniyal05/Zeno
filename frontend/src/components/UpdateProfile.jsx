@@ -193,19 +193,6 @@ export default function UpdateProfile(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
-              <TextField
-                fullWidth
-                id="phoneNumber"
-                placeholder="03343567419"
-                name="phoneNumber"
-                autoComplete="phoneNumber"
-                variant="outlined"
-                value={phoneNumber}
-                onChange={(event) => setPhoneNumber(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
                 fullWidth
