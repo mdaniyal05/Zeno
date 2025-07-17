@@ -9,7 +9,6 @@ const getUserIncome = asyncHandler(async (req, res) => {
     res.status(200).json({
       incomeId: income.incomeId,
       incomeAmount: income.incomeAmount,
-      incomeCurrency: income.incomeCurrency,
       incomeDate: income.incomeDate,
       incomeSource: income.incomeSource,
     });
@@ -34,13 +33,12 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
 });
 
 const createUserIncome = asyncHandler(async (req, res) => {
-  const { incomeAmount, currency, incomeDate, incomeSource } = req.body;
+  const { incomeAmount, incomeDate, incomeSource } = req.body;
 
   const userId = req.user.userId;
 
   const newIncome = await Income.create({
     incomeAmount: incomeAmount,
-    currency: currency,
     incomeDate: incomeDate,
     incomeSource: incomeSource,
     userId: userId,
@@ -49,7 +47,6 @@ const createUserIncome = asyncHandler(async (req, res) => {
   if (newIncome) {
     res.status(201).json({
       incomeAmount: newIncome.incomeAmount,
-      currency: newIncome.currency,
       incomeDate: newIncome.incomeDate,
       incomeSource: newIncome.incomeSource,
       message: "Income Created Successfully.",

@@ -15,10 +15,6 @@ const Income = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    currency: {
-      type: DataTypes.STRING(3),
-      allowNull: false,
-    },
     incomeDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,

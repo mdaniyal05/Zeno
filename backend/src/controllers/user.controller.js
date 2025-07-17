@@ -12,7 +12,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       dateOfBirth: user.dateOfBirth,
       about: user.about,
-      phoneNumber: user.phoneNumber,
       email: user.email,
     });
   } else {
@@ -30,7 +29,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.lastName = req.body.lastName || user.lastName;
     user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
     user.about = req.body.about || user.about;
-    user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     user.email = req.body.email || user.email;
 
     if (req.body.password) {
@@ -44,7 +42,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       fullName: `${updatedUser.firstName} ${updatedUser.lastName}`,
       dateOfBirth: updatedUser.dateOfBirth,
       about: updatedUser.about,
-      phoneNumber: updatedUser.phoneNumber,
       email: updatedUser.email,
     });
   } else {
