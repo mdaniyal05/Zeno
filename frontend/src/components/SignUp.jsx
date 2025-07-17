@@ -75,7 +75,7 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState("");
-  const [otp, setOtp] = React.useState("");
+  const [OTP, setOTP] = React.useState("");
   const [isMailSent, setIsMailSent] = React.useState(false);
 
   let isValid = true;
@@ -84,7 +84,7 @@ export default function SignUp(props) {
   const navigate = useNavigate();
 
   const [register] = useRegisterMutation();
-  const [generateOtp] = useGenerateOtpMutation();
+  const [generateOTP] = useGenerateOtpMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -94,23 +94,19 @@ export default function SignUp(props) {
     }
   }, [navigate, userInfo]);
 
-  const verifyHandler = async (event) => {
+  const sendMailHandler = async (event) => {
     event.preventDefault();
 
-    if (confirmPassword !== password) {
-      toast.error("Confirm password does not match password.");
-    } else {
-      try {
-        const res = await generateOtp({
-          email,
-        }).unwrap();
+    try {
+      const res = await generateOTP({
+        email,
+      }).unwrap();
 
-        if (res) {
-          setIsMailSent(true);
-        }
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      if (res) {
+        setIsMailSent(true);
       }
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -126,6 +122,7 @@ export default function SignUp(props) {
           lastName,
           email,
           password,
+          OTP,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate("/home");
@@ -207,23 +204,59 @@ export default function SignUp(props) {
                 sx={{ display: "flex", flexDirection: "column", gap: 2 }}
               >
                 <FormControl>
-                  <FormLabel htmlFor="otp">OTP</FormLabel>
+                  <FormLabel htmlFor="OTP">OTP</FormLabel>
                   <TextField
-                    autoComplete="otp"
-                    name="otp"
+                    autoComplete="OTP"
+                    name="OTP"
                     required
                     fullWidth
-                    id="otp"
+                    id="OTP"
                     placeholder="000000"
-                    value={otp}
-                    onChange={(event) => setOtp(event.target.value)}
+                    value={OTP}
+                    onChange={(event) => setOTP(event.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    placeholder="••••••"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    variant="outlined"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    error={passwordError}
+                    helperText={passwordErrorMessage}
+                    color={passwordError ? "error" : "primary"}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor="password">Confirm password</FormLabel>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    placeholder="••••••"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    variant="outlined"
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    error={passwordError}
+                    helperText={passwordErrorMessage}
+                    color={passwordError ? "error" : "primary"}
                   />
                 </FormControl>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
-                  onClick={submitHandler}
+                  onClick={validateInputs}
                 >
                   Verify
                 </Button>
@@ -262,7 +295,7 @@ export default function SignUp(props) {
               </Typography>
               <Box
                 component="form"
-                onSubmit={verifyHandler}
+                onSubmit={sendMailHandler}
                 sx={{ display: "flex", flexDirection: "column", gap: 2 }}
               >
                 <FormControl>
@@ -311,42 +344,6 @@ export default function SignUp(props) {
                     onChange={(event) => setEmail(event.target.value)}
                     error={emailError}
                     helperText={emailErrorMessage}
-                    color={passwordError ? "error" : "primary"}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    placeholder="••••••"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    variant="outlined"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
-                    color={passwordError ? "error" : "primary"}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="password">Confirm password</FormLabel>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    placeholder="••••••"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    variant="outlined"
-                    value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
                     color={passwordError ? "error" : "primary"}
                   />
                 </FormControl>
