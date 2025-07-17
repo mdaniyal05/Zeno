@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MenuContent from "./MenuContent";
 import OptionsMenu from "./OptionsMenu";
 import { useSelector } from "react-redux";
-import { useGetProfileQuery } from "../redux/slices/userApiSlice";
+import { useGetProfileQuery } from "../../../redux/slices/userApiSlice";
 
 const drawerWidth = 240;
 
