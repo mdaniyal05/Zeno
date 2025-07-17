@@ -17,8 +17,8 @@ const Budget = sequelize.define(
       allowNull: false,
       validate: {
         min: {
-          args: 1,
-          msg: "Amount must be greater than 0.",
+          args: 10000,
+          msg: "Amount must be greater than 10000.",
         },
       },
     },
