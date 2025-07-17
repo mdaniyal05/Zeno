@@ -47,8 +47,8 @@ const Budget = sequelize.define(
           let month = currentDate.getMonth() + 1;
           let day = currentDate.getDate();
 
-          if (value > `${year}-${month}-${day}`) {
-            throw new Error("Start date must be current date.");
+          if (value <= `${year}-${month}-${day}`) {
+            throw new Error("Start date must be in future.");
           }
         },
       },
