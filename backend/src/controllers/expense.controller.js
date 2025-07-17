@@ -1,7 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
-const Budget = require("../models/budget.model");
-const calculateBudget = require("./budgetCalculation.controller");
 const Category = require("../models/category.model");
 
 const getUserExpense = asyncHandler(async (req, res) => {
@@ -13,9 +11,9 @@ const getUserExpense = asyncHandler(async (req, res) => {
       expenseId: expense.expenseId,
       expenseAmount: expense.expenseAmount,
       expenseType: expense.expenseType,
-      currency: expense.currency,
       expenseDate: expense.expenseDate,
       merchant: expense.merchant,
+      categoryId: expense.categoryId,
     });
   } else {
     res.status(404);
@@ -38,24 +36,14 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
 });
 
 const createUserExpense = asyncHandler(async (req, res) => {
-  const {
-    expenseAmount,
-    expenseType,
-    currency,
-    expenseDate,
-    merchant,
-    categoryId,
-    budgetId,
-  } = req.body;
+  const { expenseAmount, expenseType, expenseDate, merchant, categoryId } =
+    req.body;
 
   const userId = req.user.userId;
 
   const category = await Category.findByPk(categoryId);
-  const budget = await Budget.findByPk(budgetId);
 
-  if (category.isActive === true && budget.status === "Active") {
-    calculateBudget(budget);
-
+  if (category.isActive === true) {
     category.monthlyLimitRemainingAmount =
       category.monthlyLimit - expenseAmount;
 
@@ -67,19 +55,16 @@ const createUserExpense = asyncHandler(async (req, res) => {
     const newExpense = await Expense.create({
       expenseAmount: expenseAmount,
       expenseType: expenseType,
-      currency: currency,
       expenseDate: expenseDate,
       merchant: merchant,
       userId: userId,
       categoryId: category.categoryId,
-      budgetId: budget.budgetId,
     });
 
     if (newExpense) {
       res.status(201).json({
         expenseAmount: newExpense.expenseAmount,
         expenseType: newExpense.expenseType,
-        currency: newExpense.currency,
         expenseDate: newExpense.expenseDate,
         merchant: newExpense.merchant,
         message: "Expense Created Successfully.",

@@ -2,7 +2,6 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 const Category = require("./category.model");
-const Budget = require("./budget.model");
 
 const Expense = sequelize.define(
   "Expense",
@@ -19,10 +18,6 @@ const Expense = sequelize.define(
     },
     expenseType: {
       type: DataTypes.ENUM("Needs", "Wants", "Savings"),
-      allowNull: false,
-    },
-    currency: {
-      type: DataTypes.STRING(3),
       allowNull: false,
     },
     expenseDate: {
@@ -62,19 +57,6 @@ Category.hasMany(Expense, {
 Expense.belongsTo(Category, {
   foreignKey: { name: "categoryId", allowNull: false },
   as: "fromCategory",
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
-
-Budget.hasMany(Expense, {
-  foreignKey: { name: "budgetId", allowNull: false },
-  onDelete: "NO ACTION",
-  onUpdate: "CASCADE",
-});
-
-Expense.belongsTo(Budget, {
-  foreignKey: { name: "budgetId", allowNull: false },
-  as: "ofBudget",
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
 });
