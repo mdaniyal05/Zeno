@@ -29,7 +29,6 @@ export default function BasicTable() {
             <TableRow>
               <TableCell>Expense Amount</TableCell>
               <TableCell align="left">Expense Type</TableCell>
-              <TableCell align="left">Currency</TableCell>
               <TableCell align="left">Expense Date</TableCell>
               <TableCell align="left">Merchant</TableCell>
               <TableCell align="left">Created At</TableCell>
@@ -47,7 +46,6 @@ export default function BasicTable() {
                     {row.expenseAmount} Rs
                   </TableCell>
                   <TableCell align="left">{row.expenseType}</TableCell>
-                  <TableCell align="left">{row.currency}</TableCell>
                   <TableCell align="left">{row.expenseDate}</TableCell>
                   <TableCell align="left">{row.merchant}</TableCell>
                   <TableCell align="left">

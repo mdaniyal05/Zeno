@@ -67,7 +67,6 @@ const CreateExpenseContainer = styled(Stack)(({ theme }) => ({
 export default function CreateExpense(props) {
   const [expenseAmount, setExpenseAmount] = React.useState("");
   const [expenseType, setExpenseType] = React.useState("");
-  const [currency, setCurrency] = React.useState("");
   const [expenseDate, setExpenseDate] = React.useState(null);
   const [merchant, setMerchant] = React.useState("");
 
@@ -82,7 +81,6 @@ export default function CreateExpense(props) {
       await CreateExpense({
         expenseAmount,
         expenseType,
-        currency,
         expenseDate,
         merchant,
       }).unwrap();
@@ -154,18 +152,6 @@ export default function CreateExpense(props) {
                   </Select>
                 </FormControl>
               </Box>
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="currency">Currency</FormLabel>
-              <TextField
-                name="currency"
-                required
-                fullWidth
-                id="currency"
-                placeholder="PKR"
-                value={currency}
-                onChange={(event) => setCurrency(event.target.value)}
-              />
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="expenseDate">Expense Date</FormLabel>

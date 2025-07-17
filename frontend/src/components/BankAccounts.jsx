@@ -30,7 +30,6 @@ export default function BasicTable() {
               <TableCell>Account Name</TableCell>
               <TableCell align="left">Account Type</TableCell>
               <TableCell align="left">Account Balance</TableCell>
-              <TableCell align="left">Account Currency</TableCell>
               <TableCell align="left">Bank Name</TableCell>
               <TableCell align="left">Account Number</TableCell>
               <TableCell align="left">Active Status</TableCell>
@@ -50,7 +49,6 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell align="left">{row.accountType}</TableCell>
                   <TableCell align="left">{row.accountBalance}</TableCell>
-                  <TableCell align="left">{row.accountCurrency}</TableCell>
                   <TableCell align="left">{row.bankName}</TableCell>
                   <TableCell align="left">{row.accountNumber}</TableCell>
                   <TableCell align="left">

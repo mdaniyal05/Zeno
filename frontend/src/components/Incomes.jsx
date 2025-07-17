@@ -28,7 +28,6 @@ export default function BasicTable() {
           <TableHead>
             <TableRow>
               <TableCell>Income Amount</TableCell>
-              <TableCell align="left">Currency</TableCell>
               <TableCell align="left">Income Date</TableCell>
               <TableCell align="left">Income Source</TableCell>
               <TableCell align="left">Created At</TableCell>
@@ -45,7 +44,6 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     {row.incomeAmount} Rs
                   </TableCell>
-                  <TableCell align="left">{row.currency}</TableCell>
                   <TableCell align="left">{row.incomeDate}</TableCell>
                   <TableCell align="left">{row.incomeSource}</TableCell>
                   <TableCell align="left">

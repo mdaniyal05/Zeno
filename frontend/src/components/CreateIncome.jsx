@@ -64,7 +64,6 @@ const CreateIncomeContainer = styled(Stack)(({ theme }) => ({
 
 export default function CreateIncome(props) {
   const [incomeAmount, setIncomeAmount] = React.useState("");
-  const [currency, setCurrency] = React.useState("");
   const [incomeDate, setIncomeDate] = React.useState(null);
   const [incomeSource, setIncomeSource] = React.useState("");
 
@@ -78,7 +77,6 @@ export default function CreateIncome(props) {
     try {
       await createIncome({
         incomeAmount,
-        currency,
         incomeDate,
         incomeSource,
       }).unwrap();
@@ -131,18 +129,6 @@ export default function CreateIncome(props) {
                 placeholder="2500000"
                 value={incomeAmount}
                 onChange={(event) => setIncomeAmount(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="currency">Currency</FormLabel>
-              <TextField
-                name="currency"
-                required
-                fullWidth
-                id="currency"
-                placeholder="PKR"
-                value={currency}
-                onChange={(event) => setCurrency(event.target.value)}
               />
             </FormControl>
             <FormControl>
