@@ -44,6 +44,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
   const category = await Category.findByPk(categoryId);
 
   if (category.isActive === true) {
+    if (expenseAmount < 0) {
+      res.status(400);
+      throw new Error("Negative values are not allowed.");
+    }
+
     category.monthlyLimitRemainingAmount =
       category.monthlyLimit - expenseAmount;
 
@@ -67,15 +72,15 @@ const createUserExpense = asyncHandler(async (req, res) => {
         expenseType: newExpense.expenseType,
         expenseDate: newExpense.expenseDate,
         merchant: newExpense.merchant,
-        message: "Expense Created Successfully.",
+        message: "Expense created successfully.",
       });
     } else {
       res.status(400);
-      throw new Error("Invalid Expense Data.");
+      throw new Error("Invalid expense data.");
     }
   } else {
     throw new Error(
-      "The Category Or Budget Is Not Active Anymore Due To Exceeded Factor. Select Another Category Or Budget Or Create A New One."
+      "The category is not active anymore due to exceeded factor. Select another category or create a new one."
     );
   }
 });
