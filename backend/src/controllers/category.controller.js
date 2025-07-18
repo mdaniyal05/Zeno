@@ -40,6 +40,11 @@ const createUserCategory = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const isActive = true;
 
+  if (monthlyLimit < 0) {
+    res.status(400);
+    throw new Error("Negative values are not allowed.");
+  }
+
   const newCategory = await Category.create({
     categoryName: categoryName,
     categoryType: categoryType,
@@ -73,6 +78,11 @@ const updateUserCategory = asyncHandler(async (req, res) => {
     category.categoryType = req.body.categoryType || category.categoryType;
     category.description = req.body.description || category.description;
     category.monthlyLimit = req.body.monthlyLimit || category.monthlyLimit;
+
+    if (monthlyLimit < 0) {
+      res.status(400);
+      throw new Error("Negative values are not allowed.");
+    }
 
     const updatedCategory = await category.save();
 
