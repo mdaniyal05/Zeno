@@ -37,6 +37,11 @@ const createUserIncome = asyncHandler(async (req, res) => {
 
   const userId = req.user.userId;
 
+  if (incomeAmount < 0) {
+    res.status(400);
+    throw new Error("Negative values are not allowed.");
+  }
+
   const newIncome = await Income.create({
     incomeAmount: incomeAmount,
     incomeDate: incomeDate,
