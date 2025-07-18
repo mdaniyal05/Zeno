@@ -48,6 +48,11 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     where: { accountId: accountId },
   });
 
+  if (transactionAmount < 0) {
+    res.status(400);
+    throw new Error("Negative values are not allowed.");
+  }
+
   if (account) {
     let updatedAccountBalance;
 
