@@ -51,6 +51,11 @@ const createUserAccount = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const isActive = true;
 
+  if (accountBalance < 0) {
+    res.status(400);
+    throw new Error("Negative Values Are Not Allowed.");
+  }
+
   const newAccount = await Account.create({
     accountName: accountName,
     accountType: accountType,
