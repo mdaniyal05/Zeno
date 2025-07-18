@@ -47,6 +47,13 @@ const createUserBudget = asyncHandler(async (req, res) => {
   const notificationsEnabled = true;
   const status = "Active";
 
+  if (budgetAmount < 0 && budgetAmount < 10000) {
+    res.status(400);
+    throw new Error(
+      "No negative values allowed and budget amount must be greater than 10000."
+    );
+  }
+
   const newBudget = await Budget.create({
     budgetAmount: budgetAmount,
     budgetPeriod: budgetPeriod,
