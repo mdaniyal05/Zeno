@@ -51,6 +51,8 @@ const createUserCategory = asyncHandler(async (req, res) => {
     description: description,
     isActive: isActive,
     monthlyLimit: monthlyLimit,
+    monthlyLimitRemainingAmount: monthlyLimit,
+    isMonthlyLimitExceeded: false,
     userId: userId,
   });
 

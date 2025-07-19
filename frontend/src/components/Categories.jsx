@@ -33,7 +33,7 @@ export default function BasicTable() {
               <TableCell align="left">Active Status</TableCell>
               <TableCell align="left">Monthly Limit</TableCell>
               <TableCell align="left">Monthly Limit Remaining Amount</TableCell>
-              <TableCell align="left">Monthl Limit Exceeded Status</TableCell>
+              <TableCell align="left">Monthly Limit Status</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Options</TableCell>
             </TableRow>
