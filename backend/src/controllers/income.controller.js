@@ -14,7 +14,7 @@ const getUserIncome = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Income Not Found.");
+    throw new Error("Income not found.");
   }
 });
 
@@ -28,7 +28,7 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Incomes Available.");
+    throw new Error("No incomes found.");
   }
 });
 
@@ -54,11 +54,11 @@ const createUserIncome = asyncHandler(async (req, res) => {
       incomeAmount: newIncome.incomeAmount,
       incomeDate: newIncome.incomeDate,
       incomeSource: newIncome.incomeSource,
-      message: "Income Created Successfully.",
+      message: "Income created successfully.",
     });
   } else {
     res.status(400);
-    throw new Error("Invalid Income Data.");
+    throw new Error("Invalid income data.");
   }
 });
 
@@ -69,11 +69,11 @@ const deleteUserIncome = asyncHandler(async (req, res) => {
   if (income) {
     await Income.destroy({ where: { incomeId: incomeId } });
     res.status(200).json({
-      message: `Income Of Amount: ${income.incomeAmount} Deleted Successfully.`,
+      message: `Income of amount: ${income.incomeAmount} and date of income: ${income.incomeDate} deleted successfully.`,
     });
   } else {
     res.status(404);
-    throw new Error("Income Not Found.");
+    throw new Error("Income not found.");
   }
 });
 
