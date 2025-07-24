@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
 import {
   useGetAllUserIncomesQuery,
   useDeleteUserIncomeMutation,
@@ -60,9 +61,11 @@ export default function BasicTable() {
                       title={"Confirmation"}
                       mutation={() => deleteIncome(row.incomeId)}
                     />
-                    <IconButton sx={{ ml: 1 }}>
-                      <EditIcon />
-                    </IconButton>
+                    <Link to={`/update-income/${row.incomeId}`}>
+                      <IconButton sx={{ ml: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

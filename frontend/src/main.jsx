@@ -16,6 +16,7 @@ import store from "./redux/store.js";
 import { Provider } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import UpdateProfilePage from "./pages/UpdateProfilePage.jsx";
+import UpdateIncomePage from "./pages/UpdateIncomePage.jsx";
 import CreateBankAccountPage from "./pages/CreateBankAccountPage.jsx";
 import CreateBudgetPage from "./pages/CreateBudgetPage.jsx";
 import CreateCategoryPage from "./pages/CreateCategoryPage.jsx";
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
       <Route path="" element={<PrivateRoute />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/update-profile/:id" element={<UpdateProfilePage />} />
+        <Route path="/update-income/:id" element={<UpdateIncomePage />} />
         <Route path="/create-account" element={<CreateBankAccountPage />} />
         <Route path="/create-budget" element={<CreateBudgetPage />} />
         <Route path="/create-category" element={<CreateCategoryPage />} />
