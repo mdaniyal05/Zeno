@@ -15,6 +15,7 @@ import {
 } from "../redux/slices/incomeApiSlice.js";
 import ButtonComponent from "../components/ButtonComponent";
 import AlertDialog from "./AlertDialog.jsx";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserIncomesQuery();
@@ -59,7 +60,11 @@ export default function BasicTable() {
                         "Are you sure you want to delete this income?"
                       }
                       title={"Confirmation"}
-                      mutation={() => deleteIncome(row.incomeId)}
+                      mutation={() =>
+                        deleteIncome(row.incomeId).then(
+                          toast.success("Income deleted successfully.")
+                        )
+                      }
                     />
                     <Link to={`/update-income/${row.incomeId}`}>
                       <IconButton sx={{ ml: 1 }}>
