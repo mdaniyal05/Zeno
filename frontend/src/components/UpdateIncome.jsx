@@ -19,6 +19,7 @@ import {
 } from "../redux/slices/incomeApiSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -78,7 +79,7 @@ export default function UpdateProfile(props) {
 
   React.useEffect(() => {
     setIncomeAmount((data && data.incomeAmount) || "");
-    setIncomeDate((data && data.incomeAmount) || "");
+    setIncomeDate((data && data.incomeDate) || "");
     setIncomeSource((data && data.incomeSource) || "");
   }, [data]);
 
@@ -146,7 +147,7 @@ export default function UpdateProfile(props) {
               <FormLabel htmlFor="incomeDate">Income Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={incomeDate}
+                  value={dayjs(incomeDate)}
                   onChange={(value) => setIncomeDate(value)}
                 />
               </LocalizationProvider>
