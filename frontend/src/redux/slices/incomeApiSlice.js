@@ -23,6 +23,13 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateUserCategory: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${INCOME_URL}/income/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+    }),
     deleteUserIncome: builder.mutation({
       query: (id) => ({
         url: `${INCOME_URL}/income/${id}`,
@@ -37,4 +44,5 @@ export const {
   useGetUserIncomeQuery,
   useCreateUserIncomeMutation,
   useDeleteUserIncomeMutation,
+  useUpdateUserCategoryMutation,
 } = incomeApiSlice;

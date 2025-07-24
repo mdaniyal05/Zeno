@@ -6,6 +6,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 import {
   useGetAllUserIncomesQuery,
   useDeleteUserIncomeMutation,
@@ -58,6 +60,9 @@ export default function BasicTable() {
                       title={"Confirmation"}
                       mutation={() => deleteIncome(row.incomeId)}
                     />
+                    <IconButton sx={{ ml: 1 }}>
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
