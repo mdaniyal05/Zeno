@@ -23,6 +23,7 @@ import CreateCategoryPage from "./pages/CreateCategoryPage.jsx";
 import CreateExpensePage from "./pages/CreateExpensePage.jsx";
 import CreateIncomePage from "./pages/CreateIncomePage.jsx";
 import CreateTransactionPage from "./pages/CreateTransactionPage.jsx";
+import UpdateExpensePage from "./pages/UpdateExpensePage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         <Route path="/home" element={<HomePage />} />
         <Route path="/update-profile/:id" element={<UpdateProfilePage />} />
         <Route path="/update-income/:id" element={<UpdateIncomePage />} />
+        <Route path="/update-expense/:id" element={<UpdateExpensePage />} />
         <Route path="/create-account" element={<CreateBankAccountPage />} />
         <Route path="/create-budget" element={<CreateBudgetPage />} />
         <Route path="/create-category" element={<CreateCategoryPage />} />

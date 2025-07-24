@@ -15,7 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   useGetUserIncomeQuery,
-  useUpdateUserCategoryMutation,
+  useUpdateUserIncomeMutation,
 } from "../redux/slices/incomeApiSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -75,7 +75,7 @@ export default function UpdateProfile(props) {
 
   const navigate = useNavigate();
 
-  const [updateIncome] = useUpdateUserCategoryMutation();
+  const [updateIncome] = useUpdateUserIncomeMutation();
 
   React.useEffect(() => {
     setIncomeAmount((data && data.incomeAmount) || "");

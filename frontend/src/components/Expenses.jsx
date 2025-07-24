@@ -4,6 +4,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {
@@ -60,6 +61,11 @@ export default function BasicTable() {
                       title={"Confirmation"}
                       mutation={() => deleteExpense(row.expenseId)}
                     />
+                    <Link to={`/update-expense/${row.expenseId}`}>
+                      <IconButton sx={{ ml: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
