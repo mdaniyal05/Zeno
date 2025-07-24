@@ -43,7 +43,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
   const category = await Category.findByPk(categoryId);
 
-  if (category.isActive === true) {
+  if (category && category.isActive === true) {
     if (expenseAmount < 0) {
       res.status(400);
       throw new Error("Negative values are not allowed.");
@@ -96,6 +96,29 @@ const updateUserExpense = asyncHandler(async (req, res) => {
   const expense = await Expense.findByPk(expenseId);
 
   if (expense) {
+    if (req.body.categoryId !== expense.categoryId) {
+      const category = await Category.findByPk(expense.categoryId);
+
+      category.monthlyLimitRemainingAmount =
+        category.monthlyLimitRemainingAmount + req.body.expenseAmount;
+    }
+
+    const newCategory = await Category.findByPk(req.body.categoryId);
+
+    newCategory.monthlyLimitRemainingAmount =
+      newCategory.monthlyLimitRemainingAmount - req.body.expenseAmount;
+
+    if (newCategory.monthlyLimitRemainingAmount <= 0) {
+      newCategory.isMonthlyLimitExceeded = true;
+      newCategory.isActive === false;
+      res.status(400);
+      throw new Error(
+        "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+      );
+    }
+
+    await newCategory.save();
+
     expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
     expense.expenseType = req.body.expenseType || expense.expenseType;
     expense.expenseDate = req.body.expenseDate || expense.expenseDate;
