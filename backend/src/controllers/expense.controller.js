@@ -50,12 +50,18 @@ const createUserExpense = asyncHandler(async (req, res) => {
     }
 
     category.monthlyLimitRemainingAmount =
-      category.monthlyLimit - expenseAmount;
+      category.monthlyLimitRemainingAmount - expenseAmount;
 
     if (category.monthlyLimitRemainingAmount <= 0) {
       category.isMonthlyLimitExceeded = true;
       category.isActive === false;
+      res.status(400);
+      throw new Error(
+        "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+      );
     }
+
+    await category.save();
 
     const newExpense = await Expense.create({
       expenseAmount: expenseAmount,
