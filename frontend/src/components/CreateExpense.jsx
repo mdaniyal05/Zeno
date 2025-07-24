@@ -19,6 +19,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
 import { useCreateUserExpenseMutation } from "../redux/slices/expenseApiSlice";
 import { toast } from "react-toastify";
+import { useGetAllUserCategoriesQuery } from "../redux/slices/categoryApiSlice";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -68,9 +69,12 @@ export default function CreateExpense(props) {
   const [expenseAmount, setExpenseAmount] = React.useState("");
   const [expenseType, setExpenseType] = React.useState("");
   const [expenseDate, setExpenseDate] = React.useState(null);
+  const [categoryId, setCategoryId] = React.useState("");
   const [merchant, setMerchant] = React.useState("");
 
   const navigate = useNavigate();
+
+  const { data } = useGetAllUserCategoriesQuery();
 
   const [CreateExpense] = useCreateUserExpenseMutation();
 
@@ -83,6 +87,7 @@ export default function CreateExpense(props) {
         expenseType,
         expenseDate,
         merchant,
+        categoryId,
       }).unwrap();
       navigate("/home");
       toast.success("Expense created successfully.");
@@ -149,6 +154,27 @@ export default function CreateExpense(props) {
                     <MenuItem value={"Needs"}>Needs</MenuItem>
                     <MenuItem value={"Wants"}>Wants</MenuItem>
                     <MenuItem value={"Savings"}>Savings</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="category">Category</FormLabel>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <Select
+                    labelId="category"
+                    id="category"
+                    label="Category"
+                    value={categoryId}
+                    onChange={(event) => setCategoryId(event.target.value)}
+                  >
+                    {data &&
+                      data.categoriesData.map((category) => (
+                        <MenuItem value={category.categoryId}>
+                          {category.categoryName}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Box>
