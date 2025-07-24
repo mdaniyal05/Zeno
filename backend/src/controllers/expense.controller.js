@@ -91,6 +91,32 @@ const createUserExpense = asyncHandler(async (req, res) => {
   }
 });
 
+const updateUserExpense = asyncHandler(async (req, res) => {
+  const expenseId = req.params.id;
+  const expense = await Expense.findByPk(expenseId);
+
+  if (expense) {
+    expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
+    expense.expenseType = req.body.expenseType || expense.expenseType;
+    expense.expenseDate = req.body.expenseDate || expense.expenseDate;
+    expense.merchant = req.body.merchant || expense.merchant;
+    expense.categoryId = req.body.categoryId || expense.categoryId;
+
+    const updatedExpense = await expense.save();
+
+    res.status(201).json({
+      expenseAmount: updatedExpense.expenseAmount,
+      expenseType: updatedExpense.expenseType,
+      expenseDate: updatedExpense.expenseDate,
+      merchant: updatedExpense.merchant,
+      categoryId: updatedExpense.categoryId,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Expense not found.");
+  }
+});
+
 const deleteUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
   const expense = await Expense.findByPk(expenseId);
@@ -117,5 +143,6 @@ module.exports = {
   getUserExpense,
   getAllUserExpenses,
   createUserExpense,
+  updateUserExpense,
   deleteUserExpense,
 };
