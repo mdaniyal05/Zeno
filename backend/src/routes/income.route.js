@@ -4,6 +4,7 @@ const {
   getUserIncome,
   getAllUserIncomes,
   createUserIncome,
+  updateUserIncome,
   deleteUserIncome,
 } = require("../controllers/income.controller");
 const protectRoute = require("../middlewares/protectRoute");
@@ -13,6 +14,7 @@ router.post("/create-income", protectRoute, createUserIncome);
 router
   .route("/income/:id")
   .get(protectRoute, getUserIncome)
+  .put(protectRoute, updateUserIncome)
   .delete(protectRoute, deleteUserIncome);
 
 module.exports = router;

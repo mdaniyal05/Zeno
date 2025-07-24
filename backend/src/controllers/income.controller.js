@@ -62,6 +62,28 @@ const createUserIncome = asyncHandler(async (req, res) => {
   }
 });
 
+const updateUserIncome = asyncHandler(async (req, res) => {
+  const incomeId = req.params.id;
+  const income = await Income.findByPk(incomeId);
+
+  if (income) {
+    income.incomeAmount = req.body.incomeAmount || income.incomeAmount;
+    income.incomeDate = req.body.incomeDate || income.incomeDate;
+    income.incomeSource = req.body.incomeSource || income.incomeSource;
+
+    const updatedIncome = await income.save();
+
+    res.status(201).json({
+      incomeAmount: updatedIncome.incomeAmount,
+      incomeDate: updatedIncome.incomeDate,
+      incomeSource: updatedIncome.incomeSource,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Income not found.");
+  }
+});
+
 const deleteUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
   const income = await Income.findByPk(incomeId);
@@ -82,4 +104,5 @@ module.exports = {
   getAllUserIncomes,
   createUserIncome,
   deleteUserIncome,
+  updateUserIncome,
 };
