@@ -21,16 +21,6 @@ const User = sequelize.define(
     },
     dateOfBirth: {
       type: DataTypes.DATEONLY,
-      get() {
-        const rawDate = this.getDataValue("dateOfBirth");
-        if (!rawDate) return null;
-
-        const date = new Date(rawDate);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-      },
     },
     about: {
       type: DataTypes.TEXT,

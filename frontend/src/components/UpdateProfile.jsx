@@ -20,6 +20,7 @@ import {
 } from "../redux/slices/userApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -85,6 +86,7 @@ export default function UpdateProfile(props) {
   React.useEffect(() => {
     setFirstName((data && data.firstName) || "");
     setLastName((data && data.lastName) || "");
+    setDateOfBirth((data && data.dateOfBirth) || "");
     setAbout((data && data.about) || "");
     setPhoneNumber((data && data.phoneNumber) || "");
     setEmail((data && data.email) || "");
@@ -174,7 +176,7 @@ export default function UpdateProfile(props) {
               <FormLabel htmlFor="dob">Date of Birth</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dateOfBirth}
+                  value={dayjs(dateOfBirth)}
                   onChange={(value) => setDateOfBirth(value)}
                 />
               </LocalizationProvider>
