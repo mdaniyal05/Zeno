@@ -95,7 +95,14 @@ const deleteUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
   const expense = await Expense.findByPk(expenseId);
 
-  if (expense) {
+  const category = await Category.findByPk(expense.categoryId);
+
+  if (expense && category) {
+    category.monthlyLimitRemainingAmount =
+      category.monthlyLimitRemainingAmount + expense.expenseAmount;
+
+    await category.save();
+
     await Expense.destroy({ where: { expenseId: expenseId } });
     res.status(200).json({
       message: `Expense Of Amount: ${expense.expenseAmount} Deleted Successfully.`,
