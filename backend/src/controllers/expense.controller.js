@@ -96,28 +96,54 @@ const updateUserExpense = asyncHandler(async (req, res) => {
   const expense = await Expense.findByPk(expenseId);
 
   if (expense) {
-    if (req.body.categoryId !== expense.categoryId) {
-      const category = await Category.findByPk(expense.categoryId);
+    const category = await Category.findByPk(expense.categoryId);
 
+    if (
+      req.body.categoryId !== category.categoryId &&
+      req.body.expenseAmount === expense.expenseAmount
+    ) {
       category.monthlyLimitRemainingAmount =
-        category.monthlyLimitRemainingAmount + req.body.expenseAmount;
+        category.monthlyLimitRemainingAmount + expense.expenseAmount;
+
+      await category.save();
+
+      const newCategory = await Category.findByPk(req.body.categoryId);
+
+      newCategory.monthlyLimitRemainingAmount =
+        newCategory.monthlyLimitRemainingAmount - expense.expenseAmount;
+
+      if (newCategory.monthlyLimitRemainingAmount <= 0) {
+        newCategory.isMonthlyLimitExceeded = true;
+        newCategory.isActive === false;
+        await newCategory.save();
+        res.status(400);
+        throw new Error(
+          "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+        );
+      } else {
+        await newCategory.save();
+      }
+    } else if (
+      req.body.categoryId === category.categoryId &&
+      req.body.expenseAmount !== expense.expenseAmount
+    ) {
+      category.monthlyLimitRemainingAmount =
+        category.monthlyLimitRemainingAmount +
+        expense.expenseAmount -
+        req.body.expenseAmount;
+
+      if (category.monthlyLimitRemainingAmount <= 0) {
+        category.isMonthlyLimitExceeded = true;
+        category.isActive === false;
+        await category.save();
+        res.status(400);
+        throw new Error(
+          "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+        );
+      } else {
+        await category.save();
+      }
     }
-
-    const newCategory = await Category.findByPk(req.body.categoryId);
-
-    newCategory.monthlyLimitRemainingAmount =
-      newCategory.monthlyLimitRemainingAmount - req.body.expenseAmount;
-
-    if (newCategory.monthlyLimitRemainingAmount <= 0) {
-      newCategory.isMonthlyLimitExceeded = true;
-      newCategory.isActive === false;
-      res.status(400);
-      throw new Error(
-        "This category's monthly limit is exceeded and is not active. Create a new one or select another."
-      );
-    }
-
-    await newCategory.save();
 
     expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
     expense.expenseType = req.body.expenseType || expense.expenseType;
