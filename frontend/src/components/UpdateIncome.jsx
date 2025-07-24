@@ -42,7 +42,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-const UpdateProfileContainer = styled(Stack)(({ theme }) => ({
+const UpdateIncomeContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
   minHeight: "100%",
   padding: theme.spacing(2),
@@ -65,7 +65,7 @@ const UpdateProfileContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function UpdateProfile(props) {
+export default function UpdateIncome(props) {
   const { id } = useParams();
   const { data } = useGetUserIncomeQuery(id);
 
@@ -103,7 +103,7 @@ export default function UpdateProfile(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <UpdateProfileContainer direction="column" justifyContent="space-between">
+      <UpdateIncomeContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
             component="span"
@@ -169,7 +169,7 @@ export default function UpdateProfile(props) {
             </Button>
           </Box>
         </Card>
-      </UpdateProfileContainer>
+      </UpdateIncomeContainer>
     </AppTheme>
   );
 }
