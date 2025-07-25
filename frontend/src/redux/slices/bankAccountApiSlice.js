@@ -23,6 +23,13 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateUserAccount: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${ACCOUNT_URL}/account/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+    }),
     deleteUserAccount: builder.mutation({
       query: (id) => ({
         url: `${ACCOUNT_URL}/account/${id}`,
@@ -36,5 +43,6 @@ export const {
   useGetAllUserAccountsQuery,
   useGetUserAccountQuery,
   useCreateUserAccountMutation,
+  useUpdateUserAccountMutation,
   useDeleteUserAccountMutation,
 } = bankAccountApiSlice;
