@@ -16,7 +16,7 @@ const getUserTransaction = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Transaction Not Found.");
+    throw new Error("Transaction not found.");
   }
 });
 
@@ -30,7 +30,7 @@ const getAllUserTransactions = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Transactions Available.");
+    throw new Error("No transactions available.");
   }
 });
 
@@ -66,7 +66,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       } else {
         res.status(400);
         throw new Error(
-          "Transaction Amount Cannot Be Greater Than Account Balance."
+          "Transaction amount cannot be greater than account balance."
         );
       }
     } else if (transactionType === "Income") {
@@ -88,15 +88,36 @@ const createUserTransaction = asyncHandler(async (req, res) => {
 
     if (newTransaction) {
       res.status(201).json({
-        message: `Transaction Of Amount: ${transactionAmount} Has Been Done Successfully.`,
+        message: `Transaction of amount: ${transactionAmount} has been created successfully.`,
       });
     } else {
       res.status(400);
-      throw new Error("Invalid Transaction Data.");
+      throw new Error("Invalid transaction data.");
     }
   } else {
     res.status(404);
-    throw new Error("Account Not Found.");
+    throw new Error("Account not found.");
+  }
+});
+
+const deleteUserTransaction = asyncHandler(async (req, res) => {
+  const transactionId = req.params.id;
+  const transaction = await Transaction.findByPk(transactionId);
+
+  const account = await Account.findByPk(transaction.accountId);
+
+  if (transaction && account) {
+    account.accountBalance =
+      account.accountBalance + transaction.transactionAmount;
+
+    await Transaction.destroy({ where: { transactionId: transactionId } });
+
+    res.status(200).json({
+      message: `Transaction of amount: ${transaction.transactionAmount} deleted successfully.`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Transaction not found.");
   }
 });
 
@@ -104,4 +125,5 @@ module.exports = {
   getUserTransaction,
   getAllUserTransactions,
   createUserTransaction,
+  deleteUserTransaction,
 };
