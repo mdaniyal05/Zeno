@@ -75,13 +75,15 @@ const updateUserCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
+  console.log(req.body.monthlyLimit);
+
   if (category) {
     category.categoryName = req.body.categoryName || category.categoryName;
     category.categoryType = req.body.categoryType || category.categoryType;
     category.description = req.body.description || category.description;
     category.monthlyLimit = req.body.monthlyLimit || category.monthlyLimit;
 
-    if (monthlyLimit < 0) {
+    if (req.body.monthlyLimit < 0) {
       res.status(400);
       throw new Error("Negative values are not allowed.");
     }
