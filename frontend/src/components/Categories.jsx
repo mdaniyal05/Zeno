@@ -5,6 +5,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import {
   useGetAllUserCategoriesQuery,
@@ -74,6 +77,11 @@ export default function BasicTable() {
                       title={"Confirmation"}
                       mutation={() => deleteCategory(row.categoryId)}
                     />
+                    <Link to={`/update-category/${row.categoryId}`}>
+                      <IconButton sx={{ ml: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
