@@ -7,13 +7,20 @@ import TableHead from "@mui/material/TableHead";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useGetAllUserTransactionsQuery } from "../redux/slices/transactionApiSlice";
+import {
+  useGetAllUserTransactionsQuery,
+  useDeleteUserTransactionMutation,
+} from "../redux/slices/transactionApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserTransactionsQuery();
+
+  const [deleteTransaction] = useDeleteUserTransactionMutation();
 
   return (
     <>
@@ -52,12 +59,23 @@ export default function BasicTable() {
                     {row.createdAt.slice(0, 10)}
                   </TableCell>
                   <TableCell align="left">
-                    <IconButton aria-label="delete" sx={{ mr: 1 }}>
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete">
-                      <EditIcon />
-                    </IconButton>
+                    <AlertDialog
+                      icon={<DeleteIcon />}
+                      contentText={
+                        "Are you sure you want to delete this transaction?"
+                      }
+                      title={"Confirmation"}
+                      mutation={() =>
+                        deleteTransaction(row.transactionId).then(
+                          toast.success("Transaction deleted successfully.")
+                        )
+                      }
+                    />
+                    <Link to={`/update-transaction/${row.transactionId}`}>
+                      <IconButton sx={{ ml: 1 }}>
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
