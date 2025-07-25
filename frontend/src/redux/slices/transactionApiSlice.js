@@ -23,6 +23,19 @@ export const transactionApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateUserTransaction: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `${TRANSACTION_URL}/transaction/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+    }),
+    deleteUserTransaction: builder.mutation({
+      query: (id) => ({
+        url: `${TRANSACTION_URL}/transaction/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -30,4 +43,6 @@ export const {
   useGetAllUserTransactionsQuery,
   useGetUserTransactionQuery,
   useCreateUserTransactionMutation,
+  useUpdateUserTransactionMutation,
+  useDeleteUserTransactionMutation,
 } = transactionApiSlice;
