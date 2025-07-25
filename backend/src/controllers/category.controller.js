@@ -75,8 +75,6 @@ const updateUserCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
-  console.log(req.body.monthlyLimit);
-
   if (category) {
     category.categoryName = req.body.categoryName || category.categoryName;
     category.categoryType = req.body.categoryType || category.categoryType;

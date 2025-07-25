@@ -17,7 +17,7 @@ const getUserAccount = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Account Not Found.");
+    throw new Error("Account not found.");
   }
 });
 
@@ -31,7 +31,7 @@ const getAllUserAccounts = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Accounts Available.");
+    throw new Error("No accounts available.");
   }
 });
 
@@ -45,7 +45,7 @@ const createUserAccount = asyncHandler(async (req, res) => {
 
   if (accountExists) {
     res.status(400);
-    throw new Error("Account Already Exists.");
+    throw new Error("Account already exists.");
   }
 
   const userId = req.user.userId;
@@ -53,7 +53,7 @@ const createUserAccount = asyncHandler(async (req, res) => {
 
   if (accountBalance < 0) {
     res.status(400);
-    throw new Error("Negative Values Are Not Allowed.");
+    throw new Error("Negative values are not allowed.");
   }
 
   const newAccount = await Account.create({
@@ -71,11 +71,37 @@ const createUserAccount = asyncHandler(async (req, res) => {
       accountName: accountName,
       accountType: accountType,
       isActive: isActive,
-      message: "Account Created Successfully.",
+      message: "Account created successfully.",
     });
   } else {
     res.status(400);
-    throw new Error("Invalid Account Data.");
+    throw new Error("Invalid account data.");
+  }
+});
+
+const updateUserAccount = asyncHandler(async (req, res) => {
+  const accountId = req.params.id;
+  const account = await Account.findByPk(accountId);
+
+  if (account) {
+    account.accountName = req.body.accountName || account.accountName;
+    account.accountType = req.body.accountType || account.accountType;
+    account.accountBalance = req.body.accountBalance || account.accountBalance;
+    account.bankName = req.body.bankName || account.bankName;
+    account.accountNumber = req.body.accountNumber || account.accountNumber;
+
+    const updatedAccount = await account.save();
+
+    res.status(201).json({
+      accountName: updatedAccount.accountName,
+      accountType: updatedAccount.accountType,
+      accountBalance: updatedAccount.accountBalance,
+      bankName: updatedAccount.bankName,
+      accountNumber: updatedAccount.accountNumber,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Account not found.");
   }
 });
 
@@ -86,11 +112,11 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
   if (account) {
     await Account.destroy({ where: { accountId: accountId } });
     res.status(200).json({
-      message: `Account Number: ${account.accountNumber} Deleted Succesfully.`,
+      message: `Account number: ${account.accountNumber} deleted succesfully.`,
     });
   } else {
     res.status(404);
-    throw new Error("Account Not Found.");
+    throw new Error("Account not found.");
   }
 });
 
@@ -98,5 +124,6 @@ module.exports = {
   getUserAccount,
   getAllUserAccounts,
   createUserAccount,
+  updateUserAccount,
   deleteUserAccount,
 };
