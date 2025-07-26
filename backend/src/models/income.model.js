@@ -24,7 +24,7 @@ const Income = sequelize.define(
       allowNull: false,
     },
   },
-  { tableName: "Incomes", timestamps: true, updatedAt: false }
+  { tableName: "Incomes", timestamps: true }
 );
 
 User.hasMany(Income, {

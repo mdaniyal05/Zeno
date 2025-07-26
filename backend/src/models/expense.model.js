@@ -32,7 +32,6 @@ const Expense = sequelize.define(
   {
     tableName: "Expenses",
     timestamps: true,
-    updatedAt: false,
   }
 );
 
