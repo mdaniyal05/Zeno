@@ -98,12 +98,7 @@ const updateUserExpense = asyncHandler(async (req, res) => {
   if (expense) {
     const category = await Category.findByPk(expense.categoryId);
 
-    if (
-      (req.body.categoryId !== category.categoryId &&
-        req.body.expenseAmount !== expense.expenseAmount) ||
-      (req.body.categoryId !== category.categoryId &&
-        req.body.expenseAmount === expense.expenseAmount)
-    ) {
+    if (req.body.categoryId !== category.categoryId) {
       category.monthlyLimitRemainingAmount =
         category.monthlyLimitRemainingAmount + expense.expenseAmount;
 
