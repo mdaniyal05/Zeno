@@ -15,6 +15,7 @@ import {
   useDeleteUserTransactionMutation,
 } from "../redux/slices/transactionApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
+import AlertDialog from "./AlertDialog.jsx";
 import { toast } from "react-toastify";
 
 export default function BasicTable() {
