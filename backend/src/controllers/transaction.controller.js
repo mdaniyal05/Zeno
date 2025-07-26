@@ -100,6 +100,35 @@ const createUserTransaction = asyncHandler(async (req, res) => {
   }
 });
 
+const updateUserTransaction = asyncHandler(async (req, res) => {
+  const transactionId = req.params.id;
+  const transaction = await Transaction.findByPk(transactionId);
+
+  if (transaction) {
+    transaction.transactionAmount =
+      req.body.transactionAmount || transaction.transactionAmount;
+    transaction.transactionType =
+      req.body.transactionType || transaction.transactionType;
+    transaction.paymentMethod =
+      req.body.paymentMethod || transaction.paymentMethod;
+    transaction.description = req.body.description || transaction.description;
+    transaction.accountId = req.body.accountId || transaction.accountId;
+
+    const updatedtransaction = await transaction.save();
+
+    res.status(201).json({
+      transactionAmount: updatedtransaction.transactionAmount,
+      transactionType: updatedtransaction.transactionType,
+      paymentMethod: updateUserTransaction.paymentMethod,
+      description: updatedtransaction.description,
+      accountId: updatedtransaction.accountId,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Transaction not found.");
+  }
+});
+
 const deleteUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
@@ -125,5 +154,6 @@ module.exports = {
   getUserTransaction,
   getAllUserTransactions,
   createUserTransaction,
+  updateUserTransaction,
   deleteUserTransaction,
 };
