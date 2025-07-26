@@ -105,6 +105,50 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
   const transaction = await Transaction.findByPk(transactionId);
 
   if (transaction) {
+    const account = await Account.findByPk(transaction.accountId);
+
+    if (transactionAmount < 0) {
+      res.status(400);
+      throw new Error("Negative values are not allowed.");
+    } else {
+      if (transaction.transactionType === "Expense") {
+        if (req.body.accountId !== transaction.accountId) {
+          account.accountBalance =
+            account.accountBalance + transaction.transactionAmount;
+
+          await account.save();
+
+          const newAccount = await Account.findByPk(req.body.accountId);
+
+          if (req.body.transactionAmount < newAccount.accountBalance) {
+            newAccount.accountBalance =
+              newAccount.accountBalance - req.body.transactionAmount;
+
+            await newAccount.save();
+          } else {
+            res.status(400);
+            throw new Error(
+              "Transaction amount cannot be greater than account balance."
+            );
+          }
+        }
+      } else if (transaction.transactionType === "Income") {
+        if (req.body.accountId !== transaction.accountId) {
+          account.accountBalance =
+            account.accountBalance - transaction.transactionAmount;
+
+          await account.save();
+
+          const newAccount = await Account.findByPk(req.body.accountId);
+
+          newAccount.accountBalance =
+            newAccount.accountBalance + req.body.transactionAmount;
+
+          await newAccount.save();
+        }
+      }
+    }
+
     transaction.transactionAmount =
       req.body.transactionAmount || transaction.transactionAmount;
     transaction.transactionType =
@@ -114,14 +158,14 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
     transaction.description = req.body.description || transaction.description;
     transaction.accountId = req.body.accountId || transaction.accountId;
 
-    const updatedtransaction = await transaction.save();
+    const updatedTransaction = await transaction.save();
 
     res.status(201).json({
-      transactionAmount: updatedtransaction.transactionAmount,
-      transactionType: updatedtransaction.transactionType,
-      paymentMethod: updateUserTransaction.paymentMethod,
-      description: updatedtransaction.description,
-      accountId: updatedtransaction.accountId,
+      transactionAmount: updatedTransaction.transactionAmount,
+      transactionType: updatedTransaction.transactionType,
+      paymentMethod: updatedTransaction.paymentMethod,
+      description: updatedTransaction.description,
+      accountId: updatedTransaction.accountId,
     });
   } else {
     res.status(404);
