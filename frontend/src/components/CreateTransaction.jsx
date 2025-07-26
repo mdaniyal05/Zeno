@@ -15,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
 import { useCreateUserTransactionMutation } from "../redux/slices/transactionApiSlice";
+import { useGetAllUserAccountsQuery } from "../redux/slices/bankAccountApiSlice";
 import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -62,10 +63,13 @@ const CreateTransactionContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function CreateTransaction(props) {
+  const { data } = useGetAllUserAccountsQuery();
+
   const [transactionAmount, setTransactionAmount] = React.useState("");
   const [transactionType, setTransactionType] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [accountId, setAccountId] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -80,6 +84,7 @@ export default function CreateTransaction(props) {
         transactionType,
         paymentMethod,
         description,
+        accountId,
       }).unwrap();
       navigate("/home");
       toast.success("Transaction created successfully.");
@@ -148,6 +153,27 @@ export default function CreateTransaction(props) {
                   >
                     <MenuItem value={"Income"}>Income</MenuItem>
                     <MenuItem value={"Expense"}>Expense</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="account">Bank Account</FormLabel>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <Select
+                    labelId="account"
+                    id="account"
+                    label="Account"
+                    value={accountId}
+                    onChange={(event) => setAccountId(event.target.value)}
+                  >
+                    {data &&
+                      data.accountsData.map((account) => (
+                        <MenuItem value={account.accountId}>
+                          {account.accountName}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Box>
