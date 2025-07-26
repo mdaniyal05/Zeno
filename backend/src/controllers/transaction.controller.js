@@ -183,6 +183,8 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
     account.accountBalance =
       account.accountBalance + transaction.transactionAmount;
 
+    await account.save();
+
     await Transaction.destroy({ where: { transactionId: transactionId } });
 
     res.status(200).json({
