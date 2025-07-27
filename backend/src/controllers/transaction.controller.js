@@ -54,15 +54,11 @@ const createUserTransaction = asyncHandler(async (req, res) => {
   }
 
   if (account) {
-    let updatedAccountBalance;
-
     if (transactionType === "Expense") {
       if (transactionAmount < account.accountBalance) {
-        updatedAccountBalance = account.accountBalance - transactionAmount;
-        await Account.update(
-          { accountBalance: updatedAccountBalance },
-          { where: { accountId: accountId } }
-        );
+        account.accountBalance = account.accountBalance - transactionAmount;
+
+        await account.save();
       } else {
         res.status(400);
         throw new Error(
@@ -70,11 +66,9 @@ const createUserTransaction = asyncHandler(async (req, res) => {
         );
       }
     } else if (transactionType === "Income") {
-      updatedAccountBalance = account.accountBalance + transactionAmount;
-      await Account.update(
-        { accountBalance: updatedAccountBalance },
-        { where: { accountId: accountId } }
-      );
+      account.accountBalance = account.accountBalance - transactionAmount;
+
+      await account.save();
     }
 
     const newTransaction = await Transaction.create({
