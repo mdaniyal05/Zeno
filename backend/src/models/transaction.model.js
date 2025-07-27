@@ -14,7 +14,7 @@ const Transaction = sequelize.define(
       primaryKey: true,
     },
     transactionAmount: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(18, 5),
       allowNull: false,
     },
     transactionType: {
