@@ -17,11 +17,12 @@ const mainListItems = [
   { text: "Home", icon: <HomeRoundedIcon /> },
   { text: "Profile", icon: <FaceIcon /> },
   { text: "Bank Accounts", icon: <AccountBalanceIcon /> },
-  { text: "Categories", icon: <CategoryIcon /> },
+  { text: "Transactions", icon: <ReceiptIcon /> },
   { text: "Incomes", icon: <PaidIcon /> },
   { text: "Expenses", icon: <PaymentsIcon /> },
-  { text: "Transactions", icon: <ReceiptIcon /> },
   { text: "Budgets", icon: <MoneyIcon /> },
+  { text: "Savings", icon: <MoneyIcon /> },
+  { text: "Categories", icon: <CategoryIcon /> },
 ];
 
 export default function MenuContent({ onMenuItemClick, activeItem }) {
