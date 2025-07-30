@@ -5,6 +5,7 @@ const Transaction = require("../models/transaction.model");
 const Budget = require("../models/budget.model");
 const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
+const Saving = require("../models/saving.model");
 const Otp = require("../models/otp.model");
 
 const syncModels = () => {
@@ -15,6 +16,7 @@ const syncModels = () => {
   Budget.sync();
   Income.sync();
   Expense.sync();
+  Saving.sync();
   Otp.sync();
 };
 
