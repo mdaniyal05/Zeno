@@ -21,7 +21,19 @@ const getUserSaving = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllUserSavings = asyncHandler(async (req, res) => {});
+const getAllUserSavings = asyncHandler(async (req, res) => {
+  const userId = req.user.userId;
+  const savings = await Saving.findAll({ where: { userId: userId } });
+
+  if (savings) {
+    res.status(200).json({
+      savingsData: savings,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No savings found.");
+  }
+});
 
 const createUserSaving = asyncHandler(async (req, res) => {});
 
