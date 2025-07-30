@@ -66,7 +66,29 @@ const createUserSaving = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserSaving = asyncHandler(async (req, res) => {});
+const updateUserSaving = asyncHandler(async (req, res) => {
+  const savingId = req.params.id;
+  const saving = await Saving.findByPk(savingId);
+
+  if (saving) {
+    saving.title = req.body.title || saving.title;
+    saving.targetAmount = req.body.targetAmount || saving.targetAmount;
+    saving.description = req.body.description || saving.description;
+    saving.accountId = req.body.accountId || saving.accountId;
+
+    const updatedSaving = await saving.save();
+
+    res.status(201).json({
+      title: updatedSaving.title,
+      targetAmount: updatedSaving.targetAmount,
+      description: updatedSaving.description,
+      accountId: updatedSaving.accountId,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Saving not found.");
+  }
+});
 
 const deleteUserSaving = asyncHandler(async (req, res) => {
   const savingId = req.params.id;
