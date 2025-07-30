@@ -7,6 +7,7 @@ import Incomes from "../../Incomes";
 import Expenses from "../../Expenses";
 import Transactions from "../../Transactions";
 import Budgets from "../../Budgets";
+import Savings from "../../Savings";
 
 export default function MainGrid({ activeItem }) {
   const renderContent = () => {
@@ -27,6 +28,8 @@ export default function MainGrid({ activeItem }) {
         return <Transactions />;
       case "Budgets":
         return <Budgets />;
+      case "Savings":
+        return <Savings />;
       default:
         return <div>Please select an item from the menu</div>;
     }
