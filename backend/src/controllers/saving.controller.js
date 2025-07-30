@@ -68,7 +68,20 @@ const createUserSaving = asyncHandler(async (req, res) => {
 
 const updateUserSaving = asyncHandler(async (req, res) => {});
 
-const deleteUserSaving = asyncHandler(async (req, res) => {});
+const deleteUserSaving = asyncHandler(async (req, res) => {
+  const savingId = req.params.id;
+  const saving = await Saving.findByPk(savingId);
+
+  if (saving) {
+    await Saving.destroy({ where: { savingId: savingId } });
+    res.status(200).json({
+      message: `Saving deleted successfully.`,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Saving not found.");
+  }
+});
 
 module.exports = {
   getUserSaving,
