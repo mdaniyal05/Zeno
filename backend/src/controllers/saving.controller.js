@@ -35,7 +35,36 @@ const getAllUserSavings = asyncHandler(async (req, res) => {
   }
 });
 
-const createUserSaving = asyncHandler(async (req, res) => {});
+const createUserSaving = asyncHandler(async (req, res) => {
+  const { title, targetAmount, description, accountId } = req.body;
+
+  const userId = req.user.userId;
+
+  if (targetAmount < 0) {
+    res.status(400);
+    throw new Error("Negative values are not allowed.");
+  }
+
+  const newSaving = await Saving.create({
+    title: title,
+    targetAmount: targetAmount,
+    description: description,
+    userId: userId,
+    accountId: accountId,
+  });
+
+  if (newSaving) {
+    res.status(201).json({
+      title: newSaving.title,
+      targetAmount: newSaving.targetAmount,
+      description: newSaving.description,
+      message: "Saving created successfully.",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid saving data.");
+  }
+});
 
 const updateUserSaving = asyncHandler(async (req, res) => {});
 
