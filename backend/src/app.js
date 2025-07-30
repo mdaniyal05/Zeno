@@ -10,6 +10,7 @@ const transactionRoutes = require("./routes/transaction.route");
 const budgetRoutes = require("./routes/budget.route");
 const incomeRoutes = require("./routes/income.route");
 const expenseRoutes = require("./routes/expense.route");
+const savingRoutes = require("./routes/saving.route");
 const otpRoute = require("./routes/otp.route");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
@@ -26,6 +27,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/budgets", budgetRoutes);
 app.use("/api/incomes", incomeRoutes);
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/savings", savingRoutes);
 app.use("/api/otp", otpRoute);
 
 app.use(notFound);
