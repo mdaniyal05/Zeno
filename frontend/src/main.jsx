@@ -28,6 +28,7 @@ import UpdateCategoryPage from "./pages/UpdateCategoryPage.jsx";
 import UpdateBankAccountPage from "./pages/UpdateBankAccountPage.jsx";
 import UpdateTransactionPage from "./pages/UpdateTransactionPage.jsx";
 import CreateSavingPage from "./pages/CreateSavingPage.jsx";
+import UpdateSavingPage from "./pages/UpdateSavingPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
         <Route path="/update-profile/:id" element={<UpdateProfilePage />} />
         <Route path="/update-income/:id" element={<UpdateIncomePage />} />
         <Route path="/update-expense/:id" element={<UpdateExpensePage />} />
+        <Route path="/update-saving/:id" element={<UpdateSavingPage />} />
         <Route path="/update-category/:id" element={<UpdateCategoryPage />} />
         <Route path="/update-account/:id" element={<UpdateBankAccountPage />} />
         <Route
