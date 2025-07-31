@@ -27,6 +27,7 @@ import UpdateExpensePage from "./pages/UpdateExpensePage.jsx";
 import UpdateCategoryPage from "./pages/UpdateCategoryPage.jsx";
 import UpdateBankAccountPage from "./pages/UpdateBankAccountPage.jsx";
 import UpdateTransactionPage from "./pages/UpdateTransactionPage.jsx";
+import CreateSavingPage from "./pages/CreateSavingPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
         <Route path="/create-category" element={<CreateCategoryPage />} />
         <Route path="/create-expense" element={<CreateExpensePage />} />
         <Route path="/create-income" element={<CreateIncomePage />} />
+        <Route path="/create-saving" element={<CreateSavingPage />} />
         <Route path="/create-transaction" element={<CreateTransactionPage />} />
       </Route>
     </Route>
