@@ -148,7 +148,6 @@ export default function CreateCategory(props) {
                   >
                     <MenuItem value={"Needs"}>Needs</MenuItem>
                     <MenuItem value={"Wants"}>Wants</MenuItem>
-                    <MenuItem value={"Savings"}>Savings</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

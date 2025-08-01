@@ -17,7 +17,7 @@ const Expense = sequelize.define(
       allowNull: false,
     },
     expenseType: {
-      type: DataTypes.ENUM("Needs", "Wants", "Savings"),
+      type: DataTypes.ENUM("Needs", "Wants"),
       allowNull: false,
     },
     expenseDate: {
