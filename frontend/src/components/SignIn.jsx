@@ -168,10 +168,6 @@ export default function SignIn(props) {
                 color={error ? "error" : "primary"}
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button type="submit" fullWidth variant="contained">
               Sign in
             </Button>
