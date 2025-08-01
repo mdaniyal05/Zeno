@@ -18,7 +18,7 @@ const Transaction = sequelize.define(
       allowNull: false,
     },
     transactionType: {
-      type: DataTypes.ENUM("Income", "Expense"),
+      type: DataTypes.ENUM("Income", "Expense", "Saving"),
       allowNull: false,
     },
     paymentMethod: {

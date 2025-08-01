@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
+const Saving = require("../models/saving.model");
 
 const getUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
@@ -55,7 +56,18 @@ const createUserTransaction = asyncHandler(async (req, res) => {
   }
 
   if (account) {
-    if (transactionType === "Expense") {
+    if (transactionType === "Saving" && account.accountType === "Savings") {
+      account.accountBalance = account.accountBalance + transactionAmount;
+
+      const saving = await Saving.findOne({ where: { accountId: accountId } });
+
+      saving.currentAmount = saving.currentAmount + transactionAmount;
+
+      await account.save();
+      await saving.save();
+    }
+
+    if (transactionType === "Expense" && account.accountType !== "Savings") {
       if (transactionAmount < account.accountBalance) {
         account.accountBalance = account.accountBalance - transactionAmount;
 
@@ -66,7 +78,9 @@ const createUserTransaction = asyncHandler(async (req, res) => {
           "Transaction amount cannot be greater than account balance."
         );
       }
-    } else if (transactionType === "Income") {
+    }
+
+    if (transactionType === "Income" && account.accountType !== "Savings") {
       account.accountBalance = account.accountBalance - transactionAmount;
 
       await account.save();
