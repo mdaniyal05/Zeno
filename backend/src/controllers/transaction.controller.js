@@ -129,7 +129,47 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Negative values are not allowed.");
     } else {
-      if (transaction.transactionType === "Expense") {
+      if (
+        transaction.transactionType === "Saving" &&
+        account.accountType === "Savings"
+      ) {
+        if (req.body.accountId !== transaction.accountId) {
+          account.accountBalance =
+            account.accountBalance - transaction.transactionAmount;
+
+          const saving = await Saving.findOne({
+            where: { accountId: account.accountId },
+          });
+
+          saving.currentAmount =
+            saving.currentAmount - transaction.transactionAmount;
+
+          await saving.save();
+          await account.save();
+
+          const newAccount = await Account.findByPk(req.body.accountId);
+          const newSaving = await Saving.findOne({
+            where: { accountId: newAccount.accountId },
+          });
+
+          newAccount.accountBalance =
+            newAccount.accountBalance + req.body.transactionAmount;
+
+          newSaving.currentAmount =
+            newSaving.currentAmount + req.body.transactionAmount;
+
+          await newSaving.save();
+          await newAccount.save();
+        }
+      } else {
+        res.status(400);
+        throw new Error("Saving only works with saving accounts.");
+      }
+
+      if (
+        transaction.transactionType === "Expense" &&
+        account.accountType !== "Savings"
+      ) {
         if (req.body.accountId !== transaction.accountId) {
           account.accountBalance =
             account.accountBalance + transaction.transactionAmount;
@@ -150,7 +190,17 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
             );
           }
         }
-      } else if (transaction.transactionType === "Income") {
+      } else {
+        res.status(400);
+        throw new Error(
+          "Expense only works with default and current accounts."
+        );
+      }
+
+      if (
+        transaction.transactionType === "Income" &&
+        account.accountType !== "Savings"
+      ) {
         if (req.body.accountId !== transaction.accountId) {
           account.accountBalance =
             account.accountBalance - transaction.transactionAmount;
@@ -164,6 +214,9 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
           await newAccount.save();
         }
+      } else {
+        res.status(400);
+        throw new Error("Income only works with default and current accounts.");
       }
     }
 
