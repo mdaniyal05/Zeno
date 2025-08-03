@@ -8,16 +8,13 @@ const getUserBudget = asyncHandler(async (req, res) => {
   if (budget) {
     res.status(200).json({
       budgetId: budget.budgetId,
-      budgetAmount: budget.budgetAmount,
-      budgetPeriod: budget.budgetPeriod,
-      description: budget.description,
       startDate: budget.startDate,
       endDate: budget.endDate,
+      budgetAmount: budget.budgetAmount,
       amountSpent: budget.amountSpent,
       amountRemaining: budget.amountRemaining,
-      percentUsed: budget.percentUsed,
+      description: budget.description,
       status: budget.status,
-      notificationsEnabled: budget.notificationsEnabled,
     });
   } else {
     res.status(404);
