@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Budget = require("../models/budget.model");
+const Income = require("../models/income.model");
+const { Op } = require("sequelize");
 
 const getUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
@@ -18,7 +20,7 @@ const getUserBudget = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Budget Not Found.");
+    throw new Error("Budget not found.");
   }
 });
 
@@ -32,36 +34,37 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Budgets Available.");
+    throw new Error("No budgets available.");
   }
 });
 
 const createUserBudget = asyncHandler(async (req, res) => {
-  const { budgetAmount, budgetPeriod, description, startDate, endDate } =
-    req.body;
+  const { startDate, endDate, description } = req.body;
 
   const userId = req.user.userId;
-  const notificationsEnabled = true;
-  const status = "Active";
 
-  if (budgetAmount < 0 && budgetAmount < 10000) {
-    res.status(400);
-    throw new Error(
-      "No negative values allowed and budget amount must be greater than 10000."
-    );
-  }
+  const allIncomes = await Income.findAll({
+    where: {
+      incomeDate: {
+        [Op.between]: [startDate, endDate],
+      },
+    },
+    attributes: ["incomeAmount"],
+  });
+
+  let netIncome;
+
+  allIncomes.map((income) => {
+    netIncome = netIncome + income.incomeAmount;
+  });
 
   const newBudget = await Budget.create({
-    budgetAmount: budgetAmount,
-    budgetPeriod: budgetPeriod,
-    description: description,
     startDate: startDate,
     endDate: endDate,
+    budgetAmount: budgetAmount,
     amountSpent: 0,
     amountRemaining: budgetAmount,
-    percentUsed: 0,
-    status: status,
-    notificationsEnabled: notificationsEnabled,
+    description: description,
     userId: userId,
   });
 
@@ -73,11 +76,11 @@ const createUserBudget = asyncHandler(async (req, res) => {
       endDate: newBudget.endDate,
       status: newBudget.status,
       notificationsEnabled: newBudget.notificationsEnabled,
-      message: "Budget Created Successfully.",
+      message: "Budget created successfully.",
     });
   } else {
     res.status(400);
-    throw new Error("Invalid Budget Data.");
+    throw new Error("Invalid budget data.");
   }
 });
 
@@ -88,11 +91,11 @@ const deleteUserBudget = asyncHandler(async (req, res) => {
   if (budget) {
     await Budget.destroy({ where: { budgetId: budgetId } });
     res.status(200).json({
-      message: `Budget Of Amount: ${budget.budgetAmount} Deleted Successfully.`,
+      message: `Budget of amount: ${budget.budgetAmount} deleted successfully.`,
     });
   } else {
     res.status(404);
-    throw new Error("Budget Not Found.");
+    throw new Error("Budget not found.");
   }
 });
 

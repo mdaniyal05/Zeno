@@ -6,6 +6,12 @@ const Budget = require("./budget.model");
 const BudgetRule = sequelize.define(
   "BudgetRule",
   {
+    budgetRuleId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
     needsPercentage: {
       type: DataTypes.FLOAT,
       defaultValue: 50.0,
