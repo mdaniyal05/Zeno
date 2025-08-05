@@ -18,7 +18,7 @@ const getUserBudget = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Budget Not Found.");
+    throw new Error("Budget not found.");
   }
 });
 
@@ -32,52 +32,41 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Budgets Available.");
+    throw new Error("No budgets available.");
   }
 });
 
 const createUserBudget = asyncHandler(async (req, res) => {
-  const { budgetAmount, budgetPeriod, description, startDate, endDate } =
-    req.body;
+  const { startDate, endDate, budgetAmount, description } = req.body;
 
   const userId = req.user.userId;
-  const notificationsEnabled = true;
-  const status = "Active";
 
-  if (budgetAmount < 0 && budgetAmount < 10000) {
+  if (budgetAmount < 0) {
     res.status(400);
-    throw new Error(
-      "No negative values allowed and budget amount must be greater than 10000."
-    );
+    throw new Error("Negative values are not allowed.");
   }
 
   const newBudget = await Budget.create({
-    budgetAmount: budgetAmount,
-    budgetPeriod: budgetPeriod,
-    description: description,
     startDate: startDate,
     endDate: endDate,
+    budgetAmount: budgetAmount,
     amountSpent: 0,
     amountRemaining: budgetAmount,
-    percentUsed: 0,
-    status: status,
-    notificationsEnabled: notificationsEnabled,
+    description: description,
     userId: userId,
   });
 
   if (newBudget) {
     res.status(201).json({
-      budgetAmount: newBudget.budgetAmount,
-      budgetPeriod: newBudget.budgetPeriod,
       startDate: newBudget.startDate,
       endDate: newBudget.endDate,
+      budgetAmount: newBudget.budgetAmount,
       status: newBudget.status,
-      notificationsEnabled: newBudget.notificationsEnabled,
-      message: "Budget Created Successfully.",
+      message: "Budget created successfully.",
     });
   } else {
     res.status(400);
-    throw new Error("Invalid Budget Data.");
+    throw new Error("Invalid budget data.");
   }
 });
 
@@ -88,11 +77,11 @@ const deleteUserBudget = asyncHandler(async (req, res) => {
   if (budget) {
     await Budget.destroy({ where: { budgetId: budgetId } });
     res.status(200).json({
-      message: `Budget Of Amount: ${budget.budgetAmount} Deleted Successfully.`,
+      message: `Budget deleted successfully.`,
     });
   } else {
     res.status(404);
-    throw new Error("Budget Not Found.");
+    throw new Error("Budget not found.");
   }
 });
 

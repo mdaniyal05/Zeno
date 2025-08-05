@@ -37,6 +37,7 @@ const Budget = sequelize.define(
     },
     budgetAmount: {
       type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
     amountSpent: {
       type: DataTypes.DECIMAL(10, 2),
