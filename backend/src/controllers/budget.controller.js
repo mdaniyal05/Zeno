@@ -70,6 +70,8 @@ const createUserBudget = asyncHandler(async (req, res) => {
   }
 });
 
+const updateUserBudget = asyncHandler(async (req, res) => {});
+
 const deleteUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
   const budget = await Budget.findByPk(budgetId);
@@ -89,5 +91,6 @@ module.exports = {
   getUserBudget,
   getAllUserBudgets,
   createUserBudget,
+  updateUserBudget,
   deleteUserBudget,
 };
