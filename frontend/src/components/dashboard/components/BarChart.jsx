@@ -1,63 +1,77 @@
 import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useGetAllUserIncomesQuery } from "../../../redux/slices/incomeApiSlice";
+import { useGetAllUserExpensesQuery } from "../../../redux/slices/expenseApiSlice";
 
 const dataset = [
   {
     income: 0,
+    expense: 0,
     month: "Jan",
   },
   {
     income: 0,
+    expense: 0,
     month: "Feb",
   },
   {
     income: 0,
+    expense: 0,
     month: "Mar",
   },
   {
     income: 0,
+    expense: 0,
     month: "Apr",
   },
   {
     income: 0,
+    expense: 0,
     month: "May",
   },
   {
     income: 0,
+    expense: 0,
     month: "June",
   },
   {
     income: 0,
+    expense: 0,
     month: "July",
   },
   {
     income: 0,
+    expense: 0,
     month: "Aug",
   },
   {
     income: 0,
+    expense: 0,
     month: "Sept",
   },
   {
     income: 0,
+    expense: 0,
     month: "Oct",
   },
   {
     income: 0,
+    expense: 0,
     month: "Nov",
   },
   {
     income: 0,
+    expense: 0,
     month: "Dec",
   },
 ];
 
-export default function IncomeBarChart() {
-  const { data } = useGetAllUserIncomesQuery();
+export default function IncomeAndExpenseBarChart() {
+  const { data: income } = useGetAllUserIncomesQuery();
+  const { data: expense } = useGetAllUserExpensesQuery();
 
-  if (data) {
-    data.incomesData.map((income) => {
+  if (income && expense) {
+    income.incomesData.map((income) => {
       let incomeSum = 0;
       let monthNo = new Date(income.incomeDate).getMonth() + 1;
 
@@ -156,6 +170,7 @@ export default function IncomeBarChart() {
       yAxis={[{ scaleType: "band", dataKey: "month" }]}
       series={[
         { dataKey: "income", label: "Total monthly income", valueFormatter },
+        { dataKey: "expense", label: "Total monthly expense", valueFormatter },
       ]}
       layout="horizontal"
       grid={{ vertical: true }}
