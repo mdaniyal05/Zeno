@@ -19,16 +19,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/accounts", accountRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/budgets", budgetRoutes);
-app.use("/api/incomes", incomeRoutes);
-app.use("/api/expenses", expenseRoutes);
-app.use("/api/savings", savingRoutes);
-app.use("/api/otp", otpRoute);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/accounts", accountRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/transactions", transactionRoutes);
+app.use("/api/v1/budgets", budgetRoutes);
+app.use("/api/v1/incomes", incomeRoutes);
+app.use("/api/v1/expenses", expenseRoutes);
+app.use("/api/v1/savings", savingRoutes);
+app.use("/api/v1/otp", otpRoute);
 
 app.use(notFound);
 app.use(errorHandler);
