@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
 const Category = require("../models/category.model");
+const Budget = require("../models/budget.model");
 
 const getUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
@@ -62,6 +63,23 @@ const createUserExpense = asyncHandler(async (req, res) => {
     }
 
     await category.save();
+
+    const budget = await Budget.findOne({ where: { status: "Active" } });
+
+    if (
+      budget.amountSpent > budget.budgetAmount &&
+      budget.amountRemaining <= 0
+    ) {
+      budget.status = "Exceeded";
+      res.status(400);
+      throw new Error(
+        "The budget amount is exceeded and not active anymore. You were not able to reach your budget goal. Try again next time. You have to create a new budget now."
+      );
+    }
+
+    budget.amountSpent = budget.amountSpent + expenseAmount;
+
+    budget.amountRemaining = budget.amountRemaining - expenseAmount;
 
     const newExpense = await Expense.create({
       expenseAmount: expenseAmount,
