@@ -12,7 +12,7 @@ const getUsercategory = asyncHandler(async (req, res) => {
       categoryType: category.categoryType,
       description: category.description,
       isActive: category.isActive,
-      monthlyLimit: category.monthlyLimit,
+      limit: category.limit,
     });
   } else {
     res.status(404);
@@ -35,12 +35,12 @@ const getAllUserCategories = asyncHandler(async (req, res) => {
 });
 
 const createUserCategory = asyncHandler(async (req, res) => {
-  const { categoryName, categoryType, description, monthlyLimit } = req.body;
+  const { categoryName, categoryType, description, limit } = req.body;
 
   const userId = req.user.userId;
   const isActive = true;
 
-  if (monthlyLimit < 0) {
+  if (limit < 0) {
     res.status(400);
     throw new Error("Negative values are not allowed.");
   }
@@ -50,9 +50,9 @@ const createUserCategory = asyncHandler(async (req, res) => {
     categoryType: categoryType,
     description: description,
     isActive: isActive,
-    monthlyLimit: monthlyLimit,
-    monthlyLimitRemainingAmount: monthlyLimit,
-    isMonthlyLimitExceeded: false,
+    limit: limit,
+    limitRemainingAmount: limit,
+    islimitExceeded: false,
     userId: userId,
   });
 
@@ -62,7 +62,7 @@ const createUserCategory = asyncHandler(async (req, res) => {
       categoryType: categoryType,
       description: description,
       isActive: isActive,
-      monthlyLimit: monthlyLimit,
+      limit: limit,
       message: "Category Created Succesfully.",
     });
   } else {
@@ -79,9 +79,9 @@ const updateUserCategory = asyncHandler(async (req, res) => {
     category.categoryName = req.body.categoryName || category.categoryName;
     category.categoryType = req.body.categoryType || category.categoryType;
     category.description = req.body.description || category.description;
-    category.monthlyLimit = req.body.monthlyLimit || category.monthlyLimit;
+    category.limit = req.body.limit || category.limit;
 
-    if (req.body.monthlyLimit < 0) {
+    if (req.body.limit < 0) {
       res.status(400);
       throw new Error("Negative values are not allowed.");
     }
@@ -92,7 +92,7 @@ const updateUserCategory = asyncHandler(async (req, res) => {
       categoryName: updatedCategory.categoryName,
       categoryType: updatedCategory.categoryType,
       description: updatedCategory.description,
-      monthlyLimit: updatedCategory.monthlyLimit,
+      limit: updatedCategory.limit,
     });
   } else {
     res.status(404);

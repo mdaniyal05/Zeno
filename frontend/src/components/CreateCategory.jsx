@@ -65,7 +65,7 @@ export default function CreateCategory(props) {
   const [categoryName, setCategoryName] = React.useState("");
   const [categoryType, setCategoryType] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [monthlyLimit, setMonthlyLimit] = React.useState("");
+  const [limit, setlimit] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -79,7 +79,7 @@ export default function CreateCategory(props) {
         categoryName,
         categoryType,
         description,
-        monthlyLimit,
+        limit,
       }).unwrap();
       navigate("/home");
       toast.success("Category created successfully.");
@@ -167,16 +167,16 @@ export default function CreateCategory(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="monthlyLimit">Monthly Limit</FormLabel>
+              <FormLabel htmlFor="limit">Monthly Limit</FormLabel>
               <TextField
                 required
                 fullWidth
-                id="monthlyLimit"
+                id="limit"
                 placeholder="50000"
-                name="monthlyLimit"
+                name="limit"
                 variant="outlined"
-                value={monthlyLimit}
-                onChange={(event) => setMonthlyLimit(event.target.value)}
+                value={limit}
+                onChange={(event) => setlimit(event.target.value)}
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
