@@ -1,4 +1,4 @@
-export default function (dataset, income) {
+export default function incomeMap(dataset, income) {
   income.incomesData.map((income) => {
     let incomeSum = 0;
     let monthNo = new Date(income.incomeDate).getMonth() + 1;

@@ -1,4 +1,4 @@
-export default function (dataset, expense) {
+export default function expenseMap (dataset, expense) {
   expense.expensesData.map((expense) => {
     let expenseSum = 0;
     let monthNo = new Date(expense.expenseDate).getMonth() + 1;
