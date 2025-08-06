@@ -30,17 +30,17 @@ const Category = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    monthlyLimit: {
+    limit: {
       type: DataTypes.DECIMAL(10, 2),
       validate: {
         min: 0,
       },
       allowNull: false,
     },
-    monthlyLimitRemainingAmount: {
+    limitRemainingAmount: {
       type: DataTypes.DECIMAL(10, 2),
     },
-    isMonthlyLimitExceeded: {
+    islimitExceeded: {
       type: DataTypes.BOOLEAN,
     },
   },

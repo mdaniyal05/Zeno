@@ -17,7 +17,7 @@ const getUserExpense = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Expense Not Found.");
+    throw new Error("Expense not found.");
   }
 });
 
@@ -31,7 +31,7 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("No Expenses Available.");
+    throw new Error("No expenses available.");
   }
 });
 
@@ -49,15 +49,15 @@ const createUserExpense = asyncHandler(async (req, res) => {
       throw new Error("Negative values are not allowed.");
     }
 
-    category.monthlyLimitRemainingAmount =
-      category.monthlyLimitRemainingAmount - expenseAmount;
+    category.limitRemainingAmount =
+      category.limitRemainingAmount - expenseAmount;
 
-    if (category.monthlyLimitRemainingAmount <= 0) {
-      category.isMonthlyLimitExceeded = true;
+    if (category.limitRemainingAmount <= 0) {
+      category.islimitExceeded = true;
       category.isActive === false;
       res.status(400);
       throw new Error(
-        "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+        "This category's limit is exceeded and is not active. Create a new one or select another."
       );
     }
 
@@ -99,21 +99,21 @@ const updateUserExpense = asyncHandler(async (req, res) => {
     const category = await Category.findByPk(expense.categoryId);
 
     if (req.body.categoryId !== category.categoryId) {
-      category.monthlyLimitRemainingAmount =
-        category.monthlyLimitRemainingAmount + expense.expenseAmount;
+      category.limitRemainingAmount =
+        category.limitRemainingAmount + expense.expenseAmount;
 
       const newCategory = await Category.findByPk(req.body.categoryId);
 
-      newCategory.monthlyLimitRemainingAmount =
-        newCategory.monthlyLimitRemainingAmount - req.body.expenseAmount;
+      newCategory.limitRemainingAmount =
+        newCategory.limitRemainingAmount - req.body.expenseAmount;
 
-      if (newCategory.monthlyLimitRemainingAmount <= 0) {
-        newCategory.isMonthlyLimitExceeded = true;
+      if (newCategory.limitRemainingAmount <= 0) {
+        newCategory.islimitExceeded = true;
         newCategory.isActive === false;
         await newCategory.save();
         res.status(400);
         throw new Error(
-          "This category's monthly limit is exceeded and is not active. Create a new one or select another."
+          "This category's limit is exceeded and is not active. Create a new one or select another."
         );
       } else {
         await category.save();
@@ -149,18 +149,18 @@ const deleteUserExpense = asyncHandler(async (req, res) => {
   const category = await Category.findByPk(expense.categoryId);
 
   if (expense && category) {
-    category.monthlyLimitRemainingAmount =
-      category.monthlyLimitRemainingAmount + expense.expenseAmount;
+    category.limitRemainingAmount =
+      category.limitRemainingAmount + expense.expenseAmount;
 
     await category.save();
 
     await Expense.destroy({ where: { expenseId: expenseId } });
     res.status(200).json({
-      message: `Expense Of Amount: ${expense.expenseAmount} Deleted Successfully.`,
+      message: `Expense deleted successfully.`,
     });
   } else {
     res.status(404);
-    throw new Error("Expense Not Found.");
+    throw new Error("Expense not found.");
   }
 });
 
