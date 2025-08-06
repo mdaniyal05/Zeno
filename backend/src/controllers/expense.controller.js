@@ -139,6 +139,25 @@ const updateUserExpense = asyncHandler(async (req, res) => {
       }
     }
 
+    const budget = await Budget.findOne({ where: { status: "Active" } });
+
+    if (
+      budget.amountSpent > budget.budgetAmount &&
+      budget.amountRemaining <= 0
+    ) {
+      budget.status = "Exceeded";
+      res.status(400);
+      throw new Error(
+        "The budget amount is exceeded and not active anymore. You were not able to reach your budget goal. Try again next time. You have to create a new budget now."
+      );
+    }
+
+    budget.amountSpent = budget.amountSpent - expense.expenseAmount;
+    budget.amountSpent = budget.amountSpent + req.body.expenseAmount;
+
+    budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
+    budget.amountRemaining = budget.amountRemaining - req.body.expenseAmount;
+
     expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
     expense.expenseType = req.body.expenseType || expense.expenseType;
     expense.expenseDate = req.body.expenseDate || expense.expenseDate;
