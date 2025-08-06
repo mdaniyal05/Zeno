@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import BarChart from "./dashboard/components/BarChart";
 
 export default function Home() {
   return (
@@ -14,7 +15,9 @@ export default function Home() {
         columns={12}
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+          <BarChart />
+        </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
