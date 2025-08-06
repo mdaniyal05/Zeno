@@ -145,7 +145,7 @@ export default function IncomeBarChart() {
   }
 
   const chartSetting = {
-    xAxis: [{ label: "Currency unit (K)" }],
+    xAxis: [{ label: "Amount" }],
     height: 400,
     margin: { left: 0 },
   };
