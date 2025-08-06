@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const OTP_URL = "/api/otp";
+const OTP_URL = "/api/v1/otp";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

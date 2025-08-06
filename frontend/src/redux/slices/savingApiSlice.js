@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const SAVING_URL = "/api/savings";
+const SAVING_URL = "/api/v1/savings";
 
 export const savingApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const ACCOUNT_URL = "/api/accounts";
+const ACCOUNT_URL = "/api/v1/accounts";
 
 export const bankAccountApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

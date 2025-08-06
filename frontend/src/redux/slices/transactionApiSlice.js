@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-const TRANSACTION_URL = "/api/transactions";
+const TRANSACTION_URL = "/api/v1/transactions";
 
 export const transactionApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
