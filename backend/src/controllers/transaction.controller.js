@@ -41,6 +41,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     transactionAmount,
     transactionType,
     paymentMethod,
+    transactionDate,
     description,
     accountId,
   } = req.body;
@@ -99,6 +100,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       transactionAmount: transactionAmount,
       transactionType: transactionType,
       paymentMethod: paymentMethod,
+      transactionDate: transactionDate,
       description: description,
       userId: userId,
       accountId: account.accountId,
@@ -226,6 +228,8 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
       req.body.transactionType || transaction.transactionType;
     transaction.paymentMethod =
       req.body.paymentMethod || transaction.paymentMethod;
+    transaction.transactionDate =
+      req.body.transactionDate || transaction.transactionDate;
     transaction.description = req.body.description || transaction.description;
     transaction.accountId = req.body.accountId || transaction.accountId;
 
@@ -235,6 +239,7 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
       transactionAmount: updatedTransaction.transactionAmount,
       transactionType: updatedTransaction.transactionType,
       paymentMethod: updatedTransaction.paymentMethod,
+      transactionDate: updatedTransaction.transactionDate,
       description: updatedTransaction.description,
       accountId: updatedTransaction.accountId,
     });
