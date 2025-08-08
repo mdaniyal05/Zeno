@@ -30,7 +30,7 @@ app.use("/api/v1/incomes", incomeRoutes);
 app.use("/api/v1/expenses", expenseRoutes);
 app.use("/api/v1/savings", savingRoutes);
 app.use("/api/v1/otp", otpRoute);
-app.use("/api/v1/dashboard", otpRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 
 app.use(notFound);
 app.use(errorHandler);
