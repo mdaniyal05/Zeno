@@ -175,6 +175,7 @@ export default function UpdateTransaction(props) {
                   >
                     <MenuItem value={"Income"}>Income</MenuItem>
                     <MenuItem value={"Expense"}>Expense</MenuItem>
+                    <MenuItem value={"Saving"}>Saving</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
