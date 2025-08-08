@@ -8,25 +8,22 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   const monthlyIncome = await Income.findAll({
     attributes: [
-      [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "yyyy-MM"), "month"],
+      [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "totalIncome"],
     ],
     where: { userId },
-    group: [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "yyyy-MM")],
+    group: [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
     raw: true,
   });
 
   const monthlyExpense = await Expense.findAll({
     attributes: [
-      [
-        Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "yyyy-MM"),
-        "month",
-      ],
+      [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "totalExpense"],
     ],
     where: { userId },
-    group: [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "yyyy-MM")],
+    group: [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
     raw: true,
   });
