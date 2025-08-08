@@ -167,7 +167,7 @@ export default function CreateCategory(props) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="limit">Monthly Limit</FormLabel>
+              <FormLabel htmlFor="limit">Limit</FormLabel>
               <TextField
                 required
                 fullWidth
