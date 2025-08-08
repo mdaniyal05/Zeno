@@ -3,7 +3,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { useGetDashboardDataQuery } from "../../../redux/slices/dashboardApiSlice";
 
 const chartSetting = {
-  xAxis: [{ label: "Income (PKR)" }],
+  xAxis: [{ label: "Amount" }],
   height: 400,
   margin: { left: 0 },
 };
