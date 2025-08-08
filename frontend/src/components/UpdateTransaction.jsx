@@ -12,6 +12,10 @@ import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -74,6 +78,7 @@ export default function UpdateTransaction(props) {
   const [transactionAmount, setTransactionAmount] = React.useState("");
   const [transactionType, setTransactionType] = React.useState("");
   const [paymentMethod, setPaymentMethod] = React.useState("");
+  const [transactionDate, setTransactionDate] = React.useState(null);
   const [description, setDescription] = React.useState("");
   const [accountId, setAccountId] = React.useState("");
 
@@ -85,6 +90,7 @@ export default function UpdateTransaction(props) {
     setTransactionAmount((transaction && transaction.transactionAmount) || "");
     setTransactionType((transaction && transaction.transactionType) || "");
     setPaymentMethod((transaction && transaction.paymentMethod) || "");
+    setTransactionDate((transaction && transaction.transactionDate) || "");
     setDescription((transaction && transaction.description) || "");
     setAccountId((transaction && transaction.accountId) || "");
   }, [transaction]);
@@ -98,6 +104,7 @@ export default function UpdateTransaction(props) {
         transactionAmount,
         transactionType,
         paymentMethod,
+        transactionDate,
         description,
         accountId,
       }).unwrap();
@@ -212,6 +219,15 @@ export default function UpdateTransaction(props) {
                   </Select>
                 </FormControl>
               </Box>
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="transactionDate">Transaction Date</FormLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  value={dayjs(transactionDate)}
+                  onChange={(value) => setTransactionDate(value)}
+                />
+              </LocalizationProvider>
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="description">Description</FormLabel>
