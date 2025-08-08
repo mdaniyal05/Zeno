@@ -12,6 +12,7 @@ const incomeRoutes = require("./routes/income.route");
 const expenseRoutes = require("./routes/expense.route");
 const savingRoutes = require("./routes/saving.route");
 const otpRoute = require("./routes/otp.route");
+const dashboardRoute = require("./routes/dashboard.route");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 app.use(cors());
@@ -29,6 +30,7 @@ app.use("/api/v1/incomes", incomeRoutes);
 app.use("/api/v1/expenses", expenseRoutes);
 app.use("/api/v1/savings", savingRoutes);
 app.use("/api/v1/otp", otpRoute);
+app.use("/api/v1/dashboard", otpRoute);
 
 app.use(notFound);
 app.use(errorHandler);
