@@ -15,6 +15,7 @@ function valueFormatter(value) {
 export default function Barchart() {
   const [incomeDataset, setIncomedataset] = React.useState([]);
   const [expenseDataset, setExpensedataset] = React.useState([]);
+  const [savingDataset, setSavingDataset] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
@@ -22,6 +23,7 @@ export default function Barchart() {
     if (data) {
       setExpensedataset(data.monthlyExpenseData);
       setIncomedataset(data.monthlyIncomeData);
+      setSavingDataset(data.monthlySavingData);
     }
   }, [data]);
 
@@ -48,6 +50,20 @@ export default function Barchart() {
           {
             dataKey: "totalExpense",
             label: "Total monthly expense",
+            valueFormatter,
+          },
+        ]}
+        layout="horizontal"
+        grid={{ vertical: true }}
+        {...chartSetting}
+      />
+      <BarChart
+        dataset={savingDataset}
+        yAxis={[{ scaleType: "band", dataKey: "month" }]}
+        series={[
+          {
+            dataKey: "totalSaving",
+            label: "Total monthly saving",
             valueFormatter,
           },
         ]}

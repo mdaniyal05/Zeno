@@ -51,7 +51,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   res.status(200).json({
     monthlyIncomeData: monthlyIncome,
     monthlyExpenseData: monthlyExpense,
-    monthlySaving: monthlySaving,
+    monthlySavingData: monthlySaving,
   });
 });
 
