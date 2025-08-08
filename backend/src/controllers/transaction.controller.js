@@ -62,7 +62,14 @@ const createUserTransaction = asyncHandler(async (req, res) => {
 
       const saving = await Saving.findOne({ where: { accountId: accountId } });
 
-      saving.currentAmount = saving.currentAmount + transactionAmount;
+      if (saving) {
+        saving.currentAmount = saving.currentAmount + transactionAmount;
+      } else {
+        res.status(400);
+        throw new Error(
+          "You must have a saving active in order to create a saving transaction."
+        );
+      }
 
       await account.save();
       await saving.save();
