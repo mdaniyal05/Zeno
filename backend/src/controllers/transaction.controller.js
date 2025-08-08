@@ -51,19 +51,21 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     where: { accountId: accountId },
   });
 
-  if (transactionAmount < 0) {
+  if (parseFloat(transactionAmount) < 0) {
     res.status(400);
     throw new Error("Negative values are not allowed.");
   }
 
   if (account) {
     if (transactionType === "Saving" && account.accountType === "Savings") {
-      account.accountBalance = account.accountBalance + transactionAmount;
+      account.accountBalance =
+        account.accountBalance + parseFloat(transactionAmount);
 
       const saving = await Saving.findOne({ where: { accountId: accountId } });
 
       if (saving) {
-        saving.currentAmount = saving.currentAmount + transactionAmount;
+        saving.currentAmount =
+          saving.currentAmount + parseFloat(transactionAmount);
 
         await saving.save();
       } else {
@@ -74,14 +76,12 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       }
 
       await account.save();
-    } else {
-      res.status(400);
-      throw new Error("Saving only works with saving accounts.");
     }
 
     if (transactionType === "Expense" && account.accountType !== "Savings") {
-      if (transactionAmount < account.accountBalance) {
-        account.accountBalance = account.accountBalance - transactionAmount;
+      if (parseFloat(transactionAmount) < account.accountBalance) {
+        account.accountBalance =
+          account.accountBalance - parseFloat(transactionAmount);
 
         await account.save();
       } else {
@@ -90,18 +90,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
           "Transaction amount cannot be greater than account balance."
         );
       }
-    } else {
-      res.status(400);
-      throw new Error("Expense only works with default and current accounts.");
     }
 
     if (transactionType === "Income" && account.accountType !== "Savings") {
-      account.accountBalance = account.accountBalance + transactionAmount;
+      account.accountBalance =
+        account.accountBalance + parseFloat(transactionAmount);
 
       await account.save();
-    } else {
-      res.status(400);
-      throw new Error("Income only works with default and current accounts.");
     }
 
     const newTransaction = await Transaction.create({
