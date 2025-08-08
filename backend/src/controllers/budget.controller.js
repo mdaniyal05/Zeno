@@ -39,6 +39,13 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
 const createUserBudget = asyncHandler(async (req, res) => {
   const { startDate, endDate, budgetAmount, description } = req.body;
 
+  const budget = await Budget.findOne({ where: { status: "Active" } });
+
+  if (budget) {
+    res.status(400);
+    throw new Error("You can only have one active budget at a time.");
+  }
+
   const userId = req.user.userId;
 
   if (budgetAmount < 0) {
