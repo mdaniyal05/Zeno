@@ -2,6 +2,7 @@ const { Sequelize } = require("sequelize");
 const asyncHandler = require("express-async-handler");
 const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
+const Transaction = require("../models/transaction.model");
 
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
@@ -11,7 +12,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "totalIncome"],
     ],
-    where: { userId },
+    where: { userId: userId },
     group: [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
     raw: true,
@@ -22,13 +23,27 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "totalExpense"],
     ],
-    where: { userId },
+    where: { userId: userId },
     group: [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
     raw: true,
   });
 
-  if (!monthlyIncome || !monthlyExpense) {
+  const monthlySaving = await Transaction.findAll({
+    attributes: [
+      [
+        Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM"),
+        "month",
+      ],
+      [Sequelize.fn("SUM", Sequelize.col("transactionAmount")), "totalSaving"],
+    ],
+    where: { userId: userId, transactiontype: "Saving" },
+    group: [Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM")],
+    order: [[Sequelize.literal("month"), "ASC"]],
+    raw: true,
+  });
+
+  if (!monthlyIncome || !monthlyExpense || !monthlySaving) {
     res.status(400);
     throw new Error("Unable to get dashboard data. Something went wrong");
   }
@@ -36,6 +51,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   res.status(200).json({
     monthlyIncomeData: monthlyIncome,
     monthlyExpenseData: monthlyExpense,
+    monthlySaving: monthlySaving,
   });
 });
 
