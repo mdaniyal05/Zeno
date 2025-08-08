@@ -64,6 +64,8 @@ const createUserTransaction = asyncHandler(async (req, res) => {
 
       if (saving) {
         saving.currentAmount = saving.currentAmount + transactionAmount;
+
+        await saving.save();
       } else {
         res.status(400);
         throw new Error(
@@ -72,7 +74,6 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       }
 
       await account.save();
-      await saving.save();
     } else {
       res.status(400);
       throw new Error("Saving only works with saving accounts.");
@@ -95,7 +96,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (transactionType === "Income" && account.accountType !== "Savings") {
-      account.accountBalance = account.accountBalance - transactionAmount;
+      account.accountBalance = account.accountBalance + transactionAmount;
 
       await account.save();
     } else {
