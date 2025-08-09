@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import BarChart from "./dashboard/components/BarChart";
+import PieChart from "./dashboard/components/PieChart";
 import { useGetDashboardDataQuery } from "../redux/slices/dashboardApiSlice";
 
 export default function Home() {
@@ -64,6 +65,9 @@ export default function Home() {
             seriesDataKey={"totalTransaction"}
             label={"Monthly total transaction"}
           />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <PieChart />
         </Grid>
       </Grid>
     </Box>
