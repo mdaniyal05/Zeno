@@ -9,6 +9,7 @@ export default function Home() {
   const [incomeDataset, setIncomedataset] = React.useState([]);
   const [expenseDataset, setExpensedataset] = React.useState([]);
   const [savingDataset, setSavingDataset] = React.useState([]);
+  const [transactionDataset, setTransactionDataset] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
@@ -17,6 +18,7 @@ export default function Home() {
       setExpensedataset(data.monthlyExpenseData);
       setIncomedataset(data.monthlyIncomeData);
       setSavingDataset(data.monthlySavingData);
+      setTransactionDataset(data.monthlyTransactionData);
     }
   }, [data]);
 
@@ -55,7 +57,14 @@ export default function Home() {
             label={"Monthly total saving"}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <BarChart
+            dataset={transactionDataset}
+            yAxisDataKey={"month"}
+            seriesDataKey={"totalTransaction"}
+            label={"Monthly total transaction"}
+          />
+        </Grid>
       </Grid>
     </Box>
   );
