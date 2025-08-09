@@ -36,6 +36,7 @@ export default function BasicTable() {
               <TableCell align="left">Current Amount</TableCell>
               <TableCell align="left">Description</TableCell>
               <TableCell align="left">Status</TableCell>
+              <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Options</TableCell>
             </TableRow>
           </TableHead>
