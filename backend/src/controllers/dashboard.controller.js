@@ -43,7 +43,29 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
-  if (!monthlyIncome || !monthlyExpense || !monthlySaving) {
+  const monthlyTransaction = await Transaction.findAll({
+    attributes: [
+      [
+        Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM"),
+        "month",
+      ],
+      [
+        Sequelize.fn("SUM", Sequelize.col("transactionAmount")),
+        "totalTransaction",
+      ],
+    ],
+    where: { userId: userId },
+    group: [Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM")],
+    order: [[Sequelize.literal("month"), "ASC"]],
+    raw: true,
+  });
+
+  if (
+    !monthlyIncome ||
+    !monthlyExpense ||
+    !monthlySaving ||
+    !monthlyTransaction
+  ) {
     res.status(400);
     throw new Error("Unable to get dashboard data. Something went wrong");
   }
@@ -52,6 +74,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlyIncomeData: monthlyIncome,
     monthlyExpenseData: monthlyExpense,
     monthlySavingData: monthlySaving,
+    monthlyTransactionData: monthlyTransaction,
   });
 });
 
