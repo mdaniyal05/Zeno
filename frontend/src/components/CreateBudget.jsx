@@ -8,8 +8,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import AppTheme from "./shared-theme/AppTheme";
 import ColorModeSelect from "./shared-theme/ColorModeSelect";
@@ -66,7 +64,6 @@ const CreateBudgetContainer = styled(Stack)(({ theme }) => ({
 
 export default function CreateBudget(props) {
   const [budgetAmount, setBudgetAmount] = React.useState("");
-  const [budgetPeriod, setBudgetPeriod] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
@@ -80,11 +77,10 @@ export default function CreateBudget(props) {
 
     try {
       await CreateBudget({
-        budgetAmount,
-        budgetPeriod,
-        description,
         startDate,
         endDate,
+        budgetAmount,
+        description,
       }).unwrap();
       navigate("/home");
       toast.success("Budget created successfully.");
@@ -126,50 +122,6 @@ export default function CreateBudget(props) {
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="amount">Budget Amount</FormLabel>
-              <TextField
-                name="amount"
-                required
-                fullWidth
-                id="amount"
-                placeholder="150000"
-                value={budgetAmount}
-                onChange={(event) => setBudgetAmount(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="budgetPeriod">Budget Period</FormLabel>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <Select
-                    labelId="budgetPeriod"
-                    id="budgetPeriod"
-                    label="Budget Period"
-                    value={budgetPeriod}
-                    onChange={(event) => setBudgetPeriod(event.target.value)}
-                  >
-                    <MenuItem value={"Weekly"}>Weekly</MenuItem>
-                    <MenuItem value={"Monthly"}>Monthly</MenuItem>
-                    <MenuItem value={"Yearly"}>Yearly</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="description">Description</FormLabel>
-              <TextField
-                name="description"
-                multiline
-                maxRows={4}
-                required
-                fullWidth
-                id="description"
-                placeholder="Budget for shopping in a year"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
               <FormLabel htmlFor="startDate">Start Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -186,6 +138,32 @@ export default function CreateBudget(props) {
                   onChange={(value) => setEndDate(value)}
                 />
               </LocalizationProvider>
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="amount">Budget Amount</FormLabel>
+              <TextField
+                name="amount"
+                required
+                fullWidth
+                id="amount"
+                placeholder="150000"
+                value={budgetAmount}
+                onChange={(event) => setBudgetAmount(event.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="description">Description</FormLabel>
+              <TextField
+                name="description"
+                multiline
+                maxRows={4}
+                required
+                fullWidth
+                id="description"
+                placeholder="Budget for shopping in a year"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
               Create Budget
