@@ -44,6 +44,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
   const category = await Category.findByPk(categoryId);
 
+  if (category.categoryType !== expenseType) {
+    res.status(400);
+    throw new Error("The category type and expense type should be same.");
+  }
+
   if (category && category.isActive === true) {
     if (expenseAmount < 0) {
       res.status(400);
@@ -121,6 +126,11 @@ const updateUserExpense = asyncHandler(async (req, res) => {
     const category = await Category.findByPk(expense.categoryId);
 
     if (req.body.categoryId !== category.categoryId) {
+      if (category.categoryType !== req.body.expenseType) {
+        res.status(400);
+        throw new Error("The category type and expense type should be same.");
+      }
+
       category.limitRemainingAmount =
         category.limitRemainingAmount + expense.expenseAmount;
 
