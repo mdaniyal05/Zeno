@@ -1,6 +1,4 @@
-import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { useGetDashboardDataQuery } from "../../../redux/slices/dashboardApiSlice";
 
 const chartSetting = {
   xAxis: [{ label: "Amount" }],
@@ -9,61 +7,24 @@ const chartSetting = {
 };
 
 function valueFormatter(value) {
-  return `${value} PKR`;
+  return `${value} Amount`;
 }
 
-export default function Barchart() {
-  const [incomeDataset, setIncomedataset] = React.useState([]);
-  const [expenseDataset, setExpensedataset] = React.useState([]);
-  const [savingDataset, setSavingDataset] = React.useState([]);
-
-  const { data } = useGetDashboardDataQuery();
-
-  React.useEffect(() => {
-    if (data) {
-      setExpensedataset(data.monthlyExpenseData);
-      setIncomedataset(data.monthlyIncomeData);
-      setSavingDataset(data.monthlySavingData);
-    }
-  }, [data]);
-
+export default function Barchart({
+  dataset,
+  yAxisDataKey,
+  seriesDataKey,
+  label,
+}) {
   return (
     <>
       <BarChart
-        dataset={incomeDataset}
-        yAxis={[{ scaleType: "band", dataKey: "month" }]}
+        dataset={dataset}
+        yAxis={[{ scaleType: "band", dataKey: `${yAxisDataKey}` }]}
         series={[
           {
-            dataKey: "totalIncome",
-            label: "Total monthly income",
-            valueFormatter,
-          },
-        ]}
-        layout="horizontal"
-        grid={{ vertical: true }}
-        {...chartSetting}
-      />
-      <BarChart
-        dataset={expenseDataset}
-        yAxis={[{ scaleType: "band", dataKey: "month" }]}
-        series={[
-          {
-            dataKey: "totalExpense",
-            label: "Total monthly expense",
-            valueFormatter,
-          },
-        ]}
-        layout="horizontal"
-        grid={{ vertical: true }}
-        {...chartSetting}
-      />
-      <BarChart
-        dataset={savingDataset}
-        yAxis={[{ scaleType: "band", dataKey: "month" }]}
-        series={[
-          {
-            dataKey: "totalSaving",
-            label: "Total monthly saving",
+            dataKey: `${seriesDataKey}`,
+            label: `${label}`,
             valueFormatter,
           },
         ]}
