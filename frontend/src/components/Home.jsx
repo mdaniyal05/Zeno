@@ -31,7 +31,7 @@ export default function Home() {
         columns={12}
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={incomeDataset}
             yAxisDataKey={"month"}
@@ -39,8 +39,22 @@ export default function Home() {
             label={"Monthly total income"}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 12 }}></Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <BarChart
+            dataset={expenseDataset}
+            yAxisDataKey={"month"}
+            seriesDataKey={"totalExpense"}
+            label={"Monthly total expense"}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <BarChart
+            dataset={savingDataset}
+            yAxisDataKey={"month"}
+            seriesDataKey={"totalSaving"}
+            label={"Monthly total saving"}
+          />
+        </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
       </Grid>
     </Box>
