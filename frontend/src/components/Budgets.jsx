@@ -27,13 +27,12 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Budget Amount</TableCell>
-              <TableCell align="left">Budget Period</TableCell>
-              <TableCell align="left">Start Date</TableCell>
+              <TableCell>Start Date</TableCell>
               <TableCell align="left">End Date</TableCell>
+              <TableCell align="left">Budget Amount</TableCell>
               <TableCell align="left">Amount Spent</TableCell>
               <TableCell align="left">Amount Remaining</TableCell>
-              <TableCell align="left">Percent Used</TableCell>
+              <TableCell align="left">Description</TableCell>
               <TableCell align="left">Status</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Options</TableCell>
@@ -47,14 +46,13 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.budgetAmount} Rs
+                    {row.startDate}
                   </TableCell>
-                  <TableCell align="left">{row.budgetPeriod}</TableCell>
-                  <TableCell align="left">{row.startDate}</TableCell>
                   <TableCell align="left">{row.endDate}</TableCell>
+                  <TableCell align="left">{row.budgetAmount}</TableCell>
                   <TableCell align="left">{row.amountSpent}</TableCell>
                   <TableCell align="left">{row.amountRemaining}</TableCell>
-                  <TableCell align="left">{row.percentUsed} %</TableCell>
+                  <TableCell align="left">{row.description}</TableCell>
                   <TableCell align="left">{row.status}</TableCell>
                   <TableCell align="left">
                     {row.createdAt.slice(0, 10)}
