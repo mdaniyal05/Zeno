@@ -43,7 +43,7 @@ export default function Piechart() {
           outerRadius: 100,
           paddingAngle: 5,
           cornerRadius: 5,
-          startAngle: -45,
+          startAngle: -225,
           endAngle: 225,
         },
       ]}
