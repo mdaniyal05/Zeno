@@ -18,6 +18,14 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
+  const totalIncome = await Income.findAll({
+    attributes: [
+      [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "allIncome"],
+    ],
+    where: { userId: userId },
+    raw: true,
+  });
+
   const monthlyExpense = await Expense.findAll({
     attributes: [
       [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM"), "month"],
@@ -26,6 +34,14 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     where: { userId: userId },
     group: [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
+    raw: true,
+  });
+
+  const totalExpense = await Expense.findAll({
+    attributes: [
+      [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "allExpense"],
+    ],
+    where: { userId: userId },
     raw: true,
   });
 
@@ -40,6 +56,14 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     where: { userId: userId, transactiontype: "Saving" },
     group: [Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM")],
     order: [[Sequelize.literal("month"), "ASC"]],
+    raw: true,
+  });
+
+  const totalSaving = await Transaction.findAll({
+    attributes: [
+      [Sequelize.fn("SUM", Sequelize.col("transactionAmount")), "allSaving"],
+    ],
+    where: { userId: userId, transactiontype: "Saving" },
     raw: true,
   });
 
@@ -64,7 +88,10 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     !monthlyIncome ||
     !monthlyExpense ||
     !monthlySaving ||
-    !monthlyTransaction
+    !monthlyTransaction ||
+    !totalIncome ||
+    !totalExpense ||
+    !totalSaving
   ) {
     res.status(400);
     throw new Error("Unable to get dashboard data. Something went wrong");
@@ -75,6 +102,9 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlyExpenseData: monthlyExpense,
     monthlySavingData: monthlySaving,
     monthlyTransactionData: monthlyTransaction,
+    totalIncomeData: totalIncome,
+    totalExpenseData: totalExpense,
+    totalSavingData: totalSaving,
   });
 });
 
