@@ -72,7 +72,7 @@ export default function UpdateProfile(props) {
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
-  const [dateOfBirth, setDateOfBirth] = React.useState();
+  const [dateOfBirth, setDateOfBirth] = React.useState(null);
   const [about, setAbout] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -84,20 +84,18 @@ export default function UpdateProfile(props) {
   const [updateUserProfile] = useUpdateProfileMutation();
 
   React.useEffect(() => {
-    setFirstName((data && data.firstName) || "");
-    setLastName((data && data.lastName) || "");
-    setDateOfBirth((data && data.dateOfBirth) || "");
-    setAbout((data && data.about) || "");
-    setPhoneNumber((data && data.phoneNumber) || "");
-    setEmail((data && data.email) || "");
+    if (data) {
+      setFirstName(data.firstName || "");
+      setLastName(data.lastName || "");
+      setDateOfBirth(data.dateOfBirth || "");
+      setAbout(data.about || "");
+      setPhoneNumber(data.phoneNumber || "");
+      setEmail(data.email || "");
+    }
   }, [data]);
 
   const submitHandler = async (event) => {
     event.preventDefault();
-
-    if (confirmPassword !== password) {
-      toast.error("Confirm password does not match password.");
-    }
 
     try {
       await updateUserProfile({
@@ -109,6 +107,7 @@ export default function UpdateProfile(props) {
         phoneNumber,
         email,
         password,
+        confirmPassword,
       }).unwrap();
       navigate(`/home`);
       toast.success("Profile updated successfully.");

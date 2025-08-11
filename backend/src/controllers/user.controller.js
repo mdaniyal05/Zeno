@@ -16,7 +16,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User Not Found.");
+    throw new Error("User not found.");
   }
 });
 
@@ -32,7 +32,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
 
     if (req.body.password) {
-      user.password = req.body.password;
+      if (req.body.password === req.body.confirmPassword) {
+        user.password = req.body.password;
+      } else {
+        res.status(400);
+        throw new Error("Confirm password does not match.");
+      }
     }
 
     const updatedUser = await user.save();
@@ -46,7 +51,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User Not Found.");
+    throw new Error("User not found.");
   }
 });
 
