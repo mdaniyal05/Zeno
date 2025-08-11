@@ -40,8 +40,6 @@ const incomeVsExpenseVsSavingBarChartDataset = (
     };
   });
 
-  console.log(combined);
-
   return combined;
 };
 
@@ -69,6 +67,20 @@ const totalIncomeExpenseSavingPieChartDataset = (
   ];
 
   return combined;
+};
+
+const monthlyIncomeCalculation = (monthlyIncome) => {
+  const monthlyIncomeDataset = months.map((month) => {
+    const income =
+      monthlyIncome.find((income) => income.month === month.month) || {};
+
+    return {
+      month: month.month,
+      totalIncome: income.totalIncome || 0,
+    };
+  });
+
+  return monthlyIncomeDataset;
 };
 
 const getUserDashboardData = asyncHandler(async (req, res) => {
@@ -134,6 +146,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
+  const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
+
   const pieChartData = totalIncomeExpenseSavingPieChartDataset(
     totalIncome,
     totalExpense,
@@ -146,15 +160,11 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlySaving
   );
 
-  if (!monthlyIncome || !monthlyExpense || !monthlySaving) {
-    res.status(400);
-    throw new Error("Unable to get dashboard data. Something went wrong");
-  }
-
   res.status(200).json({
     monthlyIncomeData: monthlyIncome,
     monthlyExpenseData: monthlyExpense,
     monthlySavingData: monthlySaving,
+    monthlyIncomeDataset: monthlyIncomeDataset,
     pieChartData: pieChartData,
     barChartData: barChartData,
   });
