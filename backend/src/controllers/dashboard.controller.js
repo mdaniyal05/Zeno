@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
 const Transaction = require("../models/transaction.model");
+const Budget = require("../models/budget.model");
 
 const months = [
   { month: "Jan" },
@@ -111,6 +112,18 @@ const monthlySavingCalculation = (monthlySaving) => {
   return monthlySavingDataset;
 };
 
+const createCurrentBudgetDatasetPieChart = (currentBudget) => {
+  const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
+
+  const dataset = keysToExtract.map((key, idx) => ({
+    index: idx,
+    value: currentBudget[`${key}`],
+    label: key,
+  }));
+
+  return dataset;
+};
+
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
 
@@ -174,6 +187,14 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
+  const currentBudget = await Budget.findOne({
+    where: { status: "Active", userId: userId },
+    raw: true,
+  });
+
+  const currentBudgetDataset =
+    createCurrentBudgetDatasetPieChart(currentBudget);
+
   const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
   const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
   const monthlySavingDataset = monthlySavingCalculation(monthlySaving);
@@ -196,6 +217,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlySavingDataset: monthlySavingDataset,
     pieChartData: pieChartData,
     barChartData: barChartData,
+    currentBudgetDataset: currentBudgetDataset,
   });
 });
 

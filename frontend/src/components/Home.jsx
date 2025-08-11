@@ -19,6 +19,7 @@ function valueFormatter(value) {
 export default function Home() {
   const [pieDataset, setPieDataset] = React.useState([]);
   const [vsDataset, setVsDataset] = React.useState([]);
+  const [budgetDataset, setBudgetDataset] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
@@ -26,6 +27,7 @@ export default function Home() {
     if (data) {
       setPieDataset(data.pieChartData);
       setVsDataset(data.barChartData);
+      setBudgetDataset(data.currentBudgetDataset);
     }
   }, [data]);
 
@@ -131,6 +133,9 @@ export default function Home() {
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <Piechart dataset={pieDataset} />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Piechart dataset={budgetDataset} />
         </Grid>
       </Grid>
     </Box>
