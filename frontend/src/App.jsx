@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLogoutMutation } from "./redux/slices/authApiSlice";
 import { logout } from "./redux/slices/authSlice";
@@ -31,7 +31,19 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Flip}
+      />
       <Outlet />
     </>
   );
