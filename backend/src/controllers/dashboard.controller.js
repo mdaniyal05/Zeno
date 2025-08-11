@@ -83,6 +83,34 @@ const monthlyIncomeCalculation = (monthlyIncome) => {
   return monthlyIncomeDataset;
 };
 
+const monthlyExpenseCalculation = (monthlyExpense) => {
+  const monthlyExpenseDataset = months.map((month) => {
+    const expense =
+      monthlyExpense.find((expense) => expense.month === month.month) || {};
+
+    return {
+      month: month.month,
+      totalExpense: expense.totalExpense || 0,
+    };
+  });
+
+  return monthlyExpenseDataset;
+};
+
+const monthlySavingCalculation = (monthlySaving) => {
+  const monthlySavingDataset = months.map((month) => {
+    const saving =
+      monthlySaving.find((saving) => saving.month === month.month) || {};
+
+    return {
+      month: month.month,
+      totalSaving: saving.totalSaving || 0,
+    };
+  });
+
+  return monthlySavingDataset;
+};
+
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
 
@@ -147,12 +175,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   });
 
   const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
-
-  const pieChartData = totalIncomeExpenseSavingPieChartDataset(
-    totalIncome,
-    totalExpense,
-    totalSaving
-  );
+  const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
+  const monthlySavingDataset = monthlySavingCalculation(monthlySaving);
 
   const barChartData = incomeVsExpenseVsSavingBarChartDataset(
     monthlyIncome,
@@ -160,11 +184,16 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlySaving
   );
 
+  const pieChartData = totalIncomeExpenseSavingPieChartDataset(
+    totalIncome,
+    totalExpense,
+    totalSaving
+  );
+
   res.status(200).json({
-    monthlyIncomeData: monthlyIncome,
-    monthlyExpenseData: monthlyExpense,
-    monthlySavingData: monthlySaving,
     monthlyIncomeDataset: monthlyIncomeDataset,
+    monthlyExpenseDataset: monthlyExpenseDataset,
+    monthlySavingDataset: monthlySavingDataset,
     pieChartData: pieChartData,
     barChartData: barChartData,
   });
