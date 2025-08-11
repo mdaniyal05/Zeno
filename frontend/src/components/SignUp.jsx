@@ -69,16 +69,8 @@ export default function SignUp(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState("");
   const [OTP, setOTP] = React.useState("");
   const [isMailSent, setIsMailSent] = React.useState(false);
-
-  let isValid = true;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,6 +95,7 @@ export default function SignUp(props) {
       }).unwrap();
 
       if (res) {
+        toast.info(`OTP code sent to ${email}.`);
         setIsMailSent(true);
       }
     } catch (error) {
@@ -113,58 +106,21 @@ export default function SignUp(props) {
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    if (confirmPassword !== password) {
-      toast.error("Confirm password does not match password.");
-    } else {
-      try {
-        const res = await register({
-          firstName,
-          lastName,
-          email,
-          password,
-          OTP,
-        }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate("/home");
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
-      }
+    try {
+      const res = await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        OTP,
+      }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate("/home");
+      toast.success("You are registered successfully. Welcome!");
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
     }
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const name = document.getElementById("name");
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 8) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 8 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage("");
-    }
-
-    return isValid;
   };
 
   return (
@@ -229,9 +185,6 @@ export default function SignUp(props) {
                     variant="outlined"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
-                    color={passwordError ? "error" : "primary"}
                   />
                 </FormControl>
                 <FormControl>
@@ -247,17 +200,9 @@ export default function SignUp(props) {
                     variant="outlined"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
-                    color={passwordError ? "error" : "primary"}
                   />
                 </FormControl>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={validateInputs}
-                >
+                <Button type="submit" fullWidth variant="contained">
                   Verify
                 </Button>
               </Box>
@@ -309,9 +254,6 @@ export default function SignUp(props) {
                     placeholder="Jon Snow"
                     value={firstName}
                     onChange={(event) => setFirstName(event.target.value)}
-                    error={nameError}
-                    helperText={nameErrorMessage}
-                    color={nameError ? "error" : "primary"}
                   />
                 </FormControl>
                 <FormControl>
@@ -325,9 +267,6 @@ export default function SignUp(props) {
                     placeholder="Jon Snow"
                     value={lastName}
                     onChange={(event) => setLastName(event.target.value)}
-                    error={nameError}
-                    helperText={nameErrorMessage}
-                    color={nameError ? "error" : "primary"}
                   />
                 </FormControl>
                 <FormControl>
@@ -342,17 +281,9 @@ export default function SignUp(props) {
                     variant="outlined"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    error={emailError}
-                    helperText={emailErrorMessage}
-                    color={passwordError ? "error" : "primary"}
                   />
                 </FormControl>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  onClick={validateInputs}
-                >
+                <Button type="submit" fullWidth variant="contained">
                   Sign up
                 </Button>
               </Box>
@@ -364,7 +295,7 @@ export default function SignUp(props) {
                   Already have an account?{" "}
                   <Link
                     to={"/signin"}
-                    style={{ textDecoration: "none", color: "white" }}
+                    style={{ textDecoration: "none", color: "#4598eb" }}
                   >
                     Sign in
                   </Link>

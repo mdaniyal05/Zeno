@@ -5,13 +5,19 @@ const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password, OTP } = req.body;
+  const { firstName, lastName, email, password, confirmPassword, OTP } =
+    req.body;
 
   const userExists = await User.findOne({ where: { email: email } });
 
   if (userExists) {
     res.status(400);
     throw new Error("User Already Exists.");
+  }
+
+  if (password !== confirmPassword) {
+    res.status(400);
+    throw new Error("Confirm password does not match.");
   }
 
   const otp = await Otp.findOne({ where: { email: email } });

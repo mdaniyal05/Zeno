@@ -178,7 +178,7 @@ export default function SignIn(props) {
               Don&apos;t have an account?{" "}
               <Link
                 to={"/signup"}
-                style={{ textDecoration: "none", color: "white" }}
+                style={{ textDecoration: "none", color: "#4598eb" }}
               >
                 Sign Up
               </Link>
