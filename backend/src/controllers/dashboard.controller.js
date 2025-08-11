@@ -4,6 +4,32 @@ const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
 const Transaction = require("../models/transaction.model");
 
+const totalIncomeExpenseSavingPieChartDataset = (
+  totalIncomeData,
+  totalExpenseData,
+  totalSavingData
+) => {
+  const combined = [
+    ...totalIncomeData.map((obj, idx) => ({
+      id: idx + 1,
+      value: obj.allIncome,
+      label: "Total income",
+    })),
+    ...totalExpenseData.map((obj, idx) => ({
+      id: totalIncomeData.length + idx + 1,
+      value: obj.allExpense,
+      label: "Total expense",
+    })),
+    ...totalSavingData.map((obj, idx) => ({
+      id: totalIncomeData.length + totalExpenseData.length + idx + 1,
+      value: obj.allSaving,
+      label: "Total saving",
+    })),
+  ];
+
+  return combined;
+};
+
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
 
@@ -84,6 +110,12 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
+  const pieChartData = totalIncomeExpenseSavingPieChartDataset(
+    totalIncome,
+    totalExpense,
+    totalSaving
+  );
+
   if (
     !monthlyIncome ||
     !monthlyExpense ||
@@ -102,9 +134,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlyExpenseData: monthlyExpense,
     monthlySavingData: monthlySaving,
     monthlyTransactionData: monthlyTransaction,
-    totalIncomeData: totalIncome,
-    totalExpenseData: totalExpense,
-    totalSavingData: totalSaving,
+    pieChartData: pieChartData,
   });
 });
 

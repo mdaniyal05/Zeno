@@ -21,30 +21,7 @@ export default function Home() {
       setIncomedataset(data.monthlyIncomeData);
       setSavingDataset(data.monthlySavingData);
       setTransactionDataset(data.monthlyTransactionData);
-
-      const combined = [
-        ...data.totalIncomeData.map((obj, idx) => ({
-          id: idx + 1,
-          value: obj.allIncome,
-          label: "Total income",
-        })),
-        ...data.totalExpenseData.map((obj, idx) => ({
-          id: data.totalIncomeData.length + idx + 1,
-          value: obj.allExpense,
-          label: "Total expense",
-        })),
-        ...data.totalSavingData.map((obj, idx) => ({
-          id:
-            data.totalIncomeData.length +
-            data.totalExpenseData.length +
-            idx +
-            1,
-          value: obj.allSaving,
-          label: "Total saving",
-        })),
-      ];
-
-      setPieDataset(combined);
+      setPieDataset(data.pieChartData);
     }
   }, [data]);
 
@@ -90,6 +67,9 @@ export default function Home() {
             seriesDataKey={"totalTransaction"}
             label={"Monthly total transaction"}
           />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <PieChart dataset={pieDataset} />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <PieChart dataset={pieDataset} />
