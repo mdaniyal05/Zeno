@@ -6,10 +6,15 @@ import Piechart from "./dashboard/components/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useGetDashboardDataQuery } from "../redux/slices/dashboardApiSlice";
 
-const chartSetting = {
+const chartSettingHorizontal = {
   xAxis: [{ label: "Amount" }],
   height: 500,
   margin: { left: 0 },
+};
+
+const chartSettingVertical = {
+  yAxis: [{ label: "Amount" }],
+  height: 500,
 };
 
 function valueFormatter(value) {
@@ -45,6 +50,32 @@ export default function Home() {
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
+            xAxis={[{ scaleType: "band", dataKey: `month` }]}
+            series={[
+              {
+                dataKey: `totalIncome`,
+                label: `Monthly total income`,
+                valueFormatter,
+              },
+              {
+                dataKey: `totalExpense`,
+                label: `Monthly total expense`,
+                valueFormatter,
+              },
+              {
+                dataKey: `totalSaving`,
+                label: `Monthly total saving`,
+                valueFormatter,
+              },
+            ]}
+            layout="vertical"
+            grid={{ horizontal: true }}
+            {...chartSettingVertical}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <BarChart
+            dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
             series={[
               {
@@ -60,7 +91,7 @@ export default function Home() {
             ]}
             layout="horizontal"
             grid={{ vertical: true }}
-            {...chartSetting}
+            {...chartSettingHorizontal}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
@@ -81,13 +112,13 @@ export default function Home() {
             ]}
             layout="horizontal"
             grid={{ vertical: true }}
-            {...chartSetting}
+            {...chartSettingHorizontal}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
-            yAxis={[{ scaleType: "band", dataKey: `month` }]}
+            xAxis={[{ scaleType: "band", dataKey: `month` }]}
             series={[
               {
                 dataKey: `totalIncome`,
@@ -100,37 +131,12 @@ export default function Home() {
                 valueFormatter,
               },
             ]}
-            layout="horizontal"
-            grid={{ vertical: true }}
-            {...chartSetting}
+            layout="vertical"
+            grid={{ horizontal: true }}
+            {...chartSettingVertical}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <BarChart
-            dataset={vsDataset}
-            yAxis={[{ scaleType: "band", dataKey: `month` }]}
-            series={[
-              {
-                dataKey: `totalIncome`,
-                label: `Monthly total income`,
-                valueFormatter,
-              },
-              {
-                dataKey: `totalExpense`,
-                label: `Monthly total expense`,
-                valueFormatter,
-              },
-              {
-                dataKey: `totalSaving`,
-                label: `Monthly total saving`,
-                valueFormatter,
-              },
-            ]}
-            layout="horizontal"
-            grid={{ vertical: true }}
-            {...chartSetting}
-          />
-        </Grid>
+
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <Piechart dataset={pieDataset} />
         </Grid>
