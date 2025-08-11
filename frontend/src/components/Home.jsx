@@ -38,7 +38,11 @@ export default function Home() {
 
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+      <Typography
+        component="h2"
+        variant="h2"
+        sx={{ mb: 10, textAlign: "center" }}
+      >
         Overview
       </Typography>
       <Grid
@@ -48,6 +52,14 @@ export default function Home() {
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Total Monthly Income VS Total Monthly Saving VS Total Monthly
+            Expense
+          </Typography>
           <BarChart
             dataset={vsDataset}
             xAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -74,6 +86,13 @@ export default function Home() {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Total Monthly Income VS Total Monthly Expense
+          </Typography>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -95,6 +114,13 @@ export default function Home() {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Total Monthly Expense VS Total Monthly Saving
+          </Typography>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -116,6 +142,13 @@ export default function Home() {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Total Monthly Income VS Total Monthly Saving
+          </Typography>
           <BarChart
             dataset={vsDataset}
             xAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -138,9 +171,23 @@ export default function Home() {
         </Grid>
 
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Overall Total Income, Expense and Saving
+          </Typography>
           <Piechart dataset={pieDataset} />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
+            Active Budget
+          </Typography>
           <Piechart dataset={budgetDataset} />
         </Grid>
       </Grid>

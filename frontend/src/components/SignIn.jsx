@@ -1,9 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -18,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../redux/slices/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -64,8 +63,6 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function SignIn(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -87,9 +84,9 @@ export default function SignIn(props) {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate("/home");
+      toast.success("You are logged in successfully. Welcome!");
     } catch (error) {
-      setError(true);
-      setErrorMessage(error?.data?.message || error.error);
+      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -152,8 +149,6 @@ export default function SignIn(props) {
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
-                error={error}
-                helperText={errorMessage}
                 name="password"
                 placeholder="••••••"
                 type="password"
@@ -165,7 +160,6 @@ export default function SignIn(props) {
                 required
                 fullWidth
                 variant="outlined"
-                color={error ? "error" : "primary"}
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
