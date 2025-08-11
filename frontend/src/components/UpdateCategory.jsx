@@ -78,10 +78,12 @@ export default function UpdateCategory(props) {
   const [updateCategory] = useUpdateUserCategoryMutation();
 
   React.useEffect(() => {
-    setCategoryName((data && data.categoryName) || "");
-    setCategoryType((data && data.categoryType) || "");
-    setDescription((data && data.description) || "");
-    setlimit((data && data.limit) || "");
+    if (data) {
+      setCategoryName(data.categoryName || "");
+      setCategoryType(data.categoryType || "");
+      setDescription(data.description || "");
+      setlimit(data.limit || "");
+    }
   }, [data]);
 
   const submitHandler = async (event) => {

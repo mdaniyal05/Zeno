@@ -78,9 +78,11 @@ export default function UpdateIncome(props) {
   const [updateIncome] = useUpdateUserIncomeMutation();
 
   React.useEffect(() => {
-    setIncomeAmount((data && data.incomeAmount) || "");
-    setIncomeDate((data && data.incomeDate) || "");
-    setIncomeSource((data && data.incomeSource) || "");
+    if (data) {
+      setIncomeAmount(data.incomeAmount || "");
+      setIncomeDate(data.incomeDate || "");
+      setIncomeSource(data.incomeSource || "");
+    }
   }, [data]);
 
   const submitHandler = async (event) => {

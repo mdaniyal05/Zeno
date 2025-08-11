@@ -87,12 +87,14 @@ export default function UpdateTransaction(props) {
   const [updateTransaction] = useUpdateUserTransactionMutation();
 
   React.useEffect(() => {
-    setTransactionAmount((transaction && transaction.transactionAmount) || "");
-    setTransactionType((transaction && transaction.transactionType) || "");
-    setPaymentMethod((transaction && transaction.paymentMethod) || "");
-    setTransactionDate((transaction && transaction.transactionDate) || "");
-    setDescription((transaction && transaction.description) || "");
-    setAccountId((transaction && transaction.accountId) || "");
+    if (transaction) {
+      setTransactionAmount(transaction.transactionAmount || "");
+      setTransactionType(transaction.transactionType || "");
+      setPaymentMethod(transaction.paymentMethod || "");
+      setTransactionDate(transaction.transactionDate || "");
+      setDescription(transaction.description || "");
+      setAccountId(transaction.accountId || "");
+    }
   }, [transaction]);
 
   const submitHandler = async (event) => {

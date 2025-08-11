@@ -81,10 +81,12 @@ export default function UpdateSaving(props) {
   const [updateSaving] = useUpdateUserSavingMutation();
 
   React.useEffect(() => {
-    setTitle((savingData && savingData.title) || "");
-    setTargetAmount((savingData && savingData.targetAmount) || "");
-    setDescription((savingData && savingData.description) || "");
-    setAccountId((savingData && savingData.accountId) || "");
+    if (savingData) {
+      setTitle(savingData.title || "");
+      setTargetAmount(savingData.targetAmount || "");
+      setDescription(savingData.description || "");
+      setAccountId(savingData.accountId || "");
+    }
   }, [savingData]);
 
   const submitHandler = async (event) => {

@@ -85,11 +85,13 @@ export default function UpdateExpense(props) {
   const [updateExpense] = useUpdateUserExpenseMutation();
 
   React.useEffect(() => {
-    setExpenseAmount((expenseData && expenseData.expenseAmount) || "");
-    setExpenseType((expenseData && expenseData.expenseType) || "");
-    setExpenseDate((expenseData && expenseData.expenseDate) || "");
-    setCategoryId((expenseData && expenseData.categoryId) || "");
-    setMerchant((expenseData && expenseData.merchant) || "");
+    if (expenseData) {
+      setExpenseAmount(expenseData.expenseAmount || "");
+      setExpenseType(expenseData.expenseType || "");
+      setExpenseDate(expenseData.expenseDate || "");
+      setCategoryId(expenseData.categoryId || "");
+      setMerchant(expenseData.merchant || "");
+    }
   }, [expenseData]);
 
   const submitHandler = async (event) => {
