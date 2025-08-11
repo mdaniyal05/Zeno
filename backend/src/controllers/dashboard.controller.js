@@ -4,6 +4,47 @@ const Income = require("../models/income.model");
 const Expense = require("../models/expense.model");
 const Transaction = require("../models/transaction.model");
 
+const months = [
+  { month: "Jan" },
+  { month: "Feb" },
+  { month: "Mar" },
+  { month: "Apr" },
+  { month: "May" },
+  { month: "Jun" },
+  { month: "Jul" },
+  { month: "Aug" },
+  { month: "Sep" },
+  { month: "Oct" },
+  { month: "Nov" },
+  { month: "Dec" },
+];
+
+const incomeVsExpenseVsSavingBarChartDataset = (
+  monthlyIncomeData,
+  monthlyExpenseData,
+  monthlySavingData
+) => {
+  const combined = months.map((month) => {
+    const income =
+      monthlyIncomeData.find((income) => income.month === month.month) || {};
+    const expense =
+      monthlyExpenseData.find((expense) => expense.month === month.month) || {};
+    const saving =
+      monthlySavingData.find((saving) => saving.month === month.month) || {};
+
+    return {
+      month: month.month,
+      totalIncome: income.totalIncome || 0,
+      totalExpense: expense.totalExpense || 0,
+      totalSaving: saving.totalSaving || 0,
+    };
+  });
+
+  console.log(combined);
+
+  return combined;
+};
+
 const totalIncomeExpenseSavingPieChartDataset = (
   totalIncomeData,
   totalExpenseData,
@@ -93,38 +134,19 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
-  const monthlyTransaction = await Transaction.findAll({
-    attributes: [
-      [
-        Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM"),
-        "month",
-      ],
-      [
-        Sequelize.fn("SUM", Sequelize.col("transactionAmount")),
-        "totalTransaction",
-      ],
-    ],
-    where: { userId: userId },
-    group: [Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM")],
-    order: [[Sequelize.literal("month"), "ASC"]],
-    raw: true,
-  });
-
   const pieChartData = totalIncomeExpenseSavingPieChartDataset(
     totalIncome,
     totalExpense,
     totalSaving
   );
 
-  if (
-    !monthlyIncome ||
-    !monthlyExpense ||
-    !monthlySaving ||
-    !monthlyTransaction ||
-    !totalIncome ||
-    !totalExpense ||
-    !totalSaving
-  ) {
+  const barChartData = incomeVsExpenseVsSavingBarChartDataset(
+    monthlyIncome,
+    monthlyExpense,
+    monthlySaving
+  );
+
+  if (!monthlyIncome || !monthlyExpense || !monthlySaving) {
     res.status(400);
     throw new Error("Unable to get dashboard data. Something went wrong");
   }
@@ -133,8 +155,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlyIncomeData: monthlyIncome,
     monthlyExpenseData: monthlyExpense,
     monthlySavingData: monthlySaving,
-    monthlyTransactionData: monthlyTransaction,
     pieChartData: pieChartData,
+    barChartData: barChartData,
   });
 });
 
