@@ -8,7 +8,7 @@ import { useGetDashboardDataQuery } from "../redux/slices/dashboardApiSlice";
 
 const chartSetting = {
   xAxis: [{ label: "Amount" }],
-  height: 400,
+  height: 500,
   margin: { left: 0 },
 };
 
@@ -42,7 +42,7 @@ export default function Home() {
         columns={12}
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -63,7 +63,7 @@ export default function Home() {
             {...chartSetting}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -84,7 +84,7 @@ export default function Home() {
             {...chartSetting}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
@@ -105,7 +105,7 @@ export default function Home() {
             {...chartSetting}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <BarChart
             dataset={vsDataset}
             yAxis={[{ scaleType: "band", dataKey: `month` }]}
