@@ -10,8 +10,10 @@ export const apiSlice = createApi({
     "Category",
     "Income",
     "Expense",
+    "Saving",
     "Transaction",
     "Budget",
+    "Dashboard",
   ],
   endpoints: () => ({}),
 });

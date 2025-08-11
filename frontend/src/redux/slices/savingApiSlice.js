@@ -9,12 +9,14 @@ export const savingApiSlice = apiSlice.injectEndpoints({
         url: `${SAVING_URL}/`,
         method: "GET",
       }),
+      providesTags: ["Saving"],
     }),
     getUserSaving: builder.query({
       query: (id) => ({
         url: `${SAVING_URL}/saving/${id}`,
         method: "GET",
       }),
+      providesTags: ["Saving"],
     }),
     createUserSaving: builder.mutation({
       query: (data) => ({
@@ -22,6 +24,7 @@ export const savingApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Saving"],
     }),
     updateUserSaving: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -29,12 +32,14 @@ export const savingApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
+      invalidatesTags: ["Saving"],
     }),
     deleteUserSaving: builder.mutation({
       query: (id) => ({
         url: `${SAVING_URL}/saving/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Saving"],
     }),
   }),
 });

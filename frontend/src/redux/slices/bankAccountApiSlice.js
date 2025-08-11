@@ -9,12 +9,14 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
         url: `${ACCOUNT_URL}/`,
         method: "GET",
       }),
+      providesTags: ["Account"],
     }),
     getUserAccount: builder.query({
       query: (id) => ({
         url: `${ACCOUNT_URL}/account/${id}`,
         method: "GET",
       }),
+      providesTags: ["Account"],
     }),
     createUserAccount: builder.mutation({
       query: (data) => ({
@@ -22,6 +24,7 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Account"],
     }),
     updateUserAccount: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -29,12 +32,14 @@ export const bankAccountApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
+      invalidatesTags: ["Account"],
     }),
     deleteUserAccount: builder.mutation({
       query: (id) => ({
         url: `${ACCOUNT_URL}/account/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Account"],
     }),
   }),
 });

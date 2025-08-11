@@ -9,12 +9,14 @@ export const transactionApiSlice = apiSlice.injectEndpoints({
         url: `${TRANSACTION_URL}/`,
         method: "GET",
       }),
+      providesTags: ["Transaction"],
     }),
     getUserTransaction: builder.query({
       query: (id) => ({
         url: `${TRANSACTION_URL}/transaction/${id}`,
         method: "GET",
       }),
+      providesTags: ["Transaction"],
     }),
     createUserTransaction: builder.mutation({
       query: (data) => ({
@@ -22,6 +24,7 @@ export const transactionApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Transaction"],
     }),
     updateUserTransaction: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -29,12 +32,14 @@ export const transactionApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
+      invalidatesTags: ["Transaction"],
     }),
     deleteUserTransaction: builder.mutation({
       query: (id) => ({
         url: `${TRANSACTION_URL}/transaction/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Transaction"],
     }),
   }),
 });

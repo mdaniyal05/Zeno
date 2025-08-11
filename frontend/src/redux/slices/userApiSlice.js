@@ -10,12 +10,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
+      invalidatesTags: ["User"],
     }),
     getProfile: builder.query({
       query: (id) => ({
         url: `${USER_URL}/profile/${id}`,
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
   }),
 });

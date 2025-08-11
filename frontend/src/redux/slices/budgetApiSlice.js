@@ -9,12 +9,14 @@ export const budgetApiSlice = apiSlice.injectEndpoints({
         url: `${BUDGET_URL}/`,
         method: "GET",
       }),
+      providesTags: ["Budget"],
     }),
     getUserBudget: builder.query({
       query: (id) => ({
         url: `${BUDGET_URL}/budget/${id}`,
         method: "GET",
       }),
+      providesTags: ["Budget"],
     }),
     createUserBudget: builder.mutation({
       query: (data) => ({
@@ -22,12 +24,14 @@ export const budgetApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Budget"],
     }),
     deleteUserBudget: builder.mutation({
       query: (id) => ({
         url: `${BUDGET_URL}/budget/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Budget"],
     }),
   }),
 });

@@ -9,6 +9,7 @@ export const dashboardApiSlice = apiSlice.injectEndpoints({
         url: `${DASHBOARD_URL}/data`,
         method: "GET",
       }),
+      providesTags: ["Dashboard"],
     }),
   }),
 });
