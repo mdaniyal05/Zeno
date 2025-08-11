@@ -46,7 +46,7 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.incomeAmount} Rs
+                    {row.incomeAmount}
                   </TableCell>
                   <TableCell align="left">{row.incomeDate}</TableCell>
                   <TableCell align="left">{row.incomeSource}</TableCell>

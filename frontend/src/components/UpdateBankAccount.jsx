@@ -79,11 +79,13 @@ export default function UpdateBankAccount(props) {
   const [updateAccount] = useUpdateUserAccountMutation();
 
   React.useEffect(() => {
-    setAccountName((data && data.accountName) || "");
-    setAccountType((data && data.accountType) || "");
-    setAccountBalance((data && data.accountBalance) || "");
-    setBankName((data && data.bankName) || "");
-    setAccountNumber((data && data.accountNumber) || "");
+    if (data) {
+      setAccountName(data.accountName || "");
+      setAccountType(data.accountType || "");
+      setAccountBalance(data.accountBalance || "");
+      setBankName(data.bankName || "");
+      setAccountNumber(data.accountNumber || "");
+    }
   }, [data]);
 
   const submitHandler = async (event) => {

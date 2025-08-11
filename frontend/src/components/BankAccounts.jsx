@@ -15,6 +15,7 @@ import {
 } from "../redux/slices/bankAccountApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
 import AlertDialog from "./AlertDialog.jsx";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserAccountsQuery();
@@ -67,7 +68,11 @@ export default function BasicTable() {
                         "Are you sure you want to delete this bank account?"
                       }
                       title={"Confirmation"}
-                      mutation={() => deleteBankAccount(row.accountId)}
+                      mutation={() =>
+                        deleteBankAccount(row.accountId).then(
+                          toast.success("Bank account deleted successfully.")
+                        )
+                      }
                     />
                     <Link to={`/update-account/${row.accountId}`}>
                       <IconButton sx={{ ml: 1 }}>

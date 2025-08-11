@@ -12,6 +12,7 @@ import {
 } from "../redux/slices/budgetApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
 import AlertDialog from "./AlertDialog.jsx";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserBudgetsQuery();
@@ -64,7 +65,11 @@ export default function BasicTable() {
                         "Are you sure you want to delete this budget?"
                       }
                       title={"Confirmation"}
-                      mutation={() => deleteBudget(row.budgetId)}
+                      mutation={() =>
+                        deleteBudget(row.budgetId).then(
+                          toast.success("Budget deleted successfully.")
+                        )
+                      }
                     />
                   </TableCell>
                 </TableRow>

@@ -15,6 +15,7 @@ import {
 } from "../redux/slices/expenseApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
 import AlertDialog from "./AlertDialog.jsx";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserExpensesQuery();
@@ -46,7 +47,7 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.expenseAmount} Rs
+                    {row.expenseAmount}
                   </TableCell>
                   <TableCell align="left">{row.expenseType}</TableCell>
                   <TableCell align="left">{row.expenseDate}</TableCell>
@@ -61,7 +62,11 @@ export default function BasicTable() {
                         "Are you sure you want to delete this expense?"
                       }
                       title={"Confirmation"}
-                      mutation={() => deleteExpense(row.expenseId)}
+                      mutation={() =>
+                        deleteExpense(row.expenseId).then(
+                          toast.success("Expense deleted successfully.")
+                        )
+                      }
                     />
                     <Link to={`/update-expense/${row.expenseId}`}>
                       <IconButton sx={{ ml: 1 }}>

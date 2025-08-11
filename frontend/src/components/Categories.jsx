@@ -15,6 +15,7 @@ import {
 } from "../redux/slices/categoryApiSlice";
 import ButtonComponent from "../components/ButtonComponent";
 import AlertDialog from "./AlertDialog.jsx";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
   const { data } = useGetAllUserCategoriesQuery();
@@ -73,7 +74,11 @@ export default function BasicTable() {
                         "Are you sure you want to delete this category?"
                       }
                       title={"Confirmation"}
-                      mutation={() => deleteCategory(row.categoryId)}
+                      mutation={() =>
+                        deleteCategory(row.categoryId).then(
+                          toast.success("Category deleted successfully.")
+                        )
+                      }
                     />
                     <Link to={`/update-category/${row.categoryId}`}>
                       <IconButton sx={{ ml: 1 }}>
