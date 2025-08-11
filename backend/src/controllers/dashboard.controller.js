@@ -115,10 +115,16 @@ const monthlySavingCalculation = (monthlySaving) => {
 const createCurrentBudgetDatasetPieChart = (currentBudget) => {
   const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
 
+  const labelMap = {
+    budgetAmount: "Budget amount",
+    amountRemaining: "Amount remaining",
+    amountSpent: "Amount spent",
+  };
+
   const dataset = keysToExtract.map((key, idx) => ({
     index: idx,
     value: currentBudget[`${key}`],
-    label: key,
+    label: labelMap[`${key}`],
   }));
 
   return dataset;
