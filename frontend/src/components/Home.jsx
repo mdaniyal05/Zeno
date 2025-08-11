@@ -2,7 +2,6 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Barchart from "./dashboard/components/BarChart";
 import Piechart from "./dashboard/components/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useGetDashboardDataQuery } from "../redux/slices/dashboardApiSlice";
@@ -18,9 +17,6 @@ function valueFormatter(value) {
 }
 
 export default function Home() {
-  const [incomeDataset, setIncomedataset] = React.useState([]);
-  const [expenseDataset, setExpensedataset] = React.useState([]);
-  const [savingDataset, setSavingDataset] = React.useState([]);
   const [pieDataset, setPieDataset] = React.useState([]);
   const [vsDataset, setVsDataset] = React.useState([]);
 
@@ -28,9 +24,6 @@ export default function Home() {
 
   React.useEffect(() => {
     if (data) {
-      setExpensedataset(data.monthlyExpenseData);
-      setIncomedataset(data.monthlyIncomeData);
-      setSavingDataset(data.monthlySavingData);
       setPieDataset(data.pieChartData);
       setVsDataset(data.barChartData);
     }
@@ -48,27 +41,66 @@ export default function Home() {
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <Barchart
-            dataset={incomeDataset}
-            yAxisDataKey={"month"}
-            seriesDataKey={"totalIncome"}
-            label={"Monthly total income"}
+          <BarChart
+            dataset={vsDataset}
+            yAxis={[{ scaleType: "band", dataKey: `month` }]}
+            series={[
+              {
+                dataKey: `totalIncome`,
+                label: `Monthly total income`,
+                valueFormatter,
+              },
+              {
+                dataKey: `totalExpense`,
+                label: `Monthly total expense`,
+                valueFormatter,
+              },
+            ]}
+            layout="horizontal"
+            grid={{ vertical: true }}
+            {...chartSetting}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <Barchart
-            dataset={expenseDataset}
-            yAxisDataKey={"month"}
-            seriesDataKey={"totalExpense"}
-            label={"Monthly total expense"}
+          <BarChart
+            dataset={vsDataset}
+            yAxis={[{ scaleType: "band", dataKey: `month` }]}
+            series={[
+              {
+                dataKey: `totalExpense`,
+                label: `Monthly total expense`,
+                valueFormatter,
+              },
+              {
+                dataKey: `totalSaving`,
+                label: `Monthly total saving`,
+                valueFormatter,
+              },
+            ]}
+            layout="horizontal"
+            grid={{ vertical: true }}
+            {...chartSetting}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <Barchart
-            dataset={savingDataset}
-            yAxisDataKey={"month"}
-            seriesDataKey={"totalSaving"}
-            label={"Monthly total saving"}
+          <BarChart
+            dataset={vsDataset}
+            yAxis={[{ scaleType: "band", dataKey: `month` }]}
+            series={[
+              {
+                dataKey: `totalIncome`,
+                label: `Monthly total income`,
+                valueFormatter,
+              },
+              {
+                dataKey: `totalSaving`,
+                label: `Monthly total saving`,
+                valueFormatter,
+              },
+            ]}
+            layout="horizontal"
+            grid={{ vertical: true }}
+            {...chartSetting}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
