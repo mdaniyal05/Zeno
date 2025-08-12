@@ -56,6 +56,9 @@ const User = sequelize.define(
         },
       },
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+    },
   },
   {
     tableName: "Users",
