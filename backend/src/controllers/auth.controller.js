@@ -149,6 +149,23 @@ const loginUser = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const user = await User.findByPk(userId);
+
+  user.refreshToken = null;
+
+  await user.save();
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({
+      message: "User logged out succesfully.",
+    });
 });
 
 module.exports = {
