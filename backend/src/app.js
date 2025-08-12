@@ -13,7 +13,10 @@ const expenseRoutes = require("./routes/expense.route");
 const savingRoutes = require("./routes/saving.route");
 const otpRoute = require("./routes/otp.route");
 const dashboardRoute = require("./routes/dashboard.route");
-const { notFound, errorHandler } = require("./middlewares/errorHandler");
+const {
+  notFound,
+  errorHandler,
+} = require("./middlewares/errorHandler.middleware");
 
 app.use(cors());
 app.use(express.json());
