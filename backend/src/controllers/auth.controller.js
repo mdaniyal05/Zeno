@@ -118,13 +118,28 @@ const loginUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ where: { email: email } });
 
   if (userExists && (await bcrypt.compare(password, userExists.password))) {
-    generateJwtToken(res, userExists.userId);
+    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(
+      res,
+      userExists.userId
+    );
 
-    res.status(200).json({
-      userId: userExists.userId,
-      fullName: `${userExists.firstName} ${userExists.lastName}`,
-      email: userExists.email,
-    });
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        userId: userExists.userId,
+        fullName: `${userExists.firstName} ${userExists.lastName}`,
+        email: userExists.email,
+        message: "User logged in successfully.",
+      });
   } else {
     res.status(401);
     throw new Error("Invalid Password or Email.");
