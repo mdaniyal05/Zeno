@@ -4,6 +4,36 @@ const Otp = require("../models/otp.model");
 const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 
+const generateAccessAndRefreshTokens = async (res, userId) => {
+  try {
+    const user = await User.findByPk(userId);
+    const accessToken = generateJwtToken(
+      {
+        userId: user.userId,
+        email: user.email,
+        fullName: `${user.firstName} ${user.lastName}`,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      process.env.ACCESS_TOKEN_EXPIRY
+    );
+    const refreshToken = generateJwtToken(
+      { userId: user.userId },
+      process.env.REFRESH_TOKEN_SECRET,
+      process.env.REFRESH_TOKEN_EXPIRY
+    );
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    res.status(500);
+    throw new Error(
+      "Something went wrong while generating refresh and access token."
+    );
+  }
+};
+
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword, OTP } =
     req.body;
