@@ -3,6 +3,12 @@ const User = require("../models/user.model");
 const Otp = require("../models/otp.model");
 const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 const generateAccessAndRefreshTokens = async (res, userId) => {
   try {
@@ -123,11 +129,6 @@ const loginUser = asyncHandler(async (req, res) => {
       userExists.userId
     );
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
     res
       .status(200)
       .cookie("accessToken", accessToken, options)
@@ -154,11 +155,6 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   res
     .status(200)
     .clearCookie("accessToken", options)
@@ -166,6 +162,53 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json({
       message: "User logged out succesfully.",
     });
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  try {
+    const incomingRefreshToken =
+      req.cookies.refreshToken || req.body.refreshToken;
+
+    if (!incomingRefreshToken) {
+      res.status(401);
+      throw new Error("Unauthorized request.");
+    }
+
+    const decoded = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findByPk(decoded.userId);
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid refresh token.");
+    }
+
+    if (incomingRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh token is expired or used.");
+    }
+
+    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(
+      res,
+      user.userId
+    );
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        message: "Access token refreshed.",
+      });
+  } catch (error) {
+    res.status(401);
+    throw new Error(error?.message || "Invalid refresh token.");
+  }
 });
 
 module.exports = {
