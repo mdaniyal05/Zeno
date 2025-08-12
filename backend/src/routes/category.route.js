@@ -7,14 +7,14 @@ const {
   updateUserCategory,
   deleteUserCategory,
 } = require("../controllers/category.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserCategories);
-router.post("/create-category", protectRoute, createUserCategory);
+router.get("/", authMiddleware, getAllUserCategories);
+router.post("/create-category", authMiddleware, createUserCategory);
 router
   .route("/category/:id")
-  .get(protectRoute, getUsercategory)
-  .put(protectRoute, updateUserCategory)
-  .delete(protectRoute, deleteUserCategory);
+  .get(authMiddleware, getUsercategory)
+  .put(authMiddleware, updateUserCategory)
+  .delete(authMiddleware, deleteUserCategory);
 
 module.exports = router;

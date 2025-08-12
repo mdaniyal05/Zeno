@@ -7,14 +7,14 @@ const {
   updateUserExpense,
   deleteUserExpense,
 } = require("../controllers/expense.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserExpenses);
-router.post("/create-expense", protectRoute, createUserExpense);
+router.get("/", authMiddleware, getAllUserExpenses);
+router.post("/create-expense", authMiddleware, createUserExpense);
 router
   .route("/expense/:id")
-  .get(protectRoute, getUserExpense)
-  .put(protectRoute, updateUserExpense)
-  .delete(protectRoute, deleteUserExpense);
+  .get(authMiddleware, getUserExpense)
+  .put(authMiddleware, updateUserExpense)
+  .delete(authMiddleware, deleteUserExpense);
 
 module.exports = router;

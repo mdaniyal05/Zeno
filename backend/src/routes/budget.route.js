@@ -7,14 +7,14 @@ const {
   updateUserBudget,
   deleteUserBudget,
 } = require("../controllers/budget.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserBudgets);
-router.post("/create-budget", protectRoute, createUserBudget);
+router.get("/", authMiddleware, getAllUserBudgets);
+router.post("/create-budget", authMiddleware, createUserBudget);
 router
   .route("/budget/:id")
-  .get(protectRoute, getUserBudget)
-  .put(protectRoute, updateUserBudget)
-  .delete(protectRoute, deleteUserBudget);
+  .get(authMiddleware, getUserBudget)
+  .put(authMiddleware, updateUserBudget)
+  .delete(authMiddleware, deleteUserBudget);
 
 module.exports = router;

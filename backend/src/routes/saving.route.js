@@ -7,14 +7,14 @@ const {
   updateUserSaving,
   deleteUserSaving,
 } = require("../controllers/saving.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserSavings);
-router.post("/create-saving", protectRoute, createUserSaving);
+router.get("/", authMiddleware, getAllUserSavings);
+router.post("/create-saving", authMiddleware, createUserSaving);
 router
   .route("/saving/:id")
-  .get(protectRoute, getUserSaving)
-  .put(protectRoute, updateUserSaving)
-  .delete(protectRoute, deleteUserSaving);
+  .get(authMiddleware, getUserSaving)
+  .put(authMiddleware, updateUserSaving)
+  .delete(authMiddleware, deleteUserSaving);
 
 module.exports = router;

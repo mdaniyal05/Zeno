@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
-const protectRoute = asyncHandler(async (req, res, next) => {
+const authMiddleware = asyncHandler(async (req, res, next) => {
   const token =
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", "");
@@ -33,4 +33,4 @@ const protectRoute = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = protectRoute;
+module.exports = authMiddleware;

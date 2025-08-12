@@ -7,14 +7,14 @@ const {
   updateUserIncome,
   deleteUserIncome,
 } = require("../controllers/income.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserIncomes);
-router.post("/create-income", protectRoute, createUserIncome);
+router.get("/", authMiddleware, getAllUserIncomes);
+router.post("/create-income", authMiddleware, createUserIncome);
 router
   .route("/income/:id")
-  .get(protectRoute, getUserIncome)
-  .put(protectRoute, updateUserIncome)
-  .delete(protectRoute, deleteUserIncome);
+  .get(authMiddleware, getUserIncome)
+  .put(authMiddleware, updateUserIncome)
+  .delete(authMiddleware, deleteUserIncome);
 
 module.exports = router;

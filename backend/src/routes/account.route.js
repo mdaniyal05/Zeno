@@ -7,14 +7,14 @@ const {
   updateUserAccount,
   deleteUserAccount,
 } = require("../controllers/account.controller");
-const protectRoute = require("../middlewares/protectRoute");
+const authMiddleware = require("../middlewares/auth.middleware");
 
-router.get("/", protectRoute, getAllUserAccounts);
-router.post("/create-account", protectRoute, createUserAccount);
+router.get("/", authMiddleware, getAllUserAccounts);
+router.post("/create-account", authMiddleware, createUserAccount);
 router
   .route("/account/:id")
-  .get(protectRoute, getUserAccount)
-  .put(protectRoute, updateUserAccount)
-  .delete(protectRoute, deleteUserAccount);
+  .get(authMiddleware, getUserAccount)
+  .put(authMiddleware, updateUserAccount)
+  .delete(authMiddleware, deleteUserAccount);
 
 module.exports = router;
