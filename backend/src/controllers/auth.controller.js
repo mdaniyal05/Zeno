@@ -147,10 +147,8 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("jwtToken");
-  res.status(200).json({
-    message: "User Logged Out Successfully.",
-  });
+  const userId = req.user.userId;
+  const user = await User.findByPk(userId);
 });
 
 module.exports = {

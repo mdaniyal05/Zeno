@@ -3,16 +3,24 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
 const protectRoute = asyncHandler(async (req, res, next) => {
-  let jwtToken;
+  const token =
+    req.cookies?.accessToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
 
-  jwtToken = req.cookies.jwtToken;
-
-  if (jwtToken) {
+  if (token) {
     try {
-      const verifyUser = jwt.verify(jwtToken, process.env.JWT_SECRET);
-      req.user = await User.findByPk(verifyUser.userId, {
-        attributes: { exclude: ["password"] },
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      const user = await User.findByPk(decoded?.userId, {
+        attributes: { exclude: ["password", "refreshToken"] },
       });
+
+      if (!user) {
+        res.status(401);
+        throw new Error("Invalid token.");
+      }
+
+      req.user = user;
+
       next();
     } catch (error) {
       console.error(error);
