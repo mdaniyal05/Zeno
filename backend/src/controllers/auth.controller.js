@@ -215,4 +215,5 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  refreshAccessToken,
 };
