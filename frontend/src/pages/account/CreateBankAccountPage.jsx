@@ -1,4 +1,4 @@
-import CreateBankAccount from "../components/CreateBankAccount";
+import CreateBankAccount from "../../components/account/CreateBankAccount";
 
 const CreateBankAccountPage = () => {
   return (

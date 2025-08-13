@@ -1,4 +1,4 @@
-import CreateIncome from "../components/CreateIncome";
+import CreateIncome from "../../components/income/CreateIncome";
 
 const CreateIncomePage = () => {
   return (

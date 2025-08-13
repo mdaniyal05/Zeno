@@ -1,4 +1,4 @@
-import CreateBudget from "../components/CreateBudget";
+import CreateBudget from "../../components/budget/CreateBudget";
 
 const CreateBudgetPage = () => {
   return (

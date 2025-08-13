@@ -1,4 +1,4 @@
-import UpdateExpense from "../components/UpdateExpense";
+import UpdateExpense from "../../components/expense/UpdateExpense";
 
 const UpdateExpensePage = () => {
   return (

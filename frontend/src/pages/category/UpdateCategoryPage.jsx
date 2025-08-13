@@ -1,4 +1,4 @@
-import UpdateCategory from "../components/UpdateCategory";
+import UpdateCategory from "../../components/category/UpdateCategory";
 
 const UpdateCategoryPage = () => {
   return (

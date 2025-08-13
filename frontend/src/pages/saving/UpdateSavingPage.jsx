@@ -1,4 +1,4 @@
-import UpdateSaving from "../components/UpdateSaving";
+import UpdateSaving from "../../components/saving/UpdateSaving";
 
 const UpdateSavingPage = () => {
   return (

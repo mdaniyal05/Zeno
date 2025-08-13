@@ -1,4 +1,4 @@
-import UpdateTransaction from "../components/UpdateTransaction";
+import UpdateTransaction from "../../components/transaction/UpdateTransaction";
 
 const UpdateTransactionPage = () => {
   return (

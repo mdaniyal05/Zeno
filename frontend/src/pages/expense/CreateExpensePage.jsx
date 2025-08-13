@@ -1,4 +1,4 @@
-import CreateExpense from "../components/CreateExpense";
+import CreateExpense from "../../components/expense/CreateExpense";
 
 const CreateExpensePage = () => {
   return (

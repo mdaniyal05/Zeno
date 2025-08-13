@@ -1,4 +1,4 @@
-import UpdateIncome from "../components/UpdateIncome";
+import UpdateIncome from "../../components/income/UpdateIncome";
 
 const UpdateIncomePage = () => {
   return (

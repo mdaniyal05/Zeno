@@ -8,27 +8,27 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import LandingPage from "./pages/LandingPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import SignInPage from "./pages/SignInPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
-import PrivateRoute from "./components/PrivateRoute.jsx";
-import UpdateProfilePage from "./pages/UpdateProfilePage.jsx";
-import UpdateIncomePage from "./pages/UpdateIncomePage.jsx";
-import CreateBankAccountPage from "./pages/CreateBankAccountPage.jsx";
-import CreateBudgetPage from "./pages/CreateBudgetPage.jsx";
-import CreateCategoryPage from "./pages/CreateCategoryPage.jsx";
-import CreateExpensePage from "./pages/CreateExpensePage.jsx";
-import CreateIncomePage from "./pages/CreateIncomePage.jsx";
-import CreateTransactionPage from "./pages/CreateTransactionPage.jsx";
-import UpdateExpensePage from "./pages/UpdateExpensePage.jsx";
-import UpdateCategoryPage from "./pages/UpdateCategoryPage.jsx";
-import UpdateBankAccountPage from "./pages/UpdateBankAccountPage.jsx";
-import UpdateTransactionPage from "./pages/UpdateTransactionPage.jsx";
-import CreateSavingPage from "./pages/CreateSavingPage.jsx";
-import UpdateSavingPage from "./pages/UpdateSavingPage.jsx";
+import LandingPage from "./pages/ui/LandingPage.jsx";
+import HomePage from "./pages/dashboard/HomePage.jsx";
+import SignInPage from "./pages/auth/SignInPage.jsx";
+import SignUpPage from "./pages/auth/SignUpPage.jsx";
+import PrivateRoute from "./components/auth/PrivateRoute.jsx";
+import UpdateProfilePage from "./pages/user/UpdateProfilePage.jsx";
+import UpdateIncomePage from "./pages/income/UpdateIncomePage.jsx";
+import CreateIncomePage from "./pages/income/CreateIncomePage.jsx";
+import CreateBankAccountPage from "./pages/account/CreateBankAccountPage.jsx";
+import UpdateBankAccountPage from "./pages/account/UpdateBankAccountPage.jsx";
+import CreateBudgetPage from "./pages/budget/CreateBudgetPage.jsx";
+import CreateCategoryPage from "./pages/category/CreateCategoryPage.jsx";
+import UpdateCategoryPage from "./pages/category/UpdateCategoryPage.jsx";
+import CreateExpensePage from "./pages/expense/CreateExpensePage.jsx";
+import UpdateExpensePage from "./pages/expense/UpdateExpensePage.jsx";
+import CreateTransactionPage from "./pages/transaction/CreateTransactionPage.jsx";
+import UpdateTransactionPage from "./pages/transaction/UpdateTransactionPage.jsx";
+import CreateSavingPage from "./pages/saving/CreateSavingPage.jsx";
+import UpdateSavingPage from "./pages/saving/UpdateSavingPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

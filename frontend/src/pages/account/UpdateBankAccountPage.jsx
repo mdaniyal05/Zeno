@@ -1,4 +1,4 @@
-import UpdateBankAccount from "../components/UpdateBankAccount";
+import UpdateBankAccount from "../../components/account/UpdateBankAccount";
 
 const UpdateBankAccountPage = () => {
   return (

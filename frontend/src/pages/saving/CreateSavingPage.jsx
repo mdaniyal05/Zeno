@@ -1,4 +1,4 @@
-import CreateSaving from "../components/CreateSaving";
+import CreateSaving from "../../components/saving/CreateSaving";
 
 const CreateSavingPage = () => {
   return (

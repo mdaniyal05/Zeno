@@ -10,7 +10,7 @@ import { styled } from "@mui/material/styles";
 import AppTheme from "../shared-theme/AppTheme";
 import { useSelector } from "react-redux";
 import { useGetProfileQuery } from "../../redux/slices/userApiSlice";
-import ButtonComponent from "../../ButtonComponent";
+import ButtonComponent from "../../components/ui/ButtonComponent";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

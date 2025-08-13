@@ -10,8 +10,8 @@ import {
   useGetAllUserBudgetsQuery,
   useDeleteUserBudgetMutation,
 } from "../../redux/slices/budgetApiSlice.js";
-import ButtonComponent from "../ButtonComponent.jsx";
-import AlertDialog from "../AlertDialog.jsx";
+import ButtonComponent from "../ui/ButtonComponent.jsx";
+import AlertDialog from "../ui/AlertDialog.jsx";
 import { toast } from "react-toastify";
 
 export default function BasicTable() {

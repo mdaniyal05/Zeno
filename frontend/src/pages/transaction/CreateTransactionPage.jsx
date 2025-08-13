@@ -1,4 +1,4 @@
-import CreatTransaction from "../components/CreateTransaction";
+import CreatTransaction from "../../components/transaction/CreateTransaction";
 
 const CreateTransactionPage = () => {
   return (
