@@ -5,12 +5,13 @@ const User = require("../models/user.model");
 const authMiddleware = asyncHandler(async (req, res, next) => {
   const token =
     req.cookies?.accessToken ||
-    req.header("Authorization")?.replace("Bearer ", "");
+    req.header("authorization")?.replace("Bearer ", "");
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      const user = await User.findByPk(decoded?.userId, {
+
+      const user = await User.findByPk(decoded?.payload.userId, {
         attributes: { exclude: ["password", "refreshToken"] },
       });
 
