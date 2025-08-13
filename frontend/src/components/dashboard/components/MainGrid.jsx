@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
-import Home from "../../Home";
-import Profile from "../../Profile";
-import BankAccounts from "../../BankAccounts";
-import Categories from "../../Categories";
-import Incomes from "../../Incomes";
-import Expenses from "../../Expenses";
-import Transactions from "../../Transactions";
-import Budgets from "../../Budgets";
-import Savings from "../../Savings";
+import Home from "../../dashboard/Home";
+import Profile from "../../user/Profile";
+import BankAccounts from "../../account/BankAccounts";
+import Categories from "../../category/Categories";
+import Incomes from "../../income/Incomes";
+import Expenses from "../../expense/Expenses";
+import Transactions from "../../transaction/Transactions";
+import Budgets from "../../budget/Budgets";
+import Savings from "../../saving/Savings";
 
 export default function MainGrid({ activeItem }) {
   const renderContent = () => {
