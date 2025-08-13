@@ -1,24 +1,28 @@
 import { logout, setToken } from "./authSlice";
 import { baseQuery } from "./apiSlice";
-import { apiSlice } from "./apiSlice";
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-  let response = await baseQuery(args, api, extraOptions);
+  let result = await baseQuery(args, api, extraOptions);
 
-  if (response.error?.status === 401) {
-    const refreshResponse = await apiSlice.endpoints.refreshToken.initiate(
-      null
-    )(api.dispatch, api.getState, extraOptions);
+  if (result.error?.status === 401) {
+    console.log("Access token expired, trying refresh...");
 
-    if (refreshResponse.data?.accessToken) {
-      api.dispatch(setToken(refreshResponse.data.accessToken));
-      response = await baseQuery(args, api, extraOptions);
+    const refreshResult = await baseQuery(
+      { url: "/api/v1/auth/refresh-token", method: "POST" },
+      api,
+      extraOptions
+    );
+
+    if (refreshResult.data?.accessToken) {
+      api.dispatch(setToken(refreshResult.data.accessToken));
+
+      result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
     }
   }
 
-  return response;
+  return result;
 };
 
 export default baseQueryWithReauth;
