@@ -5,7 +5,7 @@ const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const cookiecookieOptions = {
+const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict",
@@ -188,7 +188,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findByPk(decoded?.userId);
+    const user = await User.findByPk(decoded?.payload.userId);
 
     if (!user) {
       res.status(401);
