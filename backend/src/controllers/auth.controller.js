@@ -101,17 +101,25 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (newUser) {
-    generateJwtToken(res, newUser.userId);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+      res,
+      newUser.userId
+    );
 
     await Otp.destroy({ where: { email: newUser.email } });
 
-    res.status(201).json({
-      userId: newUser.userId,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      email: newUser.email,
-      message: `${newUser.firstName} ${newUser.lastName} Registered Successfully.`,
-    });
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        userId: newUser.userId,
+        fullName: `${newUser.firstName} ${newUser.lastName}`,
+        email: newUser.email,
+        message: "User registered successfully.",
+      });
   } else {
     res.status(400);
     throw new Error("Invalid User Data.");
@@ -124,7 +132,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ where: { email: email } });
 
   if (userExists && (await bcrypt.compare(password, userExists.password))) {
-    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       res,
       userExists.userId
     );
