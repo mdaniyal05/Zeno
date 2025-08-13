@@ -5,9 +5,10 @@ const generateJwtToken = require("../utils/generateJwtToken");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const options = {
+const cookiecookieOptions = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
 };
 
 const generateAccessAndRefreshTokens = async (res, userId) => {
@@ -110,8 +111,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json({
         accessToken: accessToken,
         refreshToken: refreshToken,
@@ -139,8 +140,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json({
         accessToken: accessToken,
         refreshToken: refreshToken,
@@ -165,8 +166,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
     .json({
       message: "User logged out succesfully.",
     });
@@ -187,7 +188,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findByPk(decoded.userId);
+    const user = await User.findByPk(decoded?.userId);
 
     if (!user) {
       res.status(401);
@@ -199,15 +200,15 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       throw new Error("Refresh token is expired or used.");
     }
 
-    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       res,
       user.userId
     );
 
     res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
       .json({
         accessToken: accessToken,
         refreshToken: refreshToken,
