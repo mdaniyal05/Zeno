@@ -49,7 +49,11 @@ const totalIncomeExpenseSavingPieChartDataset = (
   totalExpenseData,
   totalSavingData
 ) => {
-  if (totalIncomeData && totalExpenseData && totalSavingData) {
+  if (
+    totalIncomeData.length === 0 &&
+    totalExpenseData.length === 0 &&
+    totalSavingData.length === 0
+  ) {
     const combined = [
       ...totalIncomeData.map((obj, idx) => ({
         id: idx + 1,
