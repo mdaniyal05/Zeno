@@ -49,25 +49,29 @@ const totalIncomeExpenseSavingPieChartDataset = (
   totalExpenseData,
   totalSavingData
 ) => {
-  const combined = [
-    ...totalIncomeData.map((obj, idx) => ({
-      id: idx + 1,
-      value: obj.allIncome,
-      label: "Total income",
-    })),
-    ...totalExpenseData.map((obj, idx) => ({
-      id: totalIncomeData.length + idx + 1,
-      value: obj.allExpense,
-      label: "Total expense",
-    })),
-    ...totalSavingData.map((obj, idx) => ({
-      id: totalIncomeData.length + totalExpenseData.length + idx + 1,
-      value: obj.allSaving,
-      label: "Total saving",
-    })),
-  ];
+  if (totalIncomeData && totalExpenseData && totalSavingData) {
+    const combined = [
+      ...totalIncomeData.map((obj, idx) => ({
+        id: idx + 1,
+        value: obj.allIncome,
+        label: "Total income",
+      })),
+      ...totalExpenseData.map((obj, idx) => ({
+        id: totalIncomeData.length + idx + 1,
+        value: obj.allExpense,
+        label: "Total expense",
+      })),
+      ...totalSavingData.map((obj, idx) => ({
+        id: totalIncomeData.length + totalExpenseData.length + idx + 1,
+        value: obj.allSaving,
+        label: "Total saving",
+      })),
+    ];
 
-  return combined;
+    return combined;
+  } else {
+    return [];
+  }
 };
 
 const monthlyIncomeCalculation = (monthlyIncome) => {
@@ -113,21 +117,25 @@ const monthlySavingCalculation = (monthlySaving) => {
 };
 
 const createCurrentBudgetDatasetPieChart = (currentBudget) => {
-  const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
+  if (currentBudget) {
+    const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
 
-  const labelMap = {
-    budgetAmount: "Budget amount",
-    amountRemaining: "Amount remaining",
-    amountSpent: "Amount spent",
-  };
+    const labelMap = {
+      budgetAmount: "Budget amount",
+      amountRemaining: "Amount remaining",
+      amountSpent: "Amount spent",
+    };
 
-  const dataset = keysToExtract.map((key, idx) => ({
-    index: idx,
-    value: currentBudget[`${key}`],
-    label: labelMap[`${key}`],
-  }));
+    const dataset = keysToExtract.map((key, idx) => ({
+      index: idx,
+      value: currentBudget[`${key}`],
+      label: labelMap[`${key}`],
+    }));
 
-  return dataset;
+    return dataset;
+  } else {
+    return [];
+  }
 };
 
 const getUserDashboardData = asyncHandler(async (req, res) => {
