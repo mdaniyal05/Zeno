@@ -1,4 +1,4 @@
-import { logout, setToken } from "./authSlice";
+import { logout } from "./authSlice";
 import { baseQuery } from "./apiSlice";
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
@@ -14,8 +14,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     );
 
     if (refreshResult.data?.accessToken) {
-      api.dispatch(setToken(refreshResult.data.accessToken));
-
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
