@@ -41,6 +41,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
   const { expenseAmount, expenseType, expenseDate, merchant, categoryId } =
     req.body;
 
+  if (expenseAmount <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
   const userId = req.user.userId;
 
   const category = await Category.findByPk(categoryId);
@@ -51,11 +56,6 @@ const createUserExpense = asyncHandler(async (req, res) => {
   }
 
   if (category && category.isActive === true) {
-    if (expenseAmount < 0) {
-      res.status(400);
-      throw new Error("Negative values are not allowed.");
-    }
-
     category.limitRemainingAmount =
       category.limitRemainingAmount - expenseAmount;
 
@@ -70,7 +70,9 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
     await category.save();
 
-    const budget = await Budget.findOne({ where: { status: "Active" } });
+    const budget = await Budget.findOne({
+      where: { status: "Active", userId: userId },
+    });
 
     if (budget) {
       budget.amountSpent = budget.amountSpent + expenseAmount;
@@ -78,7 +80,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
       budget.amountRemaining = budget.amountRemaining - expenseAmount;
 
       if (
-        budget.amountSpent > budget.budgetAmount &&
+        budget.amountSpent >= budget.budgetAmount &&
         budget.amountRemaining <= 0
       ) {
         budget.status = "Exceeded";
@@ -105,10 +107,6 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
     if (newExpense) {
       res.status(201).json({
-        expenseAmount: newExpense.expenseAmount,
-        expenseType: newExpense.expenseType,
-        expenseDate: newExpense.expenseDate,
-        merchant: newExpense.merchant,
         message: "Expense created successfully.",
       });
     } else {
@@ -116,6 +114,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
       throw new Error("Invalid expense data.");
     }
   } else {
+    res.status(400);
     throw new Error(
       "The category is not active anymore due to exceeded factor. Select another category or create a new one."
     );
@@ -135,10 +134,10 @@ const updateUserExpense = asyncHandler(async (req, res) => {
         throw new Error("The category type and expense type should be same.");
       }
 
+      const newCategory = await Category.findByPk(req.body.categoryId);
+
       category.limitRemainingAmount =
         category.limitRemainingAmount + expense.expenseAmount;
-
-      const newCategory = await Category.findByPk(req.body.categoryId);
 
       newCategory.limitRemainingAmount =
         newCategory.limitRemainingAmount - req.body.expenseAmount;
@@ -159,7 +158,15 @@ const updateUserExpense = asyncHandler(async (req, res) => {
     }
 
     if (req.body.expenseAmount !== expense.expenseAmount) {
-      const budget = await Budget.findOne({ where: { status: "Active" } });
+      category.limitRemainingAmount =
+        category.limitRemainingAmount + expense.expenseAmount;
+
+      category.limitRemainingAmount =
+        category.limitRemainingAmount - req.body.expenseAmount;
+
+      const budget = await Budget.findOne({
+        where: { status: "Active", userId: req.user.userId },
+      });
 
       if (budget) {
         budget.amountSpent = budget.amountSpent - expense.expenseAmount;
@@ -180,6 +187,7 @@ const updateUserExpense = asyncHandler(async (req, res) => {
           notifyEmail(req.user.email, message);
         }
 
+        await category.save();
         await budget.save();
       }
     }
@@ -198,6 +206,7 @@ const updateUserExpense = asyncHandler(async (req, res) => {
       expenseDate: updatedExpense.expenseDate,
       merchant: updatedExpense.merchant,
       categoryId: updatedExpense.categoryId,
+      message: "Expense updated successfully.",
     });
   } else {
     res.status(404);
@@ -212,10 +221,22 @@ const deleteUserExpense = asyncHandler(async (req, res) => {
   const category = await Category.findByPk(expense.categoryId);
 
   if (expense && category) {
-    category.limitRemainingAmount =
-      category.limitRemainingAmount + expense.expenseAmount;
+    const budget = await Budget.findOne({
+      where: { status: "Active", userId: req.user.userId },
+    });
 
-    await category.save();
+    if (budget) {
+      budget.amountSpent = budget.amountSpent - expenseAmount;
+
+      budget.amountRemaining = budget.amountRemaining + expenseAmount;
+    }
+
+    if (category.isActive === true) {
+      category.limitRemainingAmount =
+        category.limitRemainingAmount + expense.expenseAmount;
+
+      await category.save();
+    }
 
     await Expense.destroy({ where: { expenseId: expenseId } });
     res.status(200).json({
