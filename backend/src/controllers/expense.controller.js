@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
 const Category = require("../models/category.model");
 const Budget = require("../models/budget.model");
+const notifyEmail = require("../utils/notifyEmail");
 
 const getUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
@@ -61,10 +62,10 @@ const createUserExpense = asyncHandler(async (req, res) => {
     if (category.limitRemainingAmount <= 0) {
       category.islimitExceeded = true;
       category.isActive === false;
-      res.status(400);
-      throw new Error(
-        "This category's limit is exceeded and is not active. Create a new one or select another."
-      );
+
+      const message = `Your category: ${category.categoryName} of type: ${category.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
+
+      notifyEmail(req.user.email, message);
     }
 
     await category.save();
@@ -72,22 +73,25 @@ const createUserExpense = asyncHandler(async (req, res) => {
     const budget = await Budget.findOne({ where: { status: "Active" } });
 
     if (budget) {
+      budget.amountSpent = budget.amountSpent + expenseAmount;
+
+      budget.amountRemaining = budget.amountRemaining - expenseAmount;
+
       if (
         budget.amountSpent > budget.budgetAmount &&
         budget.amountRemaining <= 0
       ) {
         budget.status = "Exceeded";
-        res.status(400);
-        throw new Error(
-          "The budget amount is exceeded and not active anymore. You were not able to reach your budget goal. Try again next time. You have to create a new budget now."
-        );
+
+        const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
+
+        notifyEmail(req.user.email, message);
       }
 
-      budget.amountSpent = budget.amountSpent + expenseAmount;
-
-      budget.amountRemaining = budget.amountRemaining - expenseAmount;
-
       await budget.save();
+    } else {
+      res.status(404);
+      throw new Error("No active budget found.");
     }
 
     const newExpense = await Expense.create({
@@ -142,38 +146,42 @@ const updateUserExpense = asyncHandler(async (req, res) => {
       if (newCategory.limitRemainingAmount <= 0) {
         newCategory.islimitExceeded = true;
         newCategory.isActive === false;
+
+        const message = `Your category: ${newCategory.categoryName} of type: ${newCategory.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
+
+        notifyEmail(req.user.email, message);
+
         await newCategory.save();
-        res.status(400);
-        throw new Error(
-          "This category's limit is exceeded and is not active. Create a new one or select another."
-        );
       } else {
         await category.save();
         await newCategory.save();
       }
     }
 
-    const budget = await Budget.findOne({ where: { status: "Active" } });
+    if (req.body.expenseAmount !== expense.expenseAmount) {
+      const budget = await Budget.findOne({ where: { status: "Active" } });
 
-    if (budget) {
-      if (
-        budget.amountSpent > budget.budgetAmount &&
-        budget.amountRemaining <= 0
-      ) {
-        budget.status = "Exceeded";
-        res.status(400);
-        throw new Error(
-          "The budget amount is exceeded and not active anymore. You were not able to reach your budget goal. Try again next time. You have to create a new budget now."
-        );
+      if (budget) {
+        budget.amountSpent = budget.amountSpent - expense.expenseAmount;
+        budget.amountSpent = budget.amountSpent + req.body.expenseAmount;
+
+        budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
+        budget.amountRemaining =
+          budget.amountRemaining - req.body.expenseAmount;
+
+        if (
+          budget.amountSpent > budget.budgetAmount &&
+          budget.amountRemaining <= 0
+        ) {
+          budget.status = "Exceeded";
+
+          const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
+
+          notifyEmail(req.user.email, message);
+        }
+
+        await budget.save();
       }
-
-      budget.amountSpent = budget.amountSpent - expense.expenseAmount;
-      budget.amountSpent = budget.amountSpent + req.body.expenseAmount;
-
-      budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
-      budget.amountRemaining = budget.amountRemaining - req.body.expenseAmount;
-
-      await budget.save();
     }
 
     expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
