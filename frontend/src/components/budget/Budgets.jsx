@@ -14,7 +14,7 @@ import ButtonComponent from "../ui/ButtonComponent.jsx";
 import AlertDialog from "../ui/AlertDialog.jsx";
 import { toast } from "react-toastify";
 
-export default function BasicTable() {
+export default function Budgets() {
   const { data } = useGetAllUserBudgetsQuery();
 
   const [deleteBudget] = useDeleteUserBudgetMutation();
@@ -25,7 +25,7 @@ export default function BasicTable() {
         <ButtonComponent link={`/create-budget`} text={"Create Budget"} />
       </div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="budgets">
           <TableHead>
             <TableRow>
               <TableCell>Start Date</TableCell>

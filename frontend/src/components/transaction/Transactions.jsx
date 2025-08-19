@@ -18,7 +18,7 @@ import ButtonComponent from "../ui/ButtonComponent.jsx";
 import AlertDialog from "../ui/AlertDialog.jsx";
 import { toast } from "react-toastify";
 
-export default function BasicTable() {
+export default function Transactions() {
   const { data } = useGetAllUserTransactionsQuery();
 
   const [deleteTransaction] = useDeleteUserTransactionMutation();
@@ -32,7 +32,7 @@ export default function BasicTable() {
         />
       </div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="transactions">
           <TableHead>
             <TableRow>
               <TableCell>Transaction Amount</TableCell>
@@ -51,7 +51,7 @@ export default function BasicTable() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.transactionAmount} Rs
+                    {row.transactionAmount}
                   </TableCell>
                   <TableCell align="left">{row.transactionType}</TableCell>
                   <TableCell align="left">{row.paymentMethod}</TableCell>

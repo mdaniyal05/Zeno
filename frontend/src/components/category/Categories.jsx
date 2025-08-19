@@ -17,7 +17,7 @@ import ButtonComponent from "../ui/ButtonComponent.jsx";
 import AlertDialog from "../ui/AlertDialog.jsx";
 import { toast } from "react-toastify";
 
-export default function BasicTable() {
+export default function Categories() {
   const { data } = useGetAllUserCategoriesQuery();
 
   const [deleteCategory] = useDeleteUserCategoryMutation();
@@ -28,16 +28,16 @@ export default function BasicTable() {
         <ButtonComponent link={`/create-category`} text={"Create Category"} />
       </div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="categories">
           <TableHead>
             <TableRow>
               <TableCell>Category Name</TableCell>
               <TableCell align="left">Category Type</TableCell>
               <TableCell align="left">Description</TableCell>
               <TableCell align="left">Active Status</TableCell>
-              <TableCell align="left">limit</TableCell>
-              <TableCell align="left">limit Remaining Amount</TableCell>
-              <TableCell align="left">limit Status</TableCell>
+              <TableCell align="left">Limit</TableCell>
+              <TableCell align="left">Limit Remaining Amount</TableCell>
+              <TableCell align="left">Limit Status</TableCell>
               <TableCell align="left">Created At</TableCell>
               <TableCell align="left">Options</TableCell>
             </TableRow>
