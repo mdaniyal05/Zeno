@@ -65,7 +65,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
       const message = `Your category: ${category.categoryName} of type: ${category.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
 
-      notifyEmail(req.user.email, message);
+      notifyEmail(
+        req.user.email,
+        message,
+        `Category: ${category.categoryName} limit exceeded.`
+      );
     }
 
     await category.save();
@@ -87,7 +91,11 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
         const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
 
-        notifyEmail(req.user.email, message);
+        notifyEmail(
+          req.user.email,
+          message,
+          `Current active budget of amount: ${budget.budgetAmount} exceeded.`
+        );
       }
 
       await budget.save();
@@ -148,7 +156,11 @@ const updateUserExpense = asyncHandler(async (req, res) => {
 
         const message = `Your category: ${newCategory.categoryName} of type: ${newCategory.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
 
-        notifyEmail(req.user.email, message);
+        notifyEmail(
+          req.user.email,
+          message,
+          `Category: ${newCategory.categoryName} limit exceeded.`
+        );
 
         await newCategory.save();
       } else {
@@ -184,7 +196,11 @@ const updateUserExpense = asyncHandler(async (req, res) => {
 
           const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
 
-          notifyEmail(req.user.email, message);
+          notifyEmail(
+            req.user.email,
+            message,
+            `Current active budget of amount: ${budget.budgetAmount} exceeded.`
+          );
         }
 
         await category.save();
