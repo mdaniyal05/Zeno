@@ -147,6 +147,11 @@ const updateUserExpense = asyncHandler(async (req, res) => {
   if (expense) {
     const category = await Category.findByPk(expense.categoryId);
 
+    if (req.body.expenseAmount <= 0) {
+      res.status(400);
+      throw new Error("Negative values and zero are not allowed.");
+    }
+
     if (req.body.categoryId !== category.categoryId) {
       if (category.categoryType !== req.body.expenseType) {
         res.status(400);
