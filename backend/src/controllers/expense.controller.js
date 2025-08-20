@@ -41,6 +41,17 @@ const createUserExpense = asyncHandler(async (req, res) => {
   const { expenseAmount, expenseType, expenseDate, merchant, categoryId } =
     req.body;
 
+  if (
+    !expenseAmount ||
+    !expenseType ||
+    !expenseDate ||
+    !merchant ||
+    !categoryId
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (expenseAmount <= 0) {
     res.status(400);
     throw new Error("Negative values and zero are not allowed.");
@@ -50,12 +61,12 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
   const category = await Category.findByPk(categoryId);
 
-  if (category.categoryType !== expenseType) {
-    res.status(400);
-    throw new Error("The category type and expense type should be same.");
-  }
-
   if (category && category.isActive === true) {
+    if (category.categoryType !== expenseType) {
+      res.status(400);
+      throw new Error("The category type and expense type should be same.");
+    }
+
     category.limitRemainingAmount =
       category.limitRemainingAmount - expenseAmount;
 
