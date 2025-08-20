@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Saving = require("../models/saving.model");
+const Transaction = require("../models/transaction.model");
 
 const getUserSaving = asyncHandler(async (req, res) => {
   const savingId = req.params.id;
@@ -38,12 +39,17 @@ const getAllUserSavings = asyncHandler(async (req, res) => {
 const createUserSaving = asyncHandler(async (req, res) => {
   const { title, targetAmount, description, accountId } = req.body;
 
-  const userId = req.user.userId;
-
-  if (targetAmount < 0) {
+  if (!title || !targetAmount || !description || !accountId) {
     res.status(400);
-    throw new Error("Negative values are not allowed.");
+    throw new Error("All fields are required.");
   }
+
+  if (targetAmount <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
+  const userId = req.user.userId;
 
   const newSaving = await Saving.create({
     title: title,
@@ -55,9 +61,6 @@ const createUserSaving = asyncHandler(async (req, res) => {
 
   if (newSaving) {
     res.status(201).json({
-      title: newSaving.title,
-      targetAmount: newSaving.targetAmount,
-      description: newSaving.description,
       message: "Saving created successfully.",
     });
   } else {
@@ -71,6 +74,11 @@ const updateUserSaving = asyncHandler(async (req, res) => {
   const saving = await Saving.findByPk(savingId);
 
   if (saving) {
+    if (req.body.targetAmount <= 0) {
+      res.status(400);
+      throw new Error("Negative values and zero are not allowed.");
+    }
+
     saving.title = req.body.title || saving.title;
     saving.targetAmount = req.body.targetAmount || saving.targetAmount;
     saving.description = req.body.description || saving.description;
@@ -95,9 +103,10 @@ const deleteUserSaving = asyncHandler(async (req, res) => {
   const saving = await Saving.findByPk(savingId);
 
   if (saving) {
+    await Transaction.destroy({ where: { accountId: saving.accountId } });
     await Saving.destroy({ where: { savingId: savingId } });
     res.status(200).json({
-      message: `Saving deleted successfully.`,
+      message: `This saving and all the transactions related to it are being deleted successfully.`,
     });
   } else {
     res.status(404);

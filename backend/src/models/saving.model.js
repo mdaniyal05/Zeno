@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 const Account = require("./account.model");
@@ -17,12 +17,12 @@ const Saving = sequelize.define(
       allowNull: false,
     },
     targetAmount: {
-      type: DataTypes.DECIMAL(12, 3),
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     currentAmount: {
-      type: DataTypes.DECIMAL(12, 3),
-      defaultValue: 0.0,
+      type: DataTypes.DECIMAL(12, 2),
+      defaultValue: 0,
     },
     description: {
       type: DataTypes.TEXT,

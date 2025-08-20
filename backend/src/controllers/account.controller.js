@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
 const Transaction = require("../models/transaction.model");
+const Saving = require("../models/saving.model");
 
 const getUserAccount = asyncHandler(async (req, res) => {
   const accountId = req.params.id;
@@ -122,10 +123,13 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
   const account = await Account.findByPk(accountId);
 
   if (account) {
+    if (account.accountType === "Savings") {
+      await Saving.destroy({ where: { accountId: accountId } });
+    }
     await Transaction.destroy({ where: { accountId: accountId } });
     await Account.destroy({ where: { accountId: accountId } });
     res.status(200).json({
-      message: `This account and all the realted transactions to this account are being deleted succesfully.`,
+      message: `This account and all the transactions related to this account are being deleted succesfully.`,
     });
   } else {
     res.status(404);
