@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Account = require("../models/account.model");
+const Transaction = require("../models/transaction.model");
 
 const getUserAccount = asyncHandler(async (req, res) => {
   const accountId = req.params.id;
@@ -39,6 +40,22 @@ const createUserAccount = asyncHandler(async (req, res) => {
   const { accountName, accountType, accountBalance, bankName, accountNumber } =
     req.body;
 
+  if (
+    !accountName ||
+    !accountType ||
+    !accountBalance ||
+    !bankName ||
+    !accountNumber
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
+  if (accountBalance <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
   const accountExists = await Account.findOne({
     where: { accountNumber: accountNumber },
   });
@@ -49,12 +66,6 @@ const createUserAccount = asyncHandler(async (req, res) => {
   }
 
   const userId = req.user.userId;
-  const isActive = true;
-
-  if (accountBalance < 0) {
-    res.status(400);
-    throw new Error("Negative values are not allowed.");
-  }
 
   const newAccount = await Account.create({
     accountName: accountName,
@@ -62,15 +73,11 @@ const createUserAccount = asyncHandler(async (req, res) => {
     accountBalance: accountBalance,
     bankName: bankName,
     accountNumber: accountNumber,
-    isActive: isActive,
     userId: userId,
   });
 
   if (newAccount) {
     res.status(201).json({
-      accountName: accountName,
-      accountType: accountType,
-      isActive: isActive,
       message: "Account created successfully.",
     });
   } else {
@@ -84,6 +91,11 @@ const updateUserAccount = asyncHandler(async (req, res) => {
   const account = await Account.findByPk(accountId);
 
   if (account) {
+    if (req.body.accountBalance <= 0) {
+      res.status(400);
+      throw new Error("Negative values and zero are not allowed.");
+    }
+
     account.accountName = req.body.accountName || account.accountName;
     account.accountType = req.body.accountType || account.accountType;
     account.accountBalance = req.body.accountBalance || account.accountBalance;
@@ -110,9 +122,10 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
   const account = await Account.findByPk(accountId);
 
   if (account) {
+    await Transaction.destroy({ where: { accountId: accountId } });
     await Account.destroy({ where: { accountId: accountId } });
     res.status(200).json({
-      message: `Account number: ${account.accountNumber} deleted succesfully.`,
+      message: `This account and all the realted transactions to this account are being deleted succesfully.`,
     });
   } else {
     res.status(404);

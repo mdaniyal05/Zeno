@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 
@@ -34,7 +34,7 @@ const Account = sequelize.define(
     },
     isActive: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      defaultValue: true,
     },
   },
   {
