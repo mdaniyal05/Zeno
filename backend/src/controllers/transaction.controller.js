@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
 const Saving = require("../models/saving.model");
+const notifyEmail = require("../utils/notifyEmail");
 
 const getUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
@@ -45,30 +46,60 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     transactionDate,
     description,
     accountId,
+    savingId,
   } = req.body;
 
+  if (
+    !transactionAmount ||
+    !transactionType ||
+    !paymentMethod ||
+    !transactionDate ||
+    !description ||
+    !accountId
+  ) {
+    res.status(400);
+    throw new Error(
+      "All fields are required (savings field only required when performing savings transactions)."
+    );
+  }
+
+  if (transactionAmount <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
   const userId = req.user.userId;
+
   const account = await Account.findOne({
     where: { accountId: accountId },
   });
 
-  if (parseFloat(transactionAmount) < 0) {
-    res.status(400);
-    throw new Error("Negative values are not allowed.");
-  }
-
   if (account) {
     if (transactionType === "Saving" && account.accountType === "Savings") {
-      account.accountBalance =
-        account.accountBalance + parseFloat(transactionAmount);
+      if (!savingId) {
+        res.status(400);
+        throw new Error("Please provide the saving field.");
+      }
 
-      const saving = await Saving.findOne({ where: { accountId: accountId } });
+      const saving = await Saving.findOne({ where: { savingId: savingId } });
 
       if (saving) {
-        saving.currentAmount =
-          saving.currentAmount + parseFloat(transactionAmount);
+        saving.currentAmount = saving.currentAmount + transactionAmount;
 
         await saving.save();
+
+        if (saving.currentAmount >= saving.targetAmount) {
+          saving.status = "Completed";
+
+          const message =
+            "Congratulations! You have reached your savings target. Keep up the good financial record.";
+
+          notifyEmail(
+            req.user.email,
+            message,
+            `Savings target of: ${saving.targetAmount} completed.`
+          );
+        }
       } else {
         res.status(400);
         throw new Error(
@@ -76,11 +107,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
         );
       }
 
+      account.accountBalance = account.accountBalance + transactionAmount;
+
       await account.save();
     }
 
     if (transactionType === "Expense" && account.accountType !== "Savings") {
-      if (parseFloat(transactionAmount) < account.accountBalance) {
+      if (transactionAmount < account.accountBalance) {
         account.accountBalance =
           account.accountBalance - parseFloat(transactionAmount);
 
@@ -94,8 +127,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (transactionType === "Income" && account.accountType !== "Savings") {
-      account.accountBalance =
-        account.accountBalance + parseFloat(transactionAmount);
+      account.accountBalance = account.accountBalance + transactionAmount;
 
       await account.save();
     }
@@ -107,12 +139,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       transactionDate: transactionDate,
       description: description,
       userId: userId,
-      accountId: account.accountId,
+      accountId: accountId,
+      savingId: savingId,
     });
 
     if (newTransaction) {
       res.status(201).json({
-        message: `Transaction of amount: ${transactionAmount} has been created successfully.`,
+        message: `Transaction created successfully.`,
       });
     } else {
       res.status(400);
