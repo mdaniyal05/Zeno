@@ -35,12 +35,17 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
 const createUserIncome = asyncHandler(async (req, res) => {
   const { incomeAmount, incomeDate, incomeSource } = req.body;
 
-  const userId = req.user.userId;
-
-  if (incomeAmount < 0) {
+  if (!incomeAmount || !incomeDate || !incomeSource) {
     res.status(400);
-    throw new Error("Negative values are not allowed.");
+    throw new Error("All fields are required.");
   }
+
+  if (incomeAmount <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
+  const userId = req.user.userId;
 
   const newIncome = await Income.create({
     incomeAmount: incomeAmount,
@@ -51,9 +56,6 @@ const createUserIncome = asyncHandler(async (req, res) => {
 
   if (newIncome) {
     res.status(201).json({
-      incomeAmount: newIncome.incomeAmount,
-      incomeDate: newIncome.incomeDate,
-      incomeSource: newIncome.incomeSource,
       message: "Income created successfully.",
     });
   } else {
@@ -67,6 +69,11 @@ const updateUserIncome = asyncHandler(async (req, res) => {
   const income = await Income.findByPk(incomeId);
 
   if (income) {
+    if (req.body.incomeAmount <= 0) {
+      res.status(400);
+      throw new Error("Negative values and zero are not allowed.");
+    }
+
     income.incomeAmount = req.body.incomeAmount || income.incomeAmount;
     income.incomeDate = req.body.incomeDate || income.incomeDate;
     income.incomeSource = req.body.incomeSource || income.incomeSource;
@@ -91,7 +98,7 @@ const deleteUserIncome = asyncHandler(async (req, res) => {
   if (income) {
     await Income.destroy({ where: { incomeId: incomeId } });
     res.status(200).json({
-      message: `Income of amount: ${income.incomeAmount} and date of income: ${income.incomeDate} deleted successfully.`,
+      message: `Income deleted successfully.`,
     });
   } else {
     res.status(404);
