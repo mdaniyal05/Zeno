@@ -103,7 +103,7 @@ const deleteUserSaving = asyncHandler(async (req, res) => {
   const saving = await Saving.findByPk(savingId);
 
   if (saving) {
-    await Transaction.destroy({ where: { accountId: saving.accountId } });
+    await Transaction.destroy({ where: { savingId: savingId } });
     await Saving.destroy({ where: { savingId: savingId } });
     res.status(200).json({
       message: `This saving and all the transactions related to it are being deleted successfully.`,

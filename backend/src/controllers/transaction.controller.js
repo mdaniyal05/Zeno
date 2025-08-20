@@ -13,6 +13,7 @@ const getUserTransaction = asyncHandler(async (req, res) => {
       transactionAmount: transaction.transactionAmount,
       transactionType: transaction.transactionType,
       paymentMethod: transaction.paymentMethod,
+      transactionDate: transaction.transactionDate,
       description: transaction.description,
       accountId: transaction.accountId,
     });

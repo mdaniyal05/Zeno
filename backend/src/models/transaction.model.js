@@ -1,7 +1,8 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const Account = require("./account.model");
 const User = require("./user.model");
+const Saving = require("../models/saving.model");
 
 const Transaction = sequelize.define(
   "Transaction",
@@ -13,7 +14,7 @@ const Transaction = sequelize.define(
       primaryKey: true,
     },
     transactionAmount: {
-      type: DataTypes.DECIMAL(18, 5),
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     transactionType: {
@@ -31,9 +32,6 @@ const Transaction = sequelize.define(
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        len: [0, 150],
-      },
     },
   },
   {
@@ -62,6 +60,18 @@ Account.hasMany(Transaction, {
 Transaction.belongsTo(Account, {
   as: "srcAccount",
   foreignKey: { name: "accountId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
+
+Saving.hasMany(Transaction, {
+  foreignKey: { name: "savingId" },
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
+});
+Transaction.belongsTo(Saving, {
+  as: "srcSaving",
+  foreignKey: { name: "savingId" },
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
 });
