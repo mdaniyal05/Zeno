@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 const Category = require("./category.model");
@@ -13,7 +13,7 @@ const Expense = sequelize.define(
       primaryKey: true,
     },
     expenseAmount: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     expenseType: {

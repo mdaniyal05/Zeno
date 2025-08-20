@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 
@@ -22,26 +22,21 @@ const Category = sequelize.define(
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        len: [1, 150],
-      },
     },
     isActive: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      defaultValue: true,
     },
     limit: {
-      type: DataTypes.DECIMAL(10, 2),
-      validate: {
-        min: 0,
-      },
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     limitRemainingAmount: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(12, 2),
     },
     islimitExceeded: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
   {
