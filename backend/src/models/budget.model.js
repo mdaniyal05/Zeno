@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
+const notifyEmail = require("../utils/notifyEmail");
 
 const Budget = sequelize.define(
   "Budget",
@@ -16,10 +17,10 @@ const Budget = sequelize.define(
       allowNull: false,
       validate: {
         validator(value) {
-          const currentDate = new Date();
+          const currentDate = new Date().toLocaleDateString("en-CA");
 
-          if (value < currentDate || value > currentDate) {
-            throw new Error("Start date must be in present.");
+          if (value !== currentDate) {
+            throw new Error("Start date must be today.");
           }
         },
       },
@@ -71,6 +72,29 @@ Budget.belongsTo(User, {
   foreignKey: { name: "userId" },
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
+});
+
+Budget.afterFind(async (budget, options) => {
+  const today = new Date().toLocaleDateString("en-CA");
+
+  if (budget && budget.status === "Active" && budget.endDate <= today) {
+    budget.status = "Completed";
+
+    await budget.save();
+
+    const user = await User.findByPk(budget.userId);
+
+    if (user) {
+      const message =
+        "Congratulations! You have completed your budget target. Keep up the good work.";
+
+      notifyEmail(
+        user.email,
+        message,
+        `Budget of amount: ${budget.budgetAmount} completion.`
+      );
+    }
+  }
 });
 
 module.exports = Budget;
