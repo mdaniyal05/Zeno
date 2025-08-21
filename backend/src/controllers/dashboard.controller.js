@@ -25,7 +25,7 @@ const incomeVsExpenseVsSavingBarChartDataset = (
   monthlyExpenseData,
   monthlySavingData
 ) => {
-  const combined = months.map((month) => {
+  return months.map((month) => {
     const income =
       monthlyIncomeData.find((income) => income.month === month.month) || {};
     const expense =
@@ -40,8 +40,6 @@ const incomeVsExpenseVsSavingBarChartDataset = (
       totalSaving: saving.totalSaving || 0,
     };
   });
-
-  return combined;
 };
 
 const totalIncomeExpenseSavingPieChartDataset = (
@@ -50,11 +48,11 @@ const totalIncomeExpenseSavingPieChartDataset = (
   totalSavingData
 ) => {
   if (
-    totalIncomeData.length === 0 &&
-    totalExpenseData.length === 0 &&
-    totalSavingData.length === 0
+    totalIncomeData.length > 0 ||
+    totalExpenseData.length > 0 ||
+    totalSavingData.length > 0
   ) {
-    const combined = [
+    return [
       ...totalIncomeData.map((obj, idx) => ({
         id: idx + 1,
         value: obj.allIncome,
@@ -71,54 +69,30 @@ const totalIncomeExpenseSavingPieChartDataset = (
         label: "Total saving",
       })),
     ];
-
-    return combined;
-  } else {
-    return [];
   }
+  return [];
 };
 
-const monthlyIncomeCalculation = (monthlyIncome) => {
-  const monthlyIncomeDataset = months.map((month) => {
+const monthlyIncomeCalculation = (monthlyIncome) =>
+  months.map((month) => {
     const income =
       monthlyIncome.find((income) => income.month === month.month) || {};
-
-    return {
-      month: month.month,
-      totalIncome: income.totalIncome || 0,
-    };
+    return { month: month.month, totalIncome: income.totalIncome || 0 };
   });
 
-  return monthlyIncomeDataset;
-};
-
-const monthlyExpenseCalculation = (monthlyExpense) => {
-  const monthlyExpenseDataset = months.map((month) => {
+const monthlyExpenseCalculation = (monthlyExpense) =>
+  months.map((month) => {
     const expense =
       monthlyExpense.find((expense) => expense.month === month.month) || {};
-
-    return {
-      month: month.month,
-      totalExpense: expense.totalExpense || 0,
-    };
+    return { month: month.month, totalExpense: expense.totalExpense || 0 };
   });
 
-  return monthlyExpenseDataset;
-};
-
-const monthlySavingCalculation = (monthlySaving) => {
-  const monthlySavingDataset = months.map((month) => {
+const monthlySavingCalculation = (monthlySaving) =>
+  months.map((month) => {
     const saving =
       monthlySaving.find((saving) => saving.month === month.month) || {};
-
-    return {
-      month: month.month,
-      totalSaving: saving.totalSaving || 0,
-    };
+    return { month: month.month, totalSaving: saving.totalSaving || 0 };
   });
-
-  return monthlySavingDataset;
-};
 
 const createCurrentBudgetDatasetPieChart = (currentBudget) => {
   if (currentBudget) {
@@ -150,17 +124,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "totalIncome"],
     ],
-    where: { userId: userId },
+    where: { userId },
     group: [Sequelize.fn("FORMAT", Sequelize.col("incomeDate"), "MMM")],
-    order: [[Sequelize.literal("month"), "ASC"]],
-    raw: true,
-  });
-
-  const totalIncome = await Income.findAll({
-    attributes: [
-      [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "allIncome"],
-    ],
-    where: { userId: userId },
     raw: true,
   });
 
@@ -169,17 +134,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM"), "month"],
       [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "totalExpense"],
     ],
-    where: { userId: userId },
+    where: { userId },
     group: [Sequelize.fn("FORMAT", Sequelize.col("expenseDate"), "MMM")],
-    order: [[Sequelize.literal("month"), "ASC"]],
-    raw: true,
-  });
-
-  const totalExpense = await Expense.findAll({
-    attributes: [
-      [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "allExpense"],
-    ],
-    where: { userId: userId },
     raw: true,
   });
 
@@ -191,9 +147,24 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       ],
       [Sequelize.fn("SUM", Sequelize.col("transactionAmount")), "totalSaving"],
     ],
-    where: { userId: userId, transactiontype: "Saving" },
+    where: { userId, transactiontype: "Saving" },
     group: [Sequelize.fn("FORMAT", Sequelize.col("transactionDate"), "MMM")],
-    order: [[Sequelize.literal("month"), "ASC"]],
+    raw: true,
+  });
+
+  const totalIncome = await Income.findAll({
+    attributes: [
+      [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "allIncome"],
+    ],
+    where: { userId },
+    raw: true,
+  });
+
+  const totalExpense = await Expense.findAll({
+    attributes: [
+      [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "allExpense"],
+    ],
+    where: { userId },
     raw: true,
   });
 
@@ -201,17 +172,42 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     attributes: [
       [Sequelize.fn("SUM", Sequelize.col("transactionAmount")), "allSaving"],
     ],
-    where: { userId: userId, transactiontype: "Saving" },
+    where: { userId, transactiontype: "Saving" },
     raw: true,
   });
 
   const currentBudget = await Budget.findOne({
-    where: { status: "Active", userId: userId },
+    where: { status: "Active", userId },
     raw: true,
   });
 
-  const currentBudgetDataset =
-    createCurrentBudgetDatasetPieChart(currentBudget);
+  const insights = [];
+
+  if (netBalance < 0) {
+    insights.push(
+      "⚠️ You are spending more than you earn. Consider cutting expenses."
+    );
+  } else {
+    insights.push("✅ You are saving money. Great job!");
+  }
+  if (savingsRate < 20) {
+    insights.push("💡 Try to increase your savings rate to at least 20%.");
+  }
+  if (expenseByCategory.length > 0) {
+    const topCategory = expenseByCategory.sort(
+      (a, b) => Number(b.total) - Number(a.total)
+    )[0];
+    insights.push(
+      `📊 Your top expense category is ${topCategory.category} (${topCategory.total}).`
+    );
+  }
+
+  const allIncome = Number(totalIncome[0]?.allIncome || 0);
+  const allExpense = Number(totalExpense[0]?.allExpense || 0);
+  const allSaving = Number(totalSaving[0]?.allSaving || 0);
+
+  const netBalance = allIncome - allExpense;
+  const savingsRate = allIncome > 0 ? (allSaving / allIncome) * 100 : 0;
 
   const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
   const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
@@ -229,13 +225,20 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     totalSaving
   );
 
+  const currentBudgetDataset =
+    createCurrentBudgetDatasetPieChart(currentBudget);
+
   res.status(200).json({
-    monthlyIncomeDataset: monthlyIncomeDataset,
-    monthlyExpenseDataset: monthlyExpenseDataset,
-    monthlySavingDataset: monthlySavingDataset,
-    pieChartData: pieChartData,
-    barChartData: barChartData,
-    currentBudgetDataset: currentBudgetDataset,
+    monthlyIncomeDataset,
+    monthlyExpenseDataset,
+    monthlySavingDataset,
+    pieChartData,
+    barChartData,
+    currentBudgetDataset,
+    expenseByCategory,
+    netBalance,
+    savingsRate,
+    insights,
   });
 });
 
