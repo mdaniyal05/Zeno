@@ -79,7 +79,39 @@ const createUserBudget = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserBudget = asyncHandler(async (req, res) => {});
+const updateUserBudget = asyncHandler(async (req, res) => {
+  const budgetId = req.params.id;
+  const budget = await Budget.findByPk(budgetId);
+
+  if (budget) {
+    if (req.body.budgetAmount <= 0) {
+      res.status(400);
+      throw new Error("Negative values and zero are not allowed.");
+    }
+
+    if (req.body.budgetAmount !== budget.budgetAmount) {
+      budget.amountRemaining = req.body.budgetAmount - budget.amountSpent;
+    }
+
+    budget.startDate = req.body.startDate || budget.startDate;
+    budget.endDate = req.body.endDate || budget.endDate;
+    budget.budgetAmount = req.body.budgetAmount || budget.budgetAmount;
+    budget.description = req.body.description || budget.description;
+
+    const updatedBudget = await budget.save();
+
+    res.status(200).json({
+      startDate: updatedBudget.startDate,
+      endDate: updatedBudget.endDate,
+      budgetAmount: updatedBudget.budgetAmount,
+      description: updatedBudget.description,
+      message: "Budget updated successfully.",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Budget not found.");
+  }
+});
 
 const deleteUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;

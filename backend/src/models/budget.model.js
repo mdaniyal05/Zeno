@@ -18,8 +18,8 @@ const Budget = sequelize.define(
         validator(value) {
           const currentDate = new Date();
 
-          if (value <= currentDate) {
-            throw new Error("Start date must be in future.");
+          if (value < currentDate || value > currentDate) {
+            throw new Error("Start date must be in present.");
           }
         },
       },
@@ -29,22 +29,22 @@ const Budget = sequelize.define(
       allowNull: false,
       validate: {
         validator(value) {
-          if (value < this.startDate) {
+          if (value <= this.startDate) {
             throw new Error("End date must be after the start date.");
           }
         },
       },
     },
     budgetAmount: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     amountSpent: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(12, 2),
       defaultValue: 0,
     },
     amountRemaining: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(12, 2),
     },
     description: {
       type: DataTypes.TEXT,
