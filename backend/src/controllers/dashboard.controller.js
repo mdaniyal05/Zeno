@@ -228,7 +228,6 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     pieChartData,
     barChartData,
     currentBudgetDataset,
-    expenseByCategory,
     netBalance,
     savingsRate,
     insights,
