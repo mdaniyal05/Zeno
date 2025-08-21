@@ -16,7 +16,7 @@ const generateOTP = asyncHandler(async (req, res) => {
     const currentTime = new Date();
     if (currentTime < otp.blockUntil) {
       res.status(403);
-      throw new Error("You Are Blocked. Try After Some Time.");
+      throw new Error("You are blocked. Try after some time.");
     } else {
       otp.isBlocked = false;
       otp.OtpAttempts = 0;
@@ -33,7 +33,7 @@ const generateOTP = asyncHandler(async (req, res) => {
     currentTime - lastOtpTime < 60000
   ) {
     res.status(403);
-    throw new Error("One Minute Gap Required Between OTP Requests.");
+    throw new Error("One minute gap required between OTP requests.");
   }
 
   const OTP = generateOtp();
@@ -46,11 +46,11 @@ const generateOTP = asyncHandler(async (req, res) => {
 
   if (verify) {
     res.status(200).json({
-      message: "OTP Sent Successfully.",
+      message: "OTP sent successfully.",
     });
   } else {
     res.status(500);
-    throw new Error("Server Error.");
+    throw new Error("Server error.");
   }
 });
 

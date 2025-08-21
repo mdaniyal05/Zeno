@@ -29,7 +29,7 @@ const mailSender = (email, title, body) => {
       }
     );
   } catch (error) {
-    throw new Error(`Something Went Wrong: ${error}`);
+    throw new Error(`Something went wrong: ${error}`);
   }
 };
 
