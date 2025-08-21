@@ -1,6 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user.model");
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+};
+
 const getUserProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const user = await User.findByPk(userId);
@@ -55,7 +61,29 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.user.userId;
+  const user = await User.findByPk(userId);
+
+  if (user) {
+    await User.destroy({ where: { userId: userId } });
+
+    res
+      .status(200)
+      .clearCookie("accessToken", cookieOptions)
+      .clearCookie("refreshToken", cookieOptions)
+      .json({
+        message:
+          "Your profile and all your information has been deleted successfully. We are really sad to see you go.",
+      });
+  } else {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+});
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  deleteUserProfile,
 };
