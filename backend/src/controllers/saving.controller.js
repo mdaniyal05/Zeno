@@ -86,7 +86,7 @@ const updateUserSaving = asyncHandler(async (req, res) => {
 
     const updatedSaving = await saving.save();
 
-    res.status(201).json({
+    res.status(200).json({
       title: updatedSaving.title,
       targetAmount: updatedSaving.targetAmount,
       description: updatedSaving.description,

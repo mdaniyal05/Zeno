@@ -105,7 +105,7 @@ const updateUserAccount = asyncHandler(async (req, res) => {
 
     const updatedAccount = await account.save();
 
-    res.status(201).json({
+    res.status(200).json({
       accountName: updatedAccount.accountName,
       accountType: updatedAccount.accountType,
       accountBalance: updatedAccount.accountBalance,

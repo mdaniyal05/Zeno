@@ -232,7 +232,7 @@ const updateUserExpense = asyncHandler(async (req, res) => {
 
     const updatedExpense = await expense.save();
 
-    res.status(201).json({
+    res.status(200).json({
       expenseAmount: updatedExpense.expenseAmount,
       expenseType: updatedExpense.expenseType,
       expenseDate: updatedExpense.expenseDate,

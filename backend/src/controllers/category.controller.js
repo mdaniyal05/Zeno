@@ -81,6 +81,12 @@ const updateUserCategory = asyncHandler(async (req, res) => {
       throw new Error("Negative values and zero are not allowed.");
     }
 
+    if (req.body.limit !== category.limit) {
+      const spentAmount = category.limit - category.limitRemainingAmount;
+
+      category.limitRemainingAmount = req.body.limit - spentAmount;
+    }
+
     category.categoryName = req.body.categoryName || category.categoryName;
     category.categoryType = req.body.categoryType || category.categoryType;
     category.description = req.body.description || category.description;

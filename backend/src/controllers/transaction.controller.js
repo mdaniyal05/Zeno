@@ -333,7 +333,7 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
     const updatedTransaction = await transaction.save();
 
-    res.status(201).json({
+    res.status(200).json({
       transactionAmount: updatedTransaction.transactionAmount,
       transactionType: updatedTransaction.transactionType,
       paymentMethod: updatedTransaction.paymentMethod,

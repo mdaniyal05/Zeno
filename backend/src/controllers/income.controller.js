@@ -80,7 +80,7 @@ const updateUserIncome = asyncHandler(async (req, res) => {
 
     const updatedIncome = await income.save();
 
-    res.status(201).json({
+    res.status(200).json({
       incomeAmount: updatedIncome.incomeAmount,
       incomeDate: updatedIncome.incomeDate,
       incomeSource: updatedIncome.incomeSource,
