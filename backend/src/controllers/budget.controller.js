@@ -39,25 +39,31 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
 const createUserBudget = asyncHandler(async (req, res) => {
   const { startDate, endDate, budgetAmount, description } = req.body;
 
-  const budget = await Budget.findOne({ where: { status: "Active" } });
+  if (!startDate || !endDate || !budgetAmount || !description) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
+  if (budgetAmount <= 0) {
+    res.status(400);
+    throw new Error("Negative values and zero are not allowed.");
+  }
+
+  const userId = req.user.userId;
+
+  const budget = await Budget.findOne({
+    where: { status: "Active", userId: userId },
+  });
 
   if (budget) {
     res.status(400);
     throw new Error("You can only have one active budget at a time.");
   }
 
-  const userId = req.user.userId;
-
-  if (budgetAmount < 0) {
-    res.status(400);
-    throw new Error("Negative values are not allowed.");
-  }
-
   const newBudget = await Budget.create({
     startDate: startDate,
     endDate: endDate,
     budgetAmount: budgetAmount,
-    amountSpent: 0,
     amountRemaining: budgetAmount,
     description: description,
     userId: userId,
@@ -65,10 +71,6 @@ const createUserBudget = asyncHandler(async (req, res) => {
 
   if (newBudget) {
     res.status(201).json({
-      startDate: newBudget.startDate,
-      endDate: newBudget.endDate,
-      budgetAmount: newBudget.budgetAmount,
-      status: newBudget.status,
       message: "Budget created successfully.",
     });
   } else {

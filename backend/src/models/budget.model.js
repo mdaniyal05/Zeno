@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db/db");
 const User = require("./user.model");
 
@@ -41,6 +41,7 @@ const Budget = sequelize.define(
     },
     amountSpent: {
       type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0,
     },
     amountRemaining: {
       type: DataTypes.DECIMAL(10, 2),
@@ -48,12 +49,6 @@ const Budget = sequelize.define(
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        len: {
-          args: [0, 150],
-          msg: "Description cannot exceed 150 characters.",
-        },
-      },
     },
     status: {
       type: DataTypes.ENUM("Active", "Completed", "Exceeded"),
