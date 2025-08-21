@@ -181,6 +181,13 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     raw: true,
   });
 
+  const allIncome = Number(totalIncome[0]?.allIncome || 0);
+  const allExpense = Number(totalExpense[0]?.allExpense || 0);
+  const allSaving = Number(totalSaving[0]?.allSaving || 0);
+
+  const netBalance = allIncome - allExpense;
+  const savingsRate = allIncome > 0 ? (allSaving / allIncome) * 100 : 0;
+
   const insights = [];
 
   if (netBalance < 0) {
@@ -190,24 +197,10 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   } else {
     insights.push("✅ You are saving money. Great job!");
   }
+
   if (savingsRate < 20) {
     insights.push("💡 Try to increase your savings rate to at least 20%.");
   }
-  if (expenseByCategory.length > 0) {
-    const topCategory = expenseByCategory.sort(
-      (a, b) => Number(b.total) - Number(a.total)
-    )[0];
-    insights.push(
-      `📊 Your top expense category is ${topCategory.category} (${topCategory.total}).`
-    );
-  }
-
-  const allIncome = Number(totalIncome[0]?.allIncome || 0);
-  const allExpense = Number(totalExpense[0]?.allExpense || 0);
-  const allSaving = Number(totalSaving[0]?.allSaving || 0);
-
-  const netBalance = allIncome - allExpense;
-  const savingsRate = allIncome > 0 ? (allSaving / allIncome) * 100 : 0;
 
   const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
   const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
