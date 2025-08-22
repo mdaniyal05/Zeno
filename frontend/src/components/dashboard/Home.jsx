@@ -17,6 +17,7 @@ export default function Home() {
   const [netBalance, setNetBalance] = React.useState("");
   const [savingsRate, setSavingsRate] = React.useState("");
   const [budgetUtilization, setBudgetUtilization] = React.useState("");
+  const [insights, setInsights] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
@@ -28,8 +29,11 @@ export default function Home() {
       setNetBalance(data.netBalance);
       setSavingsRate(data.savingsRate);
       setBudgetUtilization(data.budgetUtilization);
+      setInsights(data.insights);
     }
   }, [data]);
+
+  console.log(insights);
 
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
@@ -73,6 +77,11 @@ export default function Home() {
             dataset={totalIncomeExpenseSaving}
           />
         </Grid>
+        {insights.map((insight) => (
+          <Grid size={{ xs: 12, sm: 4, lg: 2 }}>
+            <MetricCard title={"🧐"} value={""} caption={insight} />
+          </Grid>
+        ))}
       </Grid>
     </Box>
   );

@@ -225,21 +225,21 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   if (netBalance < 0) {
     insights.push(
-      "⚠️ You are spending more than you earn. Consider cutting expenses."
+      "⚠️ You are spending more than you earn. Consider cutting expenses!"
     );
   } else {
     insights.push("✅ You are saving money. Great job!");
   }
 
   if (budgetUtilization < 70) {
-    insights.push("✅ Your budget utitilization is less than 70%. Keep it up.");
+    insights.push("✅ Your budget utitilization is less than 70%. Keep it up!");
   } else if (budgetUtilization >= 70 && budgetUtilization <= 80) {
     insights.push(
-      "⚠️ You have utilized your budget more than 70%. Keep your expenses in check."
+      "⚠️ You have utilized your budget more than 70%. Keep your expenses in check!"
     );
   } else if (budgetUtilization > 90) {
     insights.push(
-      "🚨 Your budget utilization has reached over 90%. Slow down your expenses and stay in your senses."
+      "🚨 Your budget utilization has reached over 90%. Slow down your expenses and stay in your senses!"
     );
   }
 
