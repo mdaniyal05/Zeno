@@ -145,7 +145,9 @@ export default function CreateSaving(props) {
                 name="targetAmount"
                 variant="outlined"
                 value={targetAmount}
-                onChange={(event) => setTargetAmount(event.target.value)}
+                onChange={(event) =>
+                  setTargetAmount(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>

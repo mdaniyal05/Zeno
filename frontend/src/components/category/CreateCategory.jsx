@@ -176,7 +176,7 @@ export default function CreateCategory(props) {
                 name="limit"
                 variant="outlined"
                 value={limit}
-                onChange={(event) => setlimit(event.target.value)}
+                onChange={(event) => setlimit(Number(event.target.value))}
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">

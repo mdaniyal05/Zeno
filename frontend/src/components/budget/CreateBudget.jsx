@@ -148,7 +148,9 @@ export default function CreateBudget(props) {
                 id="amount"
                 placeholder="150000"
                 value={budgetAmount}
-                onChange={(event) => setBudgetAmount(event.target.value)}
+                onChange={(event) =>
+                  setBudgetAmount(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>

@@ -166,7 +166,9 @@ export default function CreateBankAccount(props) {
                 name="accountBalance"
                 variant="outlined"
                 value={accountBalance}
-                onChange={(event) => setAccountBalance(event.target.value)}
+                onChange={(event) =>
+                  setAccountBalance(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>

@@ -128,7 +128,9 @@ export default function CreateIncome(props) {
                 id="amount"
                 placeholder="2500000"
                 value={incomeAmount}
-                onChange={(event) => setIncomeAmount(event.target.value)}
+                onChange={(event) =>
+                  setIncomeAmount(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>

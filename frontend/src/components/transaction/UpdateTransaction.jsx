@@ -161,7 +161,9 @@ export default function UpdateTransaction(props) {
                 id="amount"
                 placeholder="120000"
                 value={transactionAmount}
-                onChange={(event) => setTransactionAmount(event.target.value)}
+                onChange={(event) =>
+                  setTransactionAmount(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>

@@ -142,7 +142,9 @@ export default function UpdateIncome(props) {
                 id="incomeAmount"
                 placeholder="30000"
                 value={incomeAmount}
-                onChange={(event) => setIncomeAmount(event.target.value)}
+                onChange={(event) =>
+                  setIncomeAmount(Number(event.target.value))
+                }
               />
             </FormControl>
             <FormControl>
