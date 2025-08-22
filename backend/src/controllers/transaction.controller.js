@@ -17,6 +17,7 @@ const getUserTransaction = asyncHandler(async (req, res) => {
       transactionDate: transaction.transactionDate,
       description: transaction.description,
       accountId: transaction.accountId,
+      savingId: transaction.savingId,
     });
   } else {
     res.status(404);
@@ -174,11 +175,17 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
 
+  let checkCalculation = false;
+
   if (transaction) {
     const account = await Account.findByPk(transaction.accountId);
+    const newAccount = await Account.findByPk(req.body.accountId);
 
     const saving = await Saving.findOne({
       where: { savingId: transaction.savingId },
+    });
+    const newSaving = await Saving.findOne({
+      where: { savingId: req.body.savingId },
     });
 
     if (req.body.transactionAmount <= 0) {
@@ -188,33 +195,29 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
     if (
       req.body.transactionType === "Saving" &&
-      req.body.accountType === "Savings"
+      newAccount.accountType === "Savings"
     ) {
       if (!req.body.savingId) {
         res.status(400);
         throw new Error("Please provide the saving field.");
       }
 
-      if (req.body.accountId !== transaction.accountId) {
+      if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
-
-        const newAccount = await Account.findByPk(req.body.accountId);
 
         newAccount.accountBalance =
           newAccount.accountBalance + req.body.transactionAmount;
 
         await account.save();
         await newAccount.save();
+
+        checkCalculation = true;
       }
 
-      if (req.body.savingId !== transaction.savingId) {
+      if (newSaving.savingId !== transaction.savingId) {
         saving.currentAmount =
           saving.currentAmount - transaction.transactionAmount;
-
-        const newSaving = await Saving.findOne({
-          where: { savingId: req.body.savingId },
-        });
 
         newSaving.currentAmount =
           newSaving.currentAmount + req.body.transactionAmount;
@@ -234,6 +237,8 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
         await saving.save();
         await newSaving.save();
+
+        checkCalculation = true;
       }
 
       if (req.body.transactionAmount !== transaction.transactionAmount) {
@@ -264,20 +269,20 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
         await account.save();
         await saving.save();
+
+        checkCalculation = true;
       }
     }
 
     if (
       req.body.transactionType === "Expense" &&
-      req.body.accountType !== "Savings"
+      newAccount.accountType !== "Savings"
     ) {
-      if (req.body.accountId !== transaction.accountId) {
+      if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
 
         await account.save();
-
-        const newAccount = await Account.findByPk(req.body.accountId);
 
         if (req.body.transactionAmount < newAccount.accountBalance) {
           newAccount.accountBalance =
@@ -290,6 +295,8 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
             "Transaction amount cannot be greater than account balance."
           );
         }
+
+        checkCalculation = true;
       }
 
       if (req.body.transactionAmount !== transaction.transactionAmount) {
@@ -301,24 +308,26 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
         await account.save();
       }
+
+      checkCalculation = true;
     }
 
     if (
       req.body.transactionType === "Income" &&
-      req.body.accountType !== "Savings"
+      newAccount.accountType !== "Savings"
     ) {
-      if (req.body.accountId !== transaction.accountId) {
+      if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
 
         await account.save();
-
-        const newAccount = await Account.findByPk(req.body.accountId);
 
         newAccount.accountBalance =
           newAccount.accountBalance + req.body.transactionAmount;
 
         await newAccount.save();
+
+        checkCalculation = true;
       }
 
       if (req.body.transactionAmount !== transaction.transactionAmount) {
@@ -329,32 +338,40 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
           account.accountBalance + req.body.transactionAmount;
 
         await account.save();
+
+        checkCalculation = true;
       }
     }
 
-    transaction.transactionAmount =
-      req.body.transactionAmount || transaction.transactionAmount;
-    transaction.transactionType =
-      req.body.transactionType || transaction.transactionType;
-    transaction.paymentMethod =
-      req.body.paymentMethod || transaction.paymentMethod;
-    transaction.transactionDate =
-      req.body.transactionDate || transaction.transactionDate;
-    transaction.description = req.body.description || transaction.description;
-    transaction.accountId = req.body.accountId || transaction.accountId;
-    transaction.savingId = req.body.savingId || transaction.savingId;
+    if (checkCalculation) {
+      transaction.transactionAmount =
+        req.body.transactionAmount || transaction.transactionAmount;
+      transaction.transactionType =
+        req.body.transactionType || transaction.transactionType;
+      transaction.paymentMethod =
+        req.body.paymentMethod || transaction.paymentMethod;
+      transaction.transactionDate =
+        req.body.transactionDate || transaction.transactionDate;
+      transaction.description = req.body.description || transaction.description;
+      transaction.accountId = req.body.accountId || transaction.accountId;
+      transaction.savingId = req.body.savingId || transaction.savingId;
 
-    const updatedTransaction = await transaction.save();
+      const updatedTransaction = await transaction.save();
 
-    res.status(200).json({
-      transactionAmount: updatedTransaction.transactionAmount,
-      transactionType: updatedTransaction.transactionType,
-      paymentMethod: updatedTransaction.paymentMethod,
-      transactionDate: updatedTransaction.transactionDate,
-      description: updatedTransaction.description,
-      accountId: updatedTransaction.accountId,
-      message: "Transaction updated successfully.",
-    });
+      res.status(200).json({
+        transactionAmount: updatedTransaction.transactionAmount,
+        transactionType: updatedTransaction.transactionType,
+        paymentMethod: updatedTransaction.paymentMethod,
+        transactionDate: updatedTransaction.transactionDate,
+        description: updatedTransaction.description,
+        accountId: updatedTransaction.accountId,
+        message: "Transaction updated successfully.",
+      });
+    } else {
+      throw new Error(
+        "Unable to create transaction. Please check the types you have selected. (Saving type will not work with any other type except saving and expense or income type will only work with current and default types.)"
+      );
+    }
   } else {
     res.status(404);
     throw new Error("Transaction not found.");
@@ -376,8 +393,13 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
       await saving.save();
     }
 
-    account.accountBalance =
-      account.accountBalance + transaction.transactionAmount;
+    if (account.accountType === "Savings" || account.accountType === "Income") {
+      account.accountBalance =
+        account.accountBalance - transaction.transactionAmount;
+    } else {
+      account.accountBalance =
+        account.accountBalance + transaction.transactionAmount;
+    }
 
     await account.save();
 
