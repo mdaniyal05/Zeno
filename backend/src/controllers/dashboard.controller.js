@@ -76,6 +76,11 @@ const totalIncomeExpenseSaving = (
 const activeBudget = (currentBudget) => {
   if (currentBudget) {
     const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
+    const colors = [
+      "hsl(220, 25%, 65%)",
+      "hsl(220, 25%, 45%)",
+      "hsl(220, 25%, 30%)",
+    ];
 
     const labelMap = {
       budgetAmount: "Budget amount",
@@ -87,6 +92,8 @@ const activeBudget = (currentBudget) => {
       index: idx,
       value: currentBudget[`${key}`],
       label: labelMap[`${key}`],
+      percentage: (currentBudget[`${key}`] / currentBudget.budgetAmount) * 100,
+      color: colors[idx],
     }));
 
     return dataset;

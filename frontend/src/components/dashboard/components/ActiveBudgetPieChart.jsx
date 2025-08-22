@@ -12,36 +12,6 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-const data = [
-  { label: "India", value: 50000 },
-  { label: "USA", value: 35000 },
-  { label: "Brazil", value: 10000 },
-  { label: "Other", value: 5000 },
-];
-
-const countries = [
-  {
-    name: "India",
-    value: 50,
-    color: "hsl(220, 25%, 65%)",
-  },
-  {
-    name: "USA",
-    value: 35,
-    color: "hsl(220, 25%, 45%)",
-  },
-  {
-    name: "Brazil",
-    value: 10,
-    color: "hsl(220, 25%, 30%)",
-  },
-  {
-    name: "Other",
-    value: 5,
-    color: "hsl(220, 25%, 20%)",
-  },
-];
-
 const StyledText = styled("text", {
   shouldForwardProp: (prop) => prop !== "variant",
 })(({ theme }) => ({
@@ -109,7 +79,7 @@ const colors = [
   "hsl(220, 20%, 25%)",
 ];
 
-export default function ChartUserByCountry() {
+export default function ActiveBudgetPieChart({ dataset }) {
   return (
     <Card
       variant="outlined"
@@ -117,7 +87,7 @@ export default function ChartUserByCountry() {
     >
       <CardContent>
         <Typography component="h2" variant="subtitle2">
-          Users by country
+          Active Budget
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <PieChart
@@ -130,7 +100,7 @@ export default function ChartUserByCountry() {
             }}
             series={[
               {
-                data,
+                data: dataset,
                 innerRadius: 75,
                 outerRadius: 100,
                 paddingAngle: 0,
@@ -141,44 +111,48 @@ export default function ChartUserByCountry() {
             width={260}
             hideLegend
           >
-            <PieCenterLabel primaryText="98.5K" secondaryText="Total" />
+            {dataset === null && (
+              <PieCenterLabel primaryText="BUDGET" secondaryText="Active" />
+            )}
           </PieChart>
         </Box>
-        {countries.map((country, index) => (
-          <Stack
-            key={index}
-            direction="row"
-            sx={{ alignItems: "center", gap: 2, pb: 2 }}
-          >
-            <Stack sx={{ gap: 1, flexGrow: 1 }}>
-              <Stack
-                direction="row"
-                sx={{
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <Typography variant="body2" sx={{ fontWeight: "500" }}>
-                  {country.name}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {country.value}%
-                </Typography>
+        {dataset
+          .filter((item) => item.index !== 0)
+          .map((data) => (
+            <Stack
+              key={data.index}
+              direction="row"
+              sx={{ alignItems: "center", gap: 2, pb: 2 }}
+            >
+              <Stack sx={{ gap: 1, flexGrow: 1 }}>
+                <Stack
+                  direction="row"
+                  sx={{
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: "500" }}>
+                    {data.label}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {data.percentage}%
+                  </Typography>
+                </Stack>
+                <LinearProgress
+                  variant="determinate"
+                  aria-label="Number of users by country"
+                  value={data.percentage}
+                  sx={{
+                    [`& .${linearProgressClasses.bar}`]: {
+                      backgroundColor: data.color,
+                    },
+                  }}
+                />
               </Stack>
-              <LinearProgress
-                variant="determinate"
-                aria-label="Number of users by country"
-                value={country.value}
-                sx={{
-                  [`& .${linearProgressClasses.bar}`]: {
-                    backgroundColor: country.color,
-                  },
-                }}
-              />
             </Stack>
-          </Stack>
-        ))}
+          ))}
       </CardContent>
     </Card>
   );

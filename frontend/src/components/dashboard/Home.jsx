@@ -6,16 +6,19 @@ import { useGetDashboardDataQuery } from "../../redux/slices/dashboardApiSlice";
 import IncomeExpenseSavingBarChart from "./components/IncomeExpenseSavingBarChart";
 import IncomeExpenseSavingLineChart from "./components/IncomeExpenseSavingLineChart";
 import MetricCard from "./components/MetricCard";
-import IncomeExpenseSavingPieChart from "./components/IncomeExpenseSavingPieChart";
+import ActiveBudgetPieChart from "./components/ActiveBudgetPieChart";
 
 export default function Home() {
   const [IncomeExpenseSaving, setIncomeExpenseSaving] = React.useState([]);
+  const [activeBudget, setActiveBudget] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
   React.useEffect(() => {
     if (data) {
       setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
+      setActiveBudget(data.activeBudgetDataset);
+      console.log(data.activeBudgetDataset);
     }
   }, [data]);
 
@@ -46,10 +49,7 @@ export default function Home() {
           <IncomeExpenseSavingBarChart dataset={IncomeExpenseSaving} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingPieChart />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingPieChart />
+          <ActiveBudgetPieChart dataset={activeBudget} />
         </Grid>
       </Grid>
     </Box>
