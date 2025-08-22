@@ -49,6 +49,8 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     savingId,
   } = req.body;
 
+  let checkCalculation = false;
+
   if (
     !transactionAmount ||
     !transactionType ||
@@ -86,7 +88,10 @@ const createUserTransaction = asyncHandler(async (req, res) => {
       if (saving) {
         saving.currentAmount = saving.currentAmount + transactionAmount;
 
+        account.accountBalance = account.accountBalance + transactionAmount;
+
         await saving.save();
+        await account.save();
 
         if (saving.currentAmount >= saving.targetAmount) {
           saving.status = "Completed";
@@ -107,15 +112,12 @@ const createUserTransaction = asyncHandler(async (req, res) => {
         );
       }
 
-      account.accountBalance = account.accountBalance + transactionAmount;
-
-      await account.save();
+      checkCalculation = true;
     }
 
     if (transactionType === "Expense" && account.accountType !== "Savings") {
       if (transactionAmount < account.accountBalance) {
-        account.accountBalance =
-          account.accountBalance - parseFloat(transactionAmount);
+        account.accountBalance = account.accountBalance - transactionAmount;
 
         await account.save();
       } else {
@@ -124,32 +126,43 @@ const createUserTransaction = asyncHandler(async (req, res) => {
           "Transaction amount cannot be greater than account balance."
         );
       }
+
+      checkCalculation = true;
     }
 
     if (transactionType === "Income" && account.accountType !== "Savings") {
       account.accountBalance = account.accountBalance + transactionAmount;
 
       await account.save();
+
+      checkCalculation = true;
     }
 
-    const newTransaction = await Transaction.create({
-      transactionAmount: transactionAmount,
-      transactionType: transactionType,
-      paymentMethod: paymentMethod,
-      transactionDate: transactionDate,
-      description: description,
-      userId: userId,
-      accountId: accountId,
-      savingId: savingId,
-    });
-
-    if (newTransaction) {
-      res.status(201).json({
-        message: `Transaction created successfully.`,
+    if (checkCalculation) {
+      const newTransaction = await Transaction.create({
+        transactionAmount: transactionAmount,
+        transactionType: transactionType,
+        paymentMethod: paymentMethod,
+        transactionDate: transactionDate,
+        description: description,
+        userId: userId,
+        accountId: accountId,
+        savingId: savingId,
       });
+
+      if (newTransaction) {
+        res.status(201).json({
+          message: `Transaction created successfully.`,
+        });
+      } else {
+        res.status(400);
+        throw new Error("Invalid transaction data.");
+      }
     } else {
       res.status(400);
-      throw new Error("Invalid transaction data.");
+      throw new Error(
+        "Unable to create transaction. Please check the types you have selected. (Saving type will not work with any other type except saving and expense or income type will only work with current and default types.)"
+      );
     }
   } else {
     res.status(404);

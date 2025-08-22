@@ -65,7 +65,7 @@ Transaction.belongsTo(Account, {
 });
 
 Saving.hasMany(Transaction, {
-  foreignKey: { name: "savingId" },
+  foreignKey: { name: "savingId", defaultValue: null },
   onDelete: "NO ACTION",
   onUpdate: "CASCADE",
 });
