@@ -19,6 +19,7 @@ import ColorModeSelect from "../shared-theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
 import { useCreateUserTransactionMutation } from "../../redux/slices/transactionApiSlice";
 import { useGetAllUserAccountsQuery } from "../../redux/slices/bankAccountApiSlice";
+import { useGetAllUserSavingsQuery } from "../../redux/slices/savingApiSlice";
 import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -66,7 +67,8 @@ const CreateTransactionContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function CreateTransaction(props) {
-  const { data } = useGetAllUserAccountsQuery();
+  const { data: accounts } = useGetAllUserAccountsQuery();
+  const { data: savings } = useGetAllUserSavingsQuery();
 
   const [transactionAmount, setTransactionAmount] = React.useState("");
   const [transactionType, setTransactionType] = React.useState("");
@@ -74,6 +76,7 @@ export default function CreateTransaction(props) {
   const [transactionDate, setTransactionDate] = React.useState(null);
   const [description, setDescription] = React.useState("");
   const [accountId, setAccountId] = React.useState("");
+  const [savingId, setSavingId] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -90,6 +93,7 @@ export default function CreateTransaction(props) {
         transactionDate,
         description,
         accountId,
+        savingId,
       }).unwrap();
       navigate("/home");
       toast.success("Transaction created successfully.");
@@ -176,8 +180,8 @@ export default function CreateTransaction(props) {
                     value={accountId}
                     onChange={(event) => setAccountId(event.target.value)}
                   >
-                    {data &&
-                      data.accountsData.map((account) => (
+                    {accounts &&
+                      accounts.accountsData.map((account) => (
                         <MenuItem value={account.accountId}>
                           {account.accountName}
                         </MenuItem>
@@ -228,6 +232,29 @@ export default function CreateTransaction(props) {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="saving">
+                Savings (Optional. Only required for saving transaction)
+              </FormLabel>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <Select
+                    labelId="saving"
+                    id="saving"
+                    label="Saving"
+                    value={savingId}
+                    onChange={(event) => setSavingId(event.target.value)}
+                  >
+                    {savings &&
+                      savings.savingsData.map((saving) => (
+                        <MenuItem value={saving.savingId}>
+                          {saving.title}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
               Create Transaction

@@ -23,6 +23,7 @@ import {
   useUpdateUserTransactionMutation,
 } from "../../redux/slices/transactionApiSlice";
 import { useGetAllUserAccountsQuery } from "../../redux/slices/bankAccountApiSlice";
+import { useGetAllUserSavingsQuery } from "../../redux/slices/savingApiSlice";
 import { toast } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -72,8 +73,9 @@ const UpdateTransactionContainer = styled(Stack)(({ theme }) => ({
 export default function UpdateTransaction(props) {
   const { id } = useParams();
 
-  const { data: allAccounts } = useGetAllUserAccountsQuery();
+  const { data: accounts } = useGetAllUserAccountsQuery();
   const { data: transaction } = useGetUserTransactionQuery(id);
+  const { data: savings } = useGetAllUserSavingsQuery();
 
   const [transactionAmount, setTransactionAmount] = React.useState("");
   const [transactionType, setTransactionType] = React.useState("");
@@ -81,6 +83,7 @@ export default function UpdateTransaction(props) {
   const [transactionDate, setTransactionDate] = React.useState(null);
   const [description, setDescription] = React.useState("");
   const [accountId, setAccountId] = React.useState("");
+  const [savingId, setSavingId] = React.useState("");
 
   const navigate = useNavigate();
 
@@ -94,6 +97,7 @@ export default function UpdateTransaction(props) {
       setTransactionDate(transaction.transactionDate || "");
       setDescription(transaction.description || "");
       setAccountId(transaction.accountId || "");
+      setSavingId(transaction.savingId || "");
     }
   }, [transaction]);
 
@@ -109,6 +113,7 @@ export default function UpdateTransaction(props) {
         transactionDate,
         description,
         accountId,
+        savingId,
       }).unwrap();
       navigate("/home");
       toast.success("Transaction updated successfully.");
@@ -195,8 +200,8 @@ export default function UpdateTransaction(props) {
                     value={accountId}
                     onChange={(event) => setAccountId(event.target.value)}
                   >
-                    {allAccounts &&
-                      allAccounts.accountsData.map((account) => (
+                    {accounts &&
+                      accounts.accountsData.map((account) => (
                         <MenuItem value={account.accountId}>
                           {account.accountName}
                         </MenuItem>
@@ -247,6 +252,29 @@ export default function UpdateTransaction(props) {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="saving">
+                Savings (Optional. Only required for saving transaction)
+              </FormLabel>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <Select
+                    labelId="saving"
+                    id="saving"
+                    label="Saving"
+                    value={savingId}
+                    onChange={(event) => setSavingId(event.target.value)}
+                  >
+                    {savings &&
+                      savings.savingsData.map((saving) => (
+                        <MenuItem value={saving.savingId}>
+                          {saving.title}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
               Update
