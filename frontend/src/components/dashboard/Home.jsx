@@ -7,10 +7,13 @@ import IncomeExpenseSavingBarChart from "./components/IncomeExpenseSavingBarChar
 import IncomeExpenseSavingLineChart from "./components/IncomeExpenseSavingLineChart";
 import MetricCard from "./components/MetricCard";
 import ActiveBudgetPieChart from "./components/ActiveBudgetPieChart";
+import TotalIncomeExpenseSavingPieChart from "./components/TotalIncomeExpenseSavingPieChart";
 
 export default function Home() {
   const [IncomeExpenseSaving, setIncomeExpenseSaving] = React.useState([]);
   const [activeBudget, setActiveBudget] = React.useState([]);
+  const [totalIncomeExpenseSaving, setTotalIncomeExpenseSaving] =
+    React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
@@ -18,7 +21,7 @@ export default function Home() {
     if (data) {
       setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
       setActiveBudget(data.activeBudgetDataset);
-      console.log(data.activeBudgetDataset);
+      setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
     }
   }, [data]);
 
@@ -50,6 +53,11 @@ export default function Home() {
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <ActiveBudgetPieChart dataset={activeBudget} />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <TotalIncomeExpenseSavingPieChart
+            dataset={totalIncomeExpenseSaving}
+          />
         </Grid>
       </Grid>
     </Box>

@@ -79,7 +79,7 @@ const colors = [
   "hsl(220, 20%, 25%)",
 ];
 
-export default function ActiveBudgetPieChart({ dataset }) {
+export default function TotalIncomeExpenseSavingPieChart({ dataset }) {
   return (
     <Card
       variant="outlined"
@@ -87,7 +87,7 @@ export default function ActiveBudgetPieChart({ dataset }) {
     >
       <CardContent>
         <Typography component="h2" variant="subtitle2">
-          Active Budget
+          Total Income, Expense & Saving
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <PieChart
@@ -112,7 +112,7 @@ export default function ActiveBudgetPieChart({ dataset }) {
             hideLegend
           >
             {dataset.length !== 0 ? (
-              <PieCenterLabel primaryText="BUDGET" secondaryText="Active" />
+              <PieCenterLabel primaryText="TOTAL" secondaryText="Amounts" />
             ) : (
               <></>
             )}
@@ -122,7 +122,7 @@ export default function ActiveBudgetPieChart({ dataset }) {
           .filter((item) => item.index !== 0)
           .map((data) => (
             <Stack
-              key={data.index}
+              key={data.id}
               direction="row"
               sx={{ alignItems: "center", gap: 2, pb: 2 }}
             >

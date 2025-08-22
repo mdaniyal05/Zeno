@@ -52,21 +52,38 @@ const totalIncomeExpenseSaving = (
     totalExpenseData.length > 0 ||
     totalSavingData.length > 0
   ) {
+    const allTotal =
+      totalIncomeData[0].allIncome +
+      totalExpenseData[0].allExpense +
+      totalSavingData[0].allSaving;
+
+    const colors = [
+      "hsl(220, 25%, 65%)",
+      "hsl(220, 25%, 45%)",
+      "hsl(220, 25%, 30%)",
+    ];
+
     return [
       ...totalIncomeData.map((obj, idx) => ({
-        id: idx + 1,
-        value: obj.allIncome,
+        id: idx,
+        value: obj.allIncome || 0,
         label: "Total income",
+        color: colors[idx],
+        percentage: (obj.allIncome / allTotal) * 100,
       })),
       ...totalExpenseData.map((obj, idx) => ({
-        id: totalIncomeData.length + idx + 1,
-        value: obj.allExpense,
+        id: totalIncomeData.length + idx,
+        value: obj.allExpense || 0,
         label: "Total expense",
+        color: colors[totalIncomeData.length + idx],
+        percentage: (obj.allExpense / allTotal) * 100,
       })),
       ...totalSavingData.map((obj, idx) => ({
-        id: totalIncomeData.length + totalExpenseData.length + idx + 1,
-        value: obj.allSaving,
+        id: totalIncomeData.length + totalExpenseData.length + idx,
+        value: obj.allSaving || 0,
         label: "Total saving",
+        color: colors[totalIncomeData.length + totalExpenseData.length + idx],
+        percentage: (obj.allSaving / allTotal) * 100,
       })),
     ];
   }
@@ -90,9 +107,10 @@ const activeBudget = (currentBudget) => {
 
     const dataset = keysToExtract.map((key, idx) => ({
       index: idx,
-      value: currentBudget[`${key}`],
+      value: currentBudget[`${key}`] || 0,
       label: labelMap[`${key}`],
-      percentage: (currentBudget[`${key}`] / currentBudget.budgetAmount) * 100,
+      percentage:
+        (currentBudget[`${key}`] / currentBudget.budgetAmount) * 100 || 0,
       color: colors[idx],
     }));
 
