@@ -48,7 +48,7 @@ export default function Home() {
         <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
           <MetricCard
             title={"📈"}
-            value={savingsRate}
+            value={`${savingsRate} %`}
             caption={"Savings Rate"}
           />
         </Grid>
