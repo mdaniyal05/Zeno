@@ -223,30 +223,30 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   const insights = [];
 
-  if (netBalance < 0) {
+  if (netBalance < 0 && netBalance !== 0) {
     insights.push(
       "⚠️ You are spending more than you earn. Consider cutting expenses!"
     );
-  } else {
-    insights.push("✅ You are saving money. Great job!");
+  } else if (netBalance > 0) {
+    insights.push("✅ You are earning more than your spendings. Great job!");
   }
 
-  if (budgetUtilization < 70) {
+  if (budgetUtilization < 70 && budgetUtilization !== 0) {
     insights.push("✅ Your budget utitilization is less than 70%. Keep it up!");
   } else if (budgetUtilization >= 70 && budgetUtilization <= 80) {
     insights.push(
-      "⚠️ You have utilized your budget more than 70%. Keep your expenses in check!"
+      "⚠️ Your budget utitilization is more than 70%. Keep your expenses in check!"
     );
   } else if (budgetUtilization > 90) {
     insights.push(
-      "🚨 Your budget utilization has reached over 90%. Slow down your expenses and stay in your senses!"
+      "🚨 Your budget utilization has reached over 90%. Keep your hands tight, slow down and think before spending!"
     );
   }
 
-  if (savingsRate < 20) {
+  if (savingsRate < 20 && savingsRate !== 0) {
     insights.push("💡 Try to increase your savings rate to at least 20%.");
-  } else {
-    insights.push("✅ Your savings rate is going great. Good job.");
+  } else if (savingsRate > 20) {
+    insights.push("✅ Your savings rate is greater than 20%. Great  job!");
   }
 
   const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
