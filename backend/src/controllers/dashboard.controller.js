@@ -48,9 +48,9 @@ const totalIncomeExpenseSaving = (
   totalSavingData
 ) => {
   if (
-    totalIncomeData.length > 0 ||
-    totalExpenseData.length > 0 ||
-    totalSavingData.length > 0
+    totalIncomeData.length === 0 ||
+    totalExpenseData.length === 0 ||
+    totalSavingData.length === 0
   ) {
     const allTotal =
       totalIncomeData[0].allIncome +
@@ -69,21 +69,21 @@ const totalIncomeExpenseSaving = (
         value: obj.allIncome || 0,
         label: "Total income",
         color: colors[idx],
-        percentage: (obj.allIncome / allTotal) * 100,
+        percentage: ((obj.allIncome / allTotal) * 100).toFixed(2) || 0,
       })),
       ...totalExpenseData.map((obj, idx) => ({
         id: totalIncomeData.length + idx,
         value: obj.allExpense || 0,
         label: "Total expense",
         color: colors[totalIncomeData.length + idx],
-        percentage: (obj.allExpense / allTotal) * 100,
+        percentage: ((obj.allExpense / allTotal) * 100).toFixed(2) || 0,
       })),
       ...totalSavingData.map((obj, idx) => ({
         id: totalIncomeData.length + totalExpenseData.length + idx,
         value: obj.allSaving || 0,
         label: "Total saving",
         color: colors[totalIncomeData.length + totalExpenseData.length + idx],
-        percentage: (obj.allSaving / allTotal) * 100,
+        percentage: ((obj.allSaving / allTotal) * 100).toFixed(2) || 0,
       })),
     ];
   }
@@ -110,7 +110,9 @@ const activeBudget = (currentBudget) => {
       value: currentBudget[`${key}`] || 0,
       label: labelMap[`${key}`],
       percentage:
-        (currentBudget[`${key}`] / currentBudget.budgetAmount) * 100 || 0,
+        ((currentBudget[`${key}`] / currentBudget.budgetAmount) * 100).toFixed(
+          2
+        ) || 0,
       color: colors[idx],
     }));
 
@@ -212,6 +214,12 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   const netBalance = allIncome - allExpense;
   const savingsRate = allIncome > 0 ? (allSaving / allIncome) * 100 : 0;
+  let budgetUtilization = 0;
+
+  if (currentBudget && currentBudget.budgetAmount > 0) {
+    budgetUtilization =
+      (currentBudget.amountSpent / currentBudget.budgetAmount) * 100;
+  }
 
   const insights = [];
 
@@ -254,6 +262,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     monthlySavingDataset,
     netBalance,
     savingsRate,
+    budgetUtilization,
     insights,
   });
 });

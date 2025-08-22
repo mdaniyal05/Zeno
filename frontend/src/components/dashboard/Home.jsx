@@ -15,6 +15,8 @@ export default function Home() {
   const [totalIncomeExpenseSaving, setTotalIncomeExpenseSaving] =
     React.useState([]);
   const [netBalance, setNetBalance] = React.useState("");
+  const [savingsRate, setSavingsRate] = React.useState("");
+  const [budgetUtilization, setBudgetUtilization] = React.useState("");
 
   const { data } = useGetDashboardDataQuery();
 
@@ -24,6 +26,8 @@ export default function Home() {
       setActiveBudget(data.activeBudgetDataset);
       setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
       setNetBalance(data.netBalance);
+      setSavingsRate(data.savingsRate);
+      setBudgetUtilization(data.budgetUtilization);
     }
   }, [data]);
 
@@ -42,10 +46,18 @@ export default function Home() {
           <MetricCard title={"💰"} value={netBalance} caption={"Net Balance"} />
         </Grid>
         <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
-          <MetricCard />
+          <MetricCard
+            title={"📈"}
+            value={savingsRate}
+            caption={"Savings Rate"}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
-          <MetricCard />
+          <MetricCard
+            title={"💸"}
+            value={`${budgetUtilization} %`}
+            caption={"Budget Utilization"}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <IncomeExpenseSavingLineChart dataset={IncomeExpenseSaving} />

@@ -139,13 +139,13 @@ export default function TotalIncomeExpenseSavingPieChart({ dataset }) {
                     {data.label}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {data.percentage.toFixed(2)}%
+                    {data.percentage} %
                   </Typography>
                 </Stack>
                 <LinearProgress
                   variant="determinate"
                   aria-label="Number of users by country"
-                  value={data.percentage.toFixed(2)}
+                  value={data.percentage}
                   sx={{
                     [`& .${linearProgressClasses.bar}`]: {
                       backgroundColor: data.color,
