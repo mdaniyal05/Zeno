@@ -4,19 +4,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useGetDashboardDataQuery } from "../../redux/slices/dashboardApiSlice";
 import IncomeExpenseSavingBarChart from "./components/IncomeExpenseSavingBarChart";
-import Linechart from "./components/LineChart";
+import IncomeExpenseSavingLineChart from "./components/IncomeExpenseSavingLineChart";
 import MetricCard from "./components/MetricCard";
 import IncomeExpenseSavingPieChart from "./components/IncomeExpenseSavingPieChart";
 
 export default function Home() {
-  const [IncomeExpenseSavingBarchart, setIncomeExpenseSavingBarchart] =
-    React.useState([]);
+  const [IncomeExpenseSaving, setIncomeExpenseSaving] = React.useState([]);
 
   const { data } = useGetDashboardDataQuery();
 
   React.useEffect(() => {
     if (data) {
-      setIncomeExpenseSavingBarchart(data.barChartData);
+      setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
     }
   }, [data]);
 
@@ -41,19 +40,17 @@ export default function Home() {
           <MetricCard />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <Linechart />
+          <IncomeExpenseSavingLineChart dataset={IncomeExpenseSaving} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingBarChart dataset={IncomeExpenseSavingBarchart} />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingPieChart />
+          <IncomeExpenseSavingBarChart dataset={IncomeExpenseSaving} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <IncomeExpenseSavingPieChart />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}></Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <IncomeExpenseSavingPieChart />
+        </Grid>
       </Grid>
     </Box>
   );

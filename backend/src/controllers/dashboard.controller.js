@@ -20,7 +20,7 @@ const months = [
   { month: "Dec" },
 ];
 
-const incomeVsExpenseVsSavingBarChartDataset = (
+const monthlyIncomeExpenseSaving = (
   monthlyIncomeData,
   monthlyExpenseData,
   monthlySavingData
@@ -42,7 +42,7 @@ const incomeVsExpenseVsSavingBarChartDataset = (
   });
 };
 
-const totalIncomeExpenseSavingPieChartDataset = (
+const totalIncomeExpenseSaving = (
   totalIncomeData,
   totalExpenseData,
   totalSavingData
@@ -73,28 +73,7 @@ const totalIncomeExpenseSavingPieChartDataset = (
   return [];
 };
 
-const monthlyIncomeCalculation = (monthlyIncome) =>
-  months.map((month) => {
-    const income =
-      monthlyIncome.find((income) => income.month === month.month) || {};
-    return { month: month.month, totalIncome: income.totalIncome || 0 };
-  });
-
-const monthlyExpenseCalculation = (monthlyExpense) =>
-  months.map((month) => {
-    const expense =
-      monthlyExpense.find((expense) => expense.month === month.month) || {};
-    return { month: month.month, totalExpense: expense.totalExpense || 0 };
-  });
-
-const monthlySavingCalculation = (monthlySaving) =>
-  months.map((month) => {
-    const saving =
-      monthlySaving.find((saving) => saving.month === month.month) || {};
-    return { month: month.month, totalSaving: saving.totalSaving || 0 };
-  });
-
-const createCurrentBudgetDatasetPieChart = (currentBudget) => {
+const activeBudget = (currentBudget) => {
   if (currentBudget) {
     const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
 
@@ -115,6 +94,27 @@ const createCurrentBudgetDatasetPieChart = (currentBudget) => {
     return [];
   }
 };
+
+const monthlyIncomeCalculation = (monthlyIncome) =>
+  months.map((month) => {
+    const income =
+      monthlyIncome.find((income) => income.month === month.month) || {};
+    return { month: month.month, totalIncome: income.totalIncome || 0 };
+  });
+
+const monthlyExpenseCalculation = (monthlyExpense) =>
+  months.map((month) => {
+    const expense =
+      monthlyExpense.find((expense) => expense.month === month.month) || {};
+    return { month: month.month, totalExpense: expense.totalExpense || 0 };
+  });
+
+const monthlySavingCalculation = (monthlySaving) =>
+  months.map((month) => {
+    const saving =
+      monthlySaving.find((saving) => saving.month === month.month) || {};
+    return { month: month.month, totalSaving: saving.totalSaving || 0 };
+  });
 
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
@@ -206,28 +206,27 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
   const monthlySavingDataset = monthlySavingCalculation(monthlySaving);
 
-  const barChartData = incomeVsExpenseVsSavingBarChartDataset(
+  const IncomeExpenseSavingDataset = monthlyIncomeExpenseSaving(
     monthlyIncome,
     monthlyExpense,
     monthlySaving
   );
 
-  const pieChartData = totalIncomeExpenseSavingPieChartDataset(
+  const totalIncomeExpenseSavingDataset = totalIncomeExpenseSaving(
     totalIncome,
     totalExpense,
     totalSaving
   );
 
-  const currentBudgetDataset =
-    createCurrentBudgetDatasetPieChart(currentBudget);
+  const activeBudgetDataset = activeBudget(currentBudget);
 
   res.status(200).json({
+    IncomeExpenseSavingDataset,
+    totalIncomeExpenseSavingDataset,
+    activeBudgetDataset,
     monthlyIncomeDataset,
     monthlyExpenseDataset,
     monthlySavingDataset,
-    pieChartData,
-    barChartData,
-    currentBudgetDataset,
     netBalance,
     savingsRate,
     insights,
