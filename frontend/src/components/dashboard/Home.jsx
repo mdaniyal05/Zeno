@@ -14,6 +14,7 @@ export default function Home() {
   const [activeBudget, setActiveBudget] = React.useState([]);
   const [totalIncomeExpenseSaving, setTotalIncomeExpenseSaving] =
     React.useState([]);
+  const [netBalance, setNetBalance] = React.useState("");
 
   const { data } = useGetDashboardDataQuery();
 
@@ -22,6 +23,7 @@ export default function Home() {
       setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
       setActiveBudget(data.activeBudgetDataset);
       setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
+      setNetBalance(data.netBalance);
     }
   }, [data]);
 
@@ -37,7 +39,7 @@ export default function Home() {
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
         <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
-          <MetricCard />
+          <MetricCard title={"💰"} value={netBalance} caption={"Net Balance"} />
         </Grid>
         <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
           <MetricCard />
