@@ -258,9 +258,11 @@ const deleteUserExpense = asyncHandler(async (req, res) => {
     });
 
     if (budget) {
-      budget.amountSpent = budget.amountSpent - expenseAmount;
+      budget.amountSpent = budget.amountSpent - expense.expenseAmount;
 
-      budget.amountRemaining = budget.amountRemaining + expenseAmount;
+      budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
+
+      await budget.save();
     }
 
     if (category.isActive === true) {
