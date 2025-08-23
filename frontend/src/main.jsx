@@ -29,6 +29,7 @@ import CreateTransactionPage from "./pages/transaction/CreateTransactionPage.jsx
 import UpdateTransactionPage from "./pages/transaction/UpdateTransactionPage.jsx";
 import CreateSavingPage from "./pages/saving/CreateSavingPage.jsx";
 import UpdateSavingPage from "./pages/saving/UpdateSavingPage.jsx";
+import UpdateBudgetPage from "./pages/budget/UpdateBudgetPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
         <Route path="/update-saving/:id" element={<UpdateSavingPage />} />
         <Route path="/update-category/:id" element={<UpdateCategoryPage />} />
         <Route path="/update-account/:id" element={<UpdateBankAccountPage />} />
+        <Route path="/update-budget/:id" element={<UpdateBudgetPage />} />
         <Route
           path="/update-transaction/:id"
           element={<UpdateTransactionPage />}

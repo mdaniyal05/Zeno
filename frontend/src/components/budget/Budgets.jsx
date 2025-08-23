@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Paper from "@mui/material/Paper";
 import {
   useGetAllUserBudgetsQuery,
@@ -93,6 +94,11 @@ export default function Budgets() {
                           )
                         }
                       />
+                      <Link to={`/update-budget/${row.budgetId}`}>
+                        <IconButton sx={{ ml: 1 }}>
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
