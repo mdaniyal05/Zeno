@@ -76,4 +76,5 @@ export const {
   useGetUserBudgetQuery,
   useCreateUserBudgetMutation,
   useDeleteUserBudgetMutation,
+  useUpdateUserBudgetMutation,
 } = budgetApiSlice;
