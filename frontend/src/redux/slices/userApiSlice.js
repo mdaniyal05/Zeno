@@ -19,6 +19,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+    deleteProfile: builder.mutation({
+      query: () => ({
+        url: `${USER_URL}/delete-profile`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
