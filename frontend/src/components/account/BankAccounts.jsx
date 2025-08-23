@@ -1,9 +1,11 @@
+import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
@@ -16,17 +18,29 @@ import {
 import ButtonComponent from "../ui/ButtonComponent.jsx";
 import AlertDialog from "../ui/AlertDialog.jsx";
 import { toast } from "react-toastify";
+import Search from "../ui/Search.jsx";
 
 export default function BankAccounts() {
+  const [search, setSearch] = React.useState("");
+
   const { data } = useGetAllUserAccountsQuery();
 
   const [deleteBankAccount] = useDeleteUserAccountMutation();
 
   return (
     <>
-      <div style={{ textAlign: "end", margin: "1rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          margin: "1rem",
+          gap: "1rem",
+        }}
+      >
+        <Search setOnChange={setSearch} />
         <ButtonComponent link={`/create-account`} text={"Create Account"} />
-      </div>
+      </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="bank accounts">
           <TableHead>
@@ -43,45 +57,54 @@ export default function BankAccounts() {
           </TableHead>
           <TableBody>
             {data &&
-              data.accountsData.map((row) => (
-                <TableRow
-                  key={row.accountId}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.accountName}
-                  </TableCell>
-                  <TableCell align="left">{row.accountType}</TableCell>
-                  <TableCell align="left">{row.accountBalance}</TableCell>
-                  <TableCell align="left">{row.bankName}</TableCell>
-                  <TableCell align="left">{row.accountNumber}</TableCell>
-                  <TableCell align="left">
-                    {row.isActive === false ? "Not Active" : "Active"}
-                  </TableCell>
-                  <TableCell align="left">
-                    {row.createdAt.slice(0, 10)}
-                  </TableCell>
-                  <TableCell align="left">
-                    <AlertDialog
-                      icon={<DeleteIcon />}
-                      contentText={
-                        "Are you sure you want to delete this bank account?"
-                      }
-                      title={"Confirmation"}
-                      mutation={() =>
-                        deleteBankAccount(row.accountId).then(
-                          toast.success("Bank account deleted successfully.")
-                        )
-                      }
-                    />
-                    <Link to={`/update-account/${row.accountId}`}>
-                      <IconButton sx={{ ml: 1 }}>
-                        <EditIcon />
-                      </IconButton>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
+              data.accountsData
+                .filter((item) =>
+                  search.toLowerCase() === ""
+                    ? item
+                    : item.accountName.toLowerCase().includes(search) ||
+                      item.accountType.toLowerCase().includes(search) ||
+                      item.bankName.toLowerCase().includes(search) ||
+                      item.accountNumber.toLowerCase().includes(search)
+                )
+                .map((row) => (
+                  <TableRow
+                    key={row.accountId}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.accountName}
+                    </TableCell>
+                    <TableCell align="left">{row.accountType}</TableCell>
+                    <TableCell align="left">{row.accountBalance}</TableCell>
+                    <TableCell align="left">{row.bankName}</TableCell>
+                    <TableCell align="left">{row.accountNumber}</TableCell>
+                    <TableCell align="left">
+                      {row.isActive === false ? "Not Active" : "Active"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.createdAt.slice(0, 10)}
+                    </TableCell>
+                    <TableCell align="left">
+                      <AlertDialog
+                        icon={<DeleteIcon />}
+                        contentText={
+                          "Are you sure you want to delete this bank account?"
+                        }
+                        title={"Confirmation"}
+                        mutation={() =>
+                          deleteBankAccount(row.accountId).then(
+                            toast.success("Bank account deleted successfully.")
+                          )
+                        }
+                      />
+                      <Link to={`/update-account/${row.accountId}`}>
+                        <IconButton sx={{ ml: 1 }}>
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </TableContainer>
