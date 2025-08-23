@@ -9,12 +9,15 @@ import { listClasses } from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import { listItemIconClasses } from "@mui/material/ListItemIcon";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import MenuButton from "./MenuButton";
 import { useLogoutMutation } from "../../../redux/slices/authApiSlice";
 import { logout } from "../../../redux/slices/authSlice";
+import { useDeleteProfileMutation } from "../../../redux/slices/userApiSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const MenuItem = styled(MuiMenuItem)({
   margin: "2px 0",
@@ -28,6 +31,19 @@ export default function OptionsMenu() {
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
+  const [deleteProfile] = useDeleteProfileMutation();
+
+  const deletProfileHandler = async () => {
+    try {
+      await deleteProfile();
+      navigate("/");
+      toast.success(
+        "Profile deleted successfully. We are sad to see you leave."
+      );
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  };
 
   const logoutHandler = async () => {
     try {
@@ -35,7 +51,7 @@ export default function OptionsMenu() {
       dispatch(logout());
       navigate("/");
     } catch (error) {
-      console.error(error);
+      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -91,6 +107,15 @@ export default function OptionsMenu() {
               onClick={logoutHandler}
             >
               Logout
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              fullWidth
+              startIcon={<DeleteIcon />}
+              onClick={deletProfileHandler}
+            >
+              Delete Profile
             </Button>
           </ListItemText>
         </MenuItem>
