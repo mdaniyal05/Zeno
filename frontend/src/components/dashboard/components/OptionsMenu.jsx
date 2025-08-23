@@ -4,9 +4,9 @@ import { dividerClasses } from "@mui/material/Divider";
 import Menu from "@mui/material/Menu";
 import MuiMenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { paperClasses } from "@mui/material/Paper";
 import { listClasses } from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
 import { listItemIconClasses } from "@mui/material/ListItemIcon";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -99,7 +99,15 @@ export default function OptionsMenu() {
             },
           }}
         >
-          <ListItemText>
+          <Stack
+            sx={{
+              p: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
             <Button
               variant="outlined"
               fullWidth
@@ -117,7 +125,7 @@ export default function OptionsMenu() {
             >
               Delete Profile
             </Button>
-          </ListItemText>
+          </Stack>
         </MenuItem>
       </Menu>
     </React.Fragment>

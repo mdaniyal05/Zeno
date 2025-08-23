@@ -93,7 +93,15 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
           />
           <Divider />
         </Stack>
-        <Stack sx={{ p: 2 }}>
+        <Stack
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
           <Button
             variant="outlined"
             fullWidth
