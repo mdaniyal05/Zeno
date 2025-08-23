@@ -75,8 +75,8 @@ export default function Home() {
             dataset={totalIncomeExpenseSaving}
           />
         </Grid>
-        {insights.map((insight) => (
-          <Grid size={{ xs: 12, sm: 4, lg: 2 }}>
+        {insights.map((insight, index) => (
+          <Grid size={{ xs: 12, sm: 4, lg: 2 }} key={index}>
             <MetricCard title={"🧐"} value={""} caption={insight} />
           </Grid>
         ))}
