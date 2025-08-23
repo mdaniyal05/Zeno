@@ -24,7 +24,16 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Income"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     updateUserIncome: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -32,14 +41,32 @@ export const incomeApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
-      invalidatesTags: ["Income"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     deleteUserIncome: builder.mutation({
       query: (id) => ({
         url: `${INCOME_URL}/income/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Income"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
   }),
 });

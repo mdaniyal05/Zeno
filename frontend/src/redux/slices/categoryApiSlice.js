@@ -24,7 +24,16 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     updateUserCategory: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -32,14 +41,32 @@ export const categoryApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     deleteUserCategory: builder.mutation({
       query: (id) => ({
         url: `${CATEGORY_URL}/category/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
   }),
 });

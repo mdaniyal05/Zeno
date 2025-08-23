@@ -24,7 +24,16 @@ export const savingApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Saving"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     updateUserSaving: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -32,14 +41,32 @@ export const savingApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
-      invalidatesTags: ["Saving"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     deleteUserSaving: builder.mutation({
       query: (id) => ({
         url: `${SAVING_URL}/saving/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Saving"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
   }),
 });

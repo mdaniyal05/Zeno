@@ -24,7 +24,16 @@ export const expenseApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Expense"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     updateUserExpense: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -32,14 +41,32 @@ export const expenseApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: patch,
       }),
-      invalidatesTags: ["Expense"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
     deleteUserExpense: builder.mutation({
       query: (id) => ({
         url: `${EXPENSE_URL}/expense/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Expense"],
+      invalidatesTags: [
+        "Account",
+        "Category",
+        "Income",
+        "Expense",
+        "Saving",
+        "Transaction",
+        "Budget",
+        "Dashboard",
+      ],
     }),
   }),
 });
