@@ -72,7 +72,7 @@ const createUserExpense = asyncHandler(async (req, res) => {
 
     if (category.limitRemainingAmount <= 0) {
       category.islimitExceeded = true;
-      category.isActive === false;
+      category.isActive = false;
 
       const message = `Your category: ${category.categoryName} of type: ${category.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
 
@@ -168,7 +168,7 @@ const updateUserExpense = asyncHandler(async (req, res) => {
 
       if (newCategory.limitRemainingAmount <= 0) {
         newCategory.islimitExceeded = true;
-        newCategory.isActive === false;
+        newCategory.isActive = false;
 
         const message = `Your category: ${newCategory.categoryName} of type: ${newCategory.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
 
@@ -257,7 +257,7 @@ const deleteUserExpense = asyncHandler(async (req, res) => {
       where: { status: "Active", userId: req.user.userId },
     });
 
-    if (budget) {
+    if (budget.status === "Active") {
       budget.amountSpent = budget.amountSpent - expense.expenseAmount;
 
       budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
