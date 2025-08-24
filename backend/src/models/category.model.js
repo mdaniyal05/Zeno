@@ -45,10 +45,6 @@ const Category = sequelize.define(
     islimitExceeded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-      get() {
-        const rawValue = this.getDataValue("islimitExceeded");
-        return rawValue === null ? null : parseFloat(rawValue);
-      },
     },
   },
   {
