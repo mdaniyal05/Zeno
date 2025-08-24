@@ -37,15 +37,27 @@ const Budget = sequelize.define(
       },
     },
     budgetAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("budgetAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     amountSpent: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       defaultValue: 0,
+      get() {
+        const rawValue = this.getDataValue("amountSpent");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     amountRemaining: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
+      get() {
+        const rawValue = this.getDataValue("amountRemaining");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     description: {
       type: DataTypes.TEXT,

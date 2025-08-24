@@ -14,8 +14,12 @@ const Transaction = sequelize.define(
       primaryKey: true,
     },
     transactionAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("transactionAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     transactionType: {
       type: DataTypes.ENUM("Income", "Expense", "Saving"),

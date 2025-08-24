@@ -17,12 +17,20 @@ const Saving = sequelize.define(
       allowNull: false,
     },
     targetAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("targetAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     currentAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       defaultValue: 0,
+      get() {
+        const rawValue = this.getDataValue("currentAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     description: {
       type: DataTypes.TEXT,

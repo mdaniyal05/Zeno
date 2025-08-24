@@ -118,43 +118,41 @@ export default function ActiveBudgetPieChart({ dataset }) {
             )}
           </PieChart>
         </Box>
-        {dataset
-          .filter((item) => item.index !== 0)
-          .map((data) => (
-            <Stack
-              key={data.index}
-              direction="row"
-              sx={{ alignItems: "center", gap: 2, pb: 2 }}
-            >
-              <Stack sx={{ gap: 1, flexGrow: 1 }}>
-                <Stack
-                  direction="row"
-                  sx={{
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 2,
-                  }}
-                >
-                  <Typography variant="body2" sx={{ fontWeight: "500" }}>
-                    {data.label}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {data.percentage} %
-                  </Typography>
-                </Stack>
-                <LinearProgress
-                  variant="determinate"
-                  aria-label="Number of users by country"
-                  value={data.percentage}
-                  sx={{
-                    [`& .${linearProgressClasses.bar}`]: {
-                      backgroundColor: data.color,
-                    },
-                  }}
-                />
+        {dataset.map((data) => (
+          <Stack
+            key={data.index}
+            direction="row"
+            sx={{ alignItems: "center", gap: 2, pb: 2 }}
+          >
+            <Stack sx={{ gap: 1, flexGrow: 1 }}>
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: "500" }}>
+                  {data.label}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {data.percentage} %
+                </Typography>
               </Stack>
+              <LinearProgress
+                variant="determinate"
+                aria-label="Number of users by country"
+                value={data.percentage}
+                sx={{
+                  [`& .${linearProgressClasses.bar}`]: {
+                    backgroundColor: data.color,
+                  },
+                }}
+              />
             </Stack>
-          ))}
+          </Stack>
+        ))}
       </CardContent>
     </Card>
   );

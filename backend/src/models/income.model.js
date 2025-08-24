@@ -12,8 +12,12 @@ const Income = sequelize.define(
       primaryKey: true,
     },
     incomeAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("incomeAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     incomeDate: {
       type: DataTypes.DATEONLY,

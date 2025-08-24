@@ -28,15 +28,27 @@ const Category = sequelize.define(
       defaultValue: true,
     },
     limit: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("limit");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     limitRemainingAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
+      get() {
+        const rawValue = this.getDataValue("limitRemainingAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     islimitExceeded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+      get() {
+        const rawValue = this.getDataValue("islimitExceeded");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
   },
   {

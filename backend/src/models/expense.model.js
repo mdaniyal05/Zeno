@@ -13,8 +13,12 @@ const Expense = sequelize.define(
       primaryKey: true,
     },
     expenseAmount: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("expenseAmount");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     expenseType: {
       type: DataTypes.ENUM("Needs", "Wants"),

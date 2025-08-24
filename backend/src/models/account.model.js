@@ -20,8 +20,12 @@ const Account = sequelize.define(
       allowNull: false,
     },
     accountBalance: {
-      type: DataTypes.DECIMAL(12, 2),
+      type: DataTypes.DECIMAL,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("accountBalance");
+        return rawValue === null ? null : parseFloat(rawValue);
+      },
     },
     bankName: {
       type: DataTypes.STRING,
