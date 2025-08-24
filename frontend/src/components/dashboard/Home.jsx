@@ -25,11 +25,20 @@ export default function Home() {
     if (data) {
       setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
       setActiveBudget(data.activeBudgetDataset);
-      setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
       setNetBalance(data.netBalance);
       setSavingsRate(data.savingsRate);
       setBudgetUtilization(data.budgetUtilization);
       setInsights(data.insights);
+
+      if (
+        data.totalIncomeExpenseSavingDataset[0]?.value === 0 &&
+        data.totalIncomeExpenseSavingDataset[1]?.value === 0 &&
+        data.totalIncomeExpenseSavingDataset[2]?.value === 0
+      ) {
+        setTotalIncomeExpenseSaving([]);
+      } else {
+        setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
+      }
     }
   }, [data]);
 
