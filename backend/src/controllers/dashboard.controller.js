@@ -237,7 +237,7 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   if (budgetUtilization < 70 && budgetUtilization !== 0) {
     insights.push("✅ Your budget utilization is less than 70%. Keep it up!");
-  } else if (budgetUtilization >= 70 && budgetUtilization <= 80) {
+  } else if (budgetUtilization >= 70 && budgetUtilization <= 90) {
     insights.push(
       "⚠️ Your budget utilization is more than 70%. Keep your expenses in check!"
     );
