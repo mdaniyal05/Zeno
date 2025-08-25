@@ -152,13 +152,20 @@ const updateUserExpense = asyncHandler(async (req, res) => {
       throw new Error("Negative values and zero are not allowed.");
     }
 
-    if (req.body.categoryId !== category.categoryId) {
+    if (req.body.categoryId === category.categoryId) {
       if (category.categoryType !== req.body.expenseType) {
         res.status(400);
         throw new Error("The category type and expense type should be same.");
       }
+    }
 
+    if (req.body.categoryId !== category.categoryId) {
       const newCategory = await Category.findByPk(req.body.categoryId);
+
+      if (newCategory.categoryType !== req.body.expenseType) {
+        res.status(400);
+        throw new Error("The category type and expense type should be same.");
+      }
 
       category.limitRemainingAmount =
         category.limitRemainingAmount + expense.expenseAmount;

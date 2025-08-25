@@ -214,12 +214,15 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   const allSaving = Number(totalSaving[0]?.allSaving || 0);
 
   const netBalance = allIncome - allExpense;
-  const savingsRate = allIncome > 0 ? (allSaving / allIncome) * 100 : 0;
+  const savingsRate =
+    allIncome > 0 ? ((allSaving / allIncome) * 100).toFixed(2) : 0;
   let budgetUtilization = 0;
 
   if (currentBudget && currentBudget.budgetAmount > 0) {
-    budgetUtilization =
-      (currentBudget.amountSpent / currentBudget.budgetAmount) * 100;
+    budgetUtilization = (
+      (currentBudget.amountSpent / currentBudget.budgetAmount) *
+      100
+    ).toFixed(2);
   }
 
   const insights = [];
