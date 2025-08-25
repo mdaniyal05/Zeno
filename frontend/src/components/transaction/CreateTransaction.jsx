@@ -76,7 +76,7 @@ export default function CreateTransaction(props) {
   const [transactionDate, setTransactionDate] = React.useState(null);
   const [description, setDescription] = React.useState("");
   const [accountId, setAccountId] = React.useState("");
-  const [savingId, setSavingId] = React.useState("");
+  const [savingId, setSavingId] = React.useState("None");
 
   const navigate = useNavigate();
 
@@ -93,7 +93,7 @@ export default function CreateTransaction(props) {
         transactionDate,
         description,
         accountId,
-        savingId,
+        savingId: savingId === "None" ? null : savingId,
       }).unwrap();
       navigate("/home");
       toast.success("Transaction created successfully.");
@@ -246,6 +246,7 @@ export default function CreateTransaction(props) {
                     value={savingId}
                     onChange={(event) => setSavingId(event.target.value)}
                   >
+                    <MenuItem value="None">None</MenuItem>
                     {savings &&
                       savings.savingsData.map((saving) => (
                         <MenuItem value={saving.savingId}>

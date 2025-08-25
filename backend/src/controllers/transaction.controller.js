@@ -117,6 +117,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (transactionType === "Expense" && account.accountType !== "Savings") {
+      if (savingId) {
+        res.status(400);
+        throw new Error(
+          "Please set saving to none when doing income or expense transaction."
+        );
+      }
+
       if (transactionAmount < account.accountBalance) {
         account.accountBalance = account.accountBalance - transactionAmount;
 
@@ -132,6 +139,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (transactionType === "Income" && account.accountType !== "Savings") {
+      if (savingId) {
+        res.status(400);
+        throw new Error(
+          "Please set saving to none when doing income or expense transaction."
+        );
+      }
+
       account.accountBalance = account.accountBalance + transactionAmount;
 
       await account.save();
@@ -278,6 +292,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
       req.body.transactionType === "Expense" &&
       newAccount.accountType !== "Savings"
     ) {
+      if (req.body.savingId) {
+        res.status(400);
+        throw new Error(
+          "Please set saving to none when doing income or expense transaction."
+        );
+      }
+
       if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
@@ -316,6 +337,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
       req.body.transactionType === "Income" &&
       newAccount.accountType !== "Savings"
     ) {
+      if (req.body.savingId) {
+        res.status(400);
+        throw new Error(
+          "Please set saving to none when doing income or expense transaction."
+        );
+      }
+
       if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
