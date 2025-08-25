@@ -421,10 +421,13 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
       await saving.save();
     }
 
-    if (account.accountType === "Savings" || account.accountType === "Income") {
+    if (
+      transaction.transactionType === "Savings" ||
+      transaction.transactionType === "Income"
+    ) {
       account.accountBalance =
         account.accountBalance - transaction.transactionAmount;
-    } else if (account.accountType === "Expense") {
+    } else if (transaction.transactionType === "Expense") {
       account.accountBalance =
         account.accountBalance + transaction.transactionAmount;
     }
