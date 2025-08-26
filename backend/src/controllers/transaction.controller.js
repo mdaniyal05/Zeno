@@ -435,7 +435,7 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
     const account = await Account.findByPk(transaction.accountId);
     const saving = await Saving.findByPk(transaction.savingId);
 
-    if (saving) {
+    if (saving && transaction.transactionType === "Saving") {
       saving.currentAmount =
         saving.currentAmount - transaction.transactionAmount;
 
