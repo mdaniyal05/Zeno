@@ -97,7 +97,7 @@ export default function UpdateTransaction(props) {
       setTransactionDate(transaction.transactionDate || "");
       setDescription(transaction.description || "");
       setAccountId(transaction.accountId || "");
-      setSavingId(transaction.savingId || "");
+      setSavingId(transaction.savingId || "None");
     }
   }, [transaction]);
 
