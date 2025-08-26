@@ -113,7 +113,7 @@ export default function UpdateTransaction(props) {
         transactionDate,
         description,
         accountId,
-        savingId,
+        savingId: savingId === "None" ? null : savingId,
       }).unwrap();
       navigate("/home");
       toast.success("Transaction updated successfully.");
@@ -266,6 +266,7 @@ export default function UpdateTransaction(props) {
                     value={savingId}
                     onChange={(event) => setSavingId(event.target.value)}
                   >
+                    <MenuItem value="None">None</MenuItem>
                     {savings &&
                       savings.savingsData.map((saving) => (
                         <MenuItem value={saving.savingId}>
