@@ -306,6 +306,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
         );
       }
 
+      if (account.accountType === "Savings") {
+        saving.currentAmount =
+          saving.currentAmount - transaction.transactionAmount;
+
+        await saving.save();
+      }
+
       if (newAccount.accountId !== transaction.accountId) {
         account.accountBalance =
           account.accountBalance - transaction.transactionAmount;
@@ -349,6 +356,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
         throw new Error(
           "Please set saving to none when doing income or expense transaction."
         );
+      }
+
+      if (account.accountType === "Savings") {
+        saving.currentAmount =
+          saving.currentAmount - transaction.transactionAmount;
+
+        await saving.save();
       }
 
       if (newAccount.accountId !== transaction.accountId) {
