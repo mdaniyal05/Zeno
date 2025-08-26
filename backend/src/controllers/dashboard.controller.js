@@ -206,7 +206,6 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
   const currentBudget = await Budget.findOne({
     where: { status: "Active", userId },
-    raw: true,
   });
 
   const allIncome = Number(totalIncome[0]?.allIncome || 0);
