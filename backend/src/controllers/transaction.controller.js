@@ -208,6 +208,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (
+      req.body.transactionType === transaction.transactionType &&
+      req.body.accountId === account.accountId
+    ) {
+      checkCalculation = true;
+    }
+
+    if (
       req.body.transactionType === "Saving" &&
       newAccount.accountType === "Savings"
     ) {
