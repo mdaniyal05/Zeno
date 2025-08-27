@@ -98,7 +98,7 @@ Budget.afterFind(async (budget, options) => {
 
     if (user) {
       const message =
-        "Congratulations! You have completed your budget target. Keep up the good work.";
+        "You’ve successfully managed your budget. Your spending stayed within the planned amount, and you finished with a balance left — great job keeping control!";
 
       notifyEmail(
         user.email,
