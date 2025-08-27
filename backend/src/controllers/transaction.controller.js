@@ -1,48 +1,65 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
 const Saving = require("../models/saving.model");
-const sequelize = require("../db/db");
 const notifyEmail = require("../utils/notifyEmail");
+
+/*
+
+Get single transaction controller
+
+*/
 
 const getUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
 
-  if (transaction) {
-    res.status(200).json({
-      transactionId: transaction.transactionId,
-      transactionAmount: transaction.transactionAmount,
-      transactionType: transaction.transactionType,
-      paymentMethod: transaction.paymentMethod,
-      transactionDate: transaction.transactionDate,
-      description: transaction.description,
-      accountId: transaction.accountId,
-      savingId: transaction.savingId,
-    });
-  } else {
+  if (!transaction) {
     res.status(404);
     throw new Error("Transaction not found.");
   }
+
+  res.status(200).json({
+    ...transaction.toJSON(),
+  });
 });
+
+/*
+
+Get single  transaction controller (END)
+
+*/
+
+/*
+
+Get all transactions controller
+
+*/
 
 const getAllUserTransactions = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const transactions = await Transaction.findAll({ where: { userId: userId } });
 
-  if (transactions) {
-    res.status(200).json({
-      transactionsData: transactions,
-    });
-  } else {
+  if (!transactions) {
     res.status(404);
-    throw new Error("No transactions available.");
+    throw new Error("No transactions found.");
   }
+
+  res.status(200).json({
+    transactionsData: transactions,
+  });
 });
 
 /*
 
-Create controller and logic for transaction feature
+Get all transactions controller (END)
+
+*/
+
+/*
+
+Create transaction controller
 
 */
 
@@ -225,13 +242,13 @@ const createUserTransaction = asyncHandler(async (req, res) => {
 
 /*
 
-Create controller and logic for transaction feature (END)
+Create transaction controller (END)
 
 */
 
 /*
 
-Update controller and logic for transaction feature
+Update transaction controller
 
 */
 
@@ -477,13 +494,13 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
 
 /*
 
-Update controller and logic for transaction feature (END)
+Update transaction controller (END)
 
 */
 
 /*
 
-Delete controller and logic for transaction feature
+Delete transaction controller
 
 */
 
@@ -542,7 +559,7 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
 
 /*
 
-Delete controller and logic for transaction feature (END)
+Delete transaction controller (END)
 
 */
 
