@@ -201,118 +201,168 @@ Create expense controller (END)
 
 */
 
+/*
+
+Update expense controller
+
+*/
+
+const validateUpdateInputs = (reqBody, res, newCategory) => {
+  if (reqBody.expenseAmount <= 0) {
+    res.status(400);
+    throw new Error("Expense amount must be greater than 0.");
+  }
+
+  if (newCategory.categoryType !== reqBody.expenseType) {
+    res.status(400);
+    throw new Error(
+      "Needs and wants type cannot be linked with each other. It must be same for category and expense."
+    );
+  }
+
+  if (newCategory.isActive === false) {
+    res.status(400);
+    throw new Error("Exceeded categories cannot be used again.");
+  }
+};
+
+const calculateBalances = async ({
+  reqBody,
+  expense,
+  budget,
+  oldCategory,
+  newCategory,
+  userEmail,
+  t,
+}) => {
+  const oldExpenseAmount = expense.expenseAmount;
+  const newExpenseAmount = reqBody.expenseAmount;
+
+  if (oldCategory.categoryId !== newCategory.categoryId) {
+    oldCategory.limitRemainingAmount += oldExpenseAmount;
+    newCategory.limitRemainingAmount -= newExpenseAmount;
+
+    if (newCategory.limitRemainingAmount <= 0) {
+      newCategory.islimitExceeded = true;
+      newCategory.isActive = false;
+
+      const message =
+        "Your spending in this category has gone over the limit. You’ve spent more than the planned limit, so it’s a good idea to review your expenses here and adjust to stay on track.";
+
+      notifyEmail(
+        userEmail,
+        message,
+        `Category: ${newCategory.categoryName} limit exceeded.`
+      );
+    }
+
+    await newCategory.save({ transaction: t });
+  }
+
+  if (oldExpenseAmount !== newExpenseAmount) {
+    oldCategory.limitRemainingAmount += oldExpenseAmount;
+    oldCategory.limitRemainingAmount -= newExpenseAmount;
+  }
+
+  await oldCategory.save({ transaction: t });
+
+  if (budget) {
+    budget.amountSpent -= oldExpenseAmount;
+    budget.amountSpent += newExpenseAmount;
+
+    budget.amountRemaining += oldExpenseAmount;
+    budget.amountRemaining -= newExpenseAmount;
+
+    if (
+      budget.amountSpent >= budget.budgetAmount &&
+      budget.amountRemaining <= 0 &&
+      budget.status !== "Completed"
+    ) {
+      budget.status = "Exceeded";
+
+      const message =
+        "Your spending has gone over the allocated budget. You crossed the set limit and spent more than planned, so it may be a good time to review your recent expenses and adjust for better control.";
+
+      notifyEmail(
+        userEmail,
+        message,
+        `Budget of amount: ${budget.budgetAmount} exceeded.`
+      );
+    }
+
+    await budget.save({ transaction: t });
+  }
+};
+
 const updateUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
   const expense = await Expense.findByPk(expenseId);
 
-  if (expense) {
-    const category = await Category.findByPk(expense.categoryId);
-
-    if (req.body.expenseAmount <= 0) {
-      res.status(400);
-      throw new Error("Negative values and zero are not allowed.");
-    }
-
-    if (req.body.categoryId === category.categoryId) {
-      if (category.categoryType !== req.body.expenseType) {
-        res.status(400);
-        throw new Error("The category type and expense type should be same.");
-      }
-    }
-
-    if (req.body.categoryId !== category.categoryId) {
-      const newCategory = await Category.findByPk(req.body.categoryId);
-
-      if (newCategory.categoryType !== req.body.expenseType) {
-        res.status(400);
-        throw new Error("The category type and expense type should be same.");
-      }
-
-      category.limitRemainingAmount =
-        category.limitRemainingAmount + expense.expenseAmount;
-
-      newCategory.limitRemainingAmount =
-        newCategory.limitRemainingAmount - req.body.expenseAmount;
-
-      if (newCategory.limitRemainingAmount <= 0) {
-        newCategory.islimitExceeded = true;
-        newCategory.isActive = false;
-
-        const message = `Your category: ${newCategory.categoryName} of type: ${newCategory.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
-
-        notifyEmail(
-          req.user.email,
-          message,
-          `Category: ${newCategory.categoryName} limit exceeded.`
-        );
-
-        await newCategory.save();
-      } else {
-        await category.save();
-        await newCategory.save();
-      }
-    }
-
-    if (req.body.expenseAmount !== expense.expenseAmount) {
-      category.limitRemainingAmount =
-        category.limitRemainingAmount + expense.expenseAmount;
-
-      category.limitRemainingAmount =
-        category.limitRemainingAmount - req.body.expenseAmount;
-
-      const budget = await Budget.findOne({
-        where: { status: "Active", userId: req.user.userId },
-      });
-
-      if (budget) {
-        budget.amountSpent = budget.amountSpent - expense.expenseAmount;
-        budget.amountSpent = budget.amountSpent + req.body.expenseAmount;
-
-        budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
-        budget.amountRemaining =
-          budget.amountRemaining - req.body.expenseAmount;
-
-        if (
-          budget.amountSpent > budget.budgetAmount &&
-          budget.amountRemaining <= 0
-        ) {
-          budget.status = "Exceeded";
-
-          const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
-
-          notifyEmail(
-            req.user.email,
-            message,
-            `Current active budget of amount: ${budget.budgetAmount} exceeded.`
-          );
-        }
-
-        await category.save();
-        await budget.save();
-      }
-    }
-
-    expense.expenseAmount = req.body.expenseAmount || expense.expenseAmount;
-    expense.expenseType = req.body.expenseType || expense.expenseType;
-    expense.expenseDate = req.body.expenseDate || expense.expenseDate;
-    expense.merchant = req.body.merchant || expense.merchant;
-    expense.categoryId = req.body.categoryId || expense.categoryId;
-
-    const updatedExpense = await expense.save();
-
-    res.status(200).json({
-      expenseAmount: updatedExpense.expenseAmount,
-      expenseType: updatedExpense.expenseType,
-      expenseDate: updatedExpense.expenseDate,
-      merchant: updatedExpense.merchant,
-      categoryId: updatedExpense.categoryId,
-      message: "Expense updated successfully.",
-    });
-  } else {
+  if (!expense) {
     res.status(404);
     throw new Error("Expense not found.");
   }
+
+  const userId = req.user.userId;
+
+  const t = await sequelize.transaction();
+
+  try {
+    const oldCategory = await Category.findByPk(expense.categoryId, {
+      transaction: t,
+    });
+
+    const newCategory = await Category.findByPk(req.body.categoryId, {
+      transaction: t,
+    });
+
+    const budget = await Budget.findOne(
+      {
+        where: { status: "Active", userId: userId },
+      },
+      { transaction: t }
+    );
+
+    validateUpdateInputs(req.body, res, newCategory);
+
+    await calculateBalances({
+      reqBody: req.body,
+      expense,
+      budget,
+      oldCategory,
+      newCategory,
+      userEmail: req.user.email,
+      t,
+    });
+
+    Object.assign(expense, {
+      expenseAmount: req.body.expenseAmount,
+      expenseType: req.body.expenseType,
+      expenseDate: req.body.expenseDate,
+      merchant: req.body.merchant,
+      categoryId: req.body.categoryId,
+    });
+
+    await expense.save({ transaction: t });
+
+    await t.commit();
+
+    res.status(200).json({
+      ...expense.toJSON(),
+      message: "Expense updated successfully.",
+    });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
+
+/*
+
+Update expense controller (END)
+
+*/
 
 const deleteUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
