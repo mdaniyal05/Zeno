@@ -40,6 +40,93 @@ const getAllUserTransactions = asyncHandler(async (req, res) => {
   }
 });
 
+/*
+
+Create controller and logic for transaction feature
+
+*/
+
+const validateCreateInputs = (
+  res,
+  transactionAmount,
+  transactionType,
+  account,
+  saving
+) => {
+  if (transactionAmount <= 0) {
+    res.status(400);
+    throw new Error("Transaction amount must be greater than 0.");
+  }
+
+  if (
+    transactionType === "Expense" &&
+    account.accountBalance < transactionAmount
+  ) {
+    res.status(400);
+    throw new Error(
+      "Expense transaction amount cannot be greater than account balance."
+    );
+  }
+
+  if (
+    (transactionType === "Expense" || transactionType === "Income") &&
+    account.accountType === "Savings"
+  ) {
+    res.status(400);
+    throw new Error("Expense or Income cannot be linked to a Savings account.");
+  }
+
+  if (transactionType === "Saving" && account.accountType !== "Savings") {
+    res.status(400);
+    throw new Error("Saving transaction must be linked to a Savings account.");
+  }
+
+  if (saving && saving.status !== "Active") {
+    res.status(400);
+    throw new Error("Selected saving must  be active.");
+  }
+};
+
+const createCalculations = async ({
+  transactionAmount,
+  transactionType,
+  account,
+  saving,
+  userEmail,
+  t,
+}) => {
+  if (transactionType === "Saving") {
+    account.accountBalance += transactionAmount;
+    saving.currentAmount += transactionAmount;
+
+    if (
+      saving.currentAmount >= saving.targetAmount &&
+      saving.status !== "Completed"
+    ) {
+      saving.status = "Completed";
+      const message =
+        "Congratulations! You have reached your savings target. Keep up the good financial record.";
+      await notifyEmail(
+        userEmail,
+        message,
+        `Savings target of: ${saving.targetAmount} completed.`
+      );
+    }
+
+    await saving.save({ transaction: t });
+  }
+
+  if (transactionType === "Income") {
+    account.accountBalance += transactionAmount;
+  }
+
+  if (transactionType === "Expense") {
+    account.accountBalance -= transactionAmount;
+  }
+
+  await account.save({ transaction: t });
+};
+
 const createUserTransaction = asyncHandler(async (req, res) => {
   const {
     transactionAmount,
@@ -51,8 +138,6 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     savingId,
   } = req.body;
 
-  let checkCalculation = false;
-
   if (
     !transactionAmount ||
     !transactionType ||
@@ -62,129 +147,87 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     !accountId
   ) {
     res.status(400);
+    throw new Error("All fields are required.");
+  }
+
+  if (transactionType === "Saving" && !savingId) {
+    res.status(400);
     throw new Error(
-      "All fields are required (savings field only required when performing savings transactions)."
+      "Please provide the saving field for a Saving transaction."
     );
   }
 
-  if (transactionAmount <= 0) {
+  if (
+    (transactionType === "Expense" || transactionType === "Income") &&
+    savingId
+  ) {
     res.status(400);
-    throw new Error("Negative values and zero are not allowed.");
+    throw new Error(
+      "Do not provide saving for Expense or Income transactions."
+    );
   }
 
-  const userId = req.user.userId;
+  const t = await sequelize.transaction();
 
-  const account = await Account.findOne({
-    where: { accountId: accountId },
-  });
+  try {
+    const account = await Account.findByPk(accountId, {
+      transaction: t,
+    });
 
-  if (account) {
-    if (transactionType === "Saving" && account.accountType === "Savings") {
-      if (!savingId) {
-        res.status(400);
-        throw new Error("Please provide the saving field.");
-      }
+    const saving = savingId
+      ? await Saving.findByPk(savingId, { transaction: t })
+      : null;
 
-      const saving = await Saving.findOne({ where: { savingId: savingId } });
+    validateCreateInputs(
+      res,
+      transactionAmount,
+      transactionType,
+      account,
+      saving
+    );
 
-      if (saving) {
-        saving.currentAmount = saving.currentAmount + transactionAmount;
+    await createCalculations({
+      transactionAmount,
+      transactionType,
+      account,
+      saving,
+      userEmail: req.user.email,
+      t,
+    });
 
-        account.accountBalance = account.accountBalance + transactionAmount;
+    const userId = req.user.userId;
 
-        await saving.save();
-        await account.save();
+    const newTransaction = await Transaction.create({
+      transactionAmount,
+      transactionType,
+      paymentMethod,
+      transactionDate,
+      description,
+      userId,
+      accountId,
+      savingId,
+    });
 
-        if (saving.currentAmount >= saving.targetAmount) {
-          saving.status = "Completed";
+    if (newTransaction) {
+      await t.commit();
 
-          const message =
-            "Congratulations! You have reached your savings target. Keep up the good financial record.";
-
-          notifyEmail(
-            req.user.email,
-            message,
-            `Savings target of: ${saving.targetAmount} completed.`
-          );
-        }
-      } else {
-        res.status(400);
-        throw new Error(
-          "You must have a saving active in order to create a saving transaction."
-        );
-      }
-
-      checkCalculation = true;
-    }
-
-    if (transactionType === "Expense" && account.accountType !== "Savings") {
-      if (savingId) {
-        res.status(400);
-        throw new Error(
-          "Please set saving to none when doing income or expense transaction."
-        );
-      }
-
-      if (transactionAmount < account.accountBalance) {
-        account.accountBalance = account.accountBalance - transactionAmount;
-
-        await account.save();
-      } else {
-        res.status(400);
-        throw new Error(
-          "Transaction amount cannot be greater than account balance."
-        );
-      }
-
-      checkCalculation = true;
-    }
-
-    if (transactionType === "Income" && account.accountType !== "Savings") {
-      if (savingId) {
-        res.status(400);
-        throw new Error(
-          "Please set saving to none when doing income or expense transaction."
-        );
-      }
-
-      account.accountBalance = account.accountBalance + transactionAmount;
-
-      await account.save();
-
-      checkCalculation = true;
-    }
-
-    if (checkCalculation) {
-      const newTransaction = await Transaction.create({
-        transactionAmount: transactionAmount,
-        transactionType: transactionType,
-        paymentMethod: paymentMethod,
-        transactionDate: transactionDate,
-        description: description,
-        userId: userId,
-        accountId: accountId,
-        savingId: savingId,
+      res.status(201).json({
+        ...newTransaction.toJSON(),
+        message: "Transaction created successfully.",
       });
-
-      if (newTransaction) {
-        res.status(201).json({
-          message: `Transaction created successfully.`,
-        });
-      } else {
-        res.status(400);
-        throw new Error("Invalid transaction data.");
-      }
-    } else {
-      res.status(400);
-      throw new Error(
-        "Unable to create transaction. Please check the types you have selected. (Saving type will not work with any other type except saving and expense or income type will only work with current and default types.)"
-      );
     }
-  } else {
-    res.status(404);
-    throw new Error("Account not found.");
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
   }
 });
+
+/*
+
+Create controller and logic for transaction feature (END)
+
+*/
 
 /*
 
