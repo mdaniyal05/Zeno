@@ -1,41 +1,136 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Expense = require("../models/expense.model");
 const Category = require("../models/category.model");
 const Budget = require("../models/budget.model");
 const notifyEmail = require("../utils/notifyEmail");
 
+/*
+
+Get single expense controller
+
+*/
+
 const getUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
   const expense = await Expense.findByPk(expenseId);
 
-  if (expense) {
-    res.status(200).json({
-      expenseId: expense.expenseId,
-      expenseAmount: expense.expenseAmount,
-      expenseType: expense.expenseType,
-      expenseDate: expense.expenseDate,
-      merchant: expense.merchant,
-      categoryId: expense.categoryId,
-    });
-  } else {
+  if (!expense) {
     res.status(404);
     throw new Error("Expense not found.");
   }
+
+  res.status(200).json({
+    ...expense.toJSON(),
+  });
 });
+
+/*
+
+Get single expense controller (END)
+
+*/
+
+/*
+
+Get all expense controller
+
+*/
 
 const getAllUserExpenses = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const expenses = await Expense.findAll({ where: { userId: userId } });
 
-  if (expenses) {
-    res.status(200).json({
-      expensesData: expenses,
-    });
-  } else {
+  if (!expenses) {
     res.status(404);
-    throw new Error("No expenses available.");
+    throw new Error("No expenses found.");
   }
+
+  res.status(200).json({
+    expensesData: expenses,
+  });
 });
+
+/*
+
+Get all expense controller (END)
+
+*/
+
+/*
+
+Create expense controller
+
+*/
+
+const validateCreateInputs = (res, expenseAmount, expenseType, category) => {
+  if (expenseAmount <= 0) {
+    res.status(400);
+    throw new Error("Expense amount must be greater than 0.");
+  }
+
+  if (category.categoryType !== expenseType) {
+    res.status(400);
+    throw new Error(
+      "Needs and wants type cannot be linked with each other. It must be same for category and expense."
+    );
+  }
+
+  if (category.isActive === false) {
+    res.status(400);
+    throw new Error("Exceeded categories cannot be used again.");
+  }
+};
+
+const createCalculations = async ({
+  expenseAmount,
+  category,
+  budget,
+  userEmail,
+  t,
+}) => {
+  if (budget) {
+    budget.amountSpent += expenseAmount;
+    budget.amountRemaining -= expenseAmount;
+
+    if (
+      budget.amountSpent >= budget.budgetAmount &&
+      budget.amountRemaining <= 0 &&
+      budget.status !== "Completed"
+    ) {
+      budget.status = "Exceeded";
+
+      const message =
+        "Your spending has gone over the allocated budget. You crossed the set limit and spent more than planned, so it may be a good time to review your recent expenses and adjust for better control.";
+
+      notifyEmail(
+        userEmail,
+        message,
+        `Budget of amount: ${budget.budgetAmount} exceeded.`
+      );
+    }
+
+    await budget.save({ transaction: t });
+  }
+
+  category.limitRemainingAmount -= expenseAmount;
+
+  if (category.limitRemainingAmount <= 0) {
+    category.islimitExceeded = true;
+    category.isActive = false;
+
+    const message =
+      "Your spending in this category has gone over the limit. You’ve spent more than the planned limit, so it’s a good idea to review your expenses here and adjust to stay on track.";
+
+    notifyEmail(
+      userEmail,
+      message,
+      `Category: ${category.categoryName} limit exceeded.`
+    );
+  }
+
+  await category.save({ transaction: t });
+};
 
 const createUserExpense = asyncHandler(async (req, res) => {
   const { expenseAmount, expenseType, expenseDate, merchant, categoryId } =
@@ -52,93 +147,59 @@ const createUserExpense = asyncHandler(async (req, res) => {
     throw new Error("All fields are required.");
   }
 
-  if (expenseAmount <= 0) {
-    res.status(400);
-    throw new Error("Negative values and zero are not allowed.");
-  }
-
   const userId = req.user.userId;
 
-  const category = await Category.findByPk(categoryId);
+  const t = await sequelize.transaction();
 
-  if (category && category.isActive === true) {
-    if (category.categoryType !== expenseType) {
-      res.status(400);
-      throw new Error("The category type and expense type should be same.");
-    }
+  try {
+    const category = await Category.findByPk(categoryId, { transaction: t });
 
-    category.limitRemainingAmount =
-      category.limitRemainingAmount - expenseAmount;
+    const budget = await Budget.findOne(
+      {
+        where: { status: "Active", userId: userId },
+      },
+      { transaction: t }
+    );
 
-    if (category.limitRemainingAmount <= 0) {
-      category.islimitExceeded = true;
-      category.isActive = false;
+    validateCreateInputs(res, expenseAmount, expenseType, category);
 
-      const message = `Your category: ${category.categoryName} of type: ${category.categoryType} limit is being exceeded. This category is not active anymore. Keep your expenses in check and don't waste too much. Be in your limits.`;
-
-      notifyEmail(
-        req.user.email,
-        message,
-        `Category: ${category.categoryName} limit exceeded.`
-      );
-    }
-
-    await category.save();
-
-    const budget = await Budget.findOne({
-      where: { status: "Active", userId: userId },
+    await createCalculations({
+      expenseAmount,
+      category,
+      budget,
+      userEmail: req.user.email,
+      t,
     });
 
-    if (budget) {
-      budget.amountSpent = budget.amountSpent + expenseAmount;
-
-      budget.amountRemaining = budget.amountRemaining - expenseAmount;
-
-      if (
-        budget.amountSpent >= budget.budgetAmount &&
-        budget.amountRemaining <= 0
-      ) {
-        budget.status = "Exceeded";
-
-        const message = `Your current active budget of amount: ${budget.budgetAmount} is being exceeded due to the following expense. This budget is being marked as exceeded. You have to consider your spending habits. They are awful. Best of luck for your next budget.`;
-
-        notifyEmail(
-          req.user.email,
-          message,
-          `Current active budget of amount: ${budget.budgetAmount} exceeded.`
-        );
-      }
-
-      await budget.save();
-    } else {
-      res.status(404);
-      throw new Error("No active budget found.");
-    }
-
     const newExpense = await Expense.create({
-      expenseAmount: expenseAmount,
-      expenseType: expenseType,
-      expenseDate: expenseDate,
-      merchant: merchant,
-      userId: userId,
-      categoryId: category.categoryId,
+      expenseAmount,
+      expenseType,
+      expenseDate,
+      merchant,
+      userId,
+      categoryId,
     });
 
     if (newExpense) {
+      await t.commit();
+
       res.status(201).json({
+        ...newExpense.toJSON(),
         message: "Expense created successfully.",
       });
-    } else {
-      res.status(400);
-      throw new Error("Invalid expense data.");
     }
-  } else {
+  } catch (error) {
+    await t.rollback();
     res.status(400);
-    throw new Error(
-      "The category is not active anymore due to exceeded factor. Select another category or create a new one."
-    );
+    throw new Error(error.message);
   }
 });
+
+/*
+
+Create expense controller (END)
+
+*/
 
 const updateUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
