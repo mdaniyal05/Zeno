@@ -1,36 +1,64 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Income = require("../models/income.model");
+
+/*
+
+Get single income controller
+
+*/
 
 const getUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
   const income = await Income.findByPk(incomeId);
 
-  if (income) {
-    res.status(200).json({
-      incomeId: income.incomeId,
-      incomeAmount: income.incomeAmount,
-      incomeDate: income.incomeDate,
-      incomeSource: income.incomeSource,
-    });
-  } else {
+  if (!income) {
     res.status(404);
     throw new Error("Income not found.");
   }
+
+  res.status(200).json({
+    ...income.toJSON(),
+  });
 });
+
+/*
+
+Get single income controller (END)
+
+*/
+
+/*
+
+Get all income controller
+
+*/
 
 const getAllUserIncomes = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const incomes = await Income.findAll({ where: { userId: userId } });
 
-  if (incomes) {
-    res.status(200).json({
-      incomesData: incomes,
-    });
-  } else {
+  if (!incomes) {
     res.status(404);
     throw new Error("No incomes found.");
   }
+
+  res.status(200).json({
+    incomesData: incomes,
+  });
 });
+
+/*
+
+Get all income controller (END)
+
+*/
+
+/*
+
+Create income controller
+
+*/
 
 const createUserIncome = asyncHandler(async (req, res) => {
   const { incomeAmount, incomeDate, incomeSource } = req.body;
@@ -42,69 +70,132 @@ const createUserIncome = asyncHandler(async (req, res) => {
 
   if (incomeAmount <= 0) {
     res.status(400);
-    throw new Error("Negative values and zero are not allowed.");
+    throw new Error("Income amount must be greater than 0.");
   }
 
   const userId = req.user.userId;
 
-  const newIncome = await Income.create({
-    incomeAmount: incomeAmount,
-    incomeDate: incomeDate,
-    incomeSource: incomeSource,
-    userId: userId,
-  });
+  const t = await sequelize.transaction();
 
-  if (newIncome) {
-    res.status(201).json({
-      message: "Income created successfully.",
-    });
-  } else {
+  try {
+    const newIncome = await Income.create(
+      {
+        incomeAmount: incomeAmount,
+        incomeDate: incomeDate,
+        incomeSource: incomeSource,
+        userId: userId,
+      },
+      { transaction: t }
+    );
+
+    if (newIncome) {
+      await t.commit();
+
+      res.status(201).json({
+        ...newIncome.toJSON(),
+        message: "Income created successfully.",
+      });
+    }
+  } catch (error) {
+    await t.rollback();
     res.status(400);
-    throw new Error("Invalid income data.");
+    throw new Error(error.message);
   }
 });
+
+/*
+
+Create income controller (END)
+
+*/
+
+/*
+
+Update income controller
+
+*/
 
 const updateUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
   const income = await Income.findByPk(incomeId);
 
-  if (income) {
-    if (req.body.incomeAmount <= 0) {
-      res.status(400);
-      throw new Error("Negative values and zero are not allowed.");
-    }
-
-    income.incomeAmount = req.body.incomeAmount || income.incomeAmount;
-    income.incomeDate = req.body.incomeDate || income.incomeDate;
-    income.incomeSource = req.body.incomeSource || income.incomeSource;
-
-    const updatedIncome = await income.save();
-
-    res.status(200).json({
-      incomeAmount: updatedIncome.incomeAmount,
-      incomeDate: updatedIncome.incomeDate,
-      incomeSource: updatedIncome.incomeSource,
-    });
-  } else {
+  if (!income) {
     res.status(404);
     throw new Error("Income not found.");
   }
+
+  if (req.body.incomeAmount <= 0) {
+    res.status(400);
+    throw new Error("Income amount must be greater than 0.");
+  }
+
+  const t = await sequelize.transaction();
+
+  try {
+    Object.assign(income, {
+      incomeAmount: req.body.incomeAmount,
+      incomeDate: req.body.incomeDate,
+      incomeSource: req.body.incomeSource,
+    });
+
+    await income.save({ transaction: t });
+
+    await t.commit();
+
+    res.status(200).json({
+      ...income.toJSON(),
+      message: "Income updated successfully.",
+    });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
+
+/*
+
+Update income controller (END)
+
+*/
+
+/*
+
+Delete income controller
+
+*/
 
 const deleteUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
   const income = await Income.findByPk(incomeId);
 
-  if (income) {
-    await Income.destroy({ where: { incomeId: incomeId } });
-    res.status(200).json({
-      message: `Income deleted successfully.`,
-    });
-  } else {
+  if (!income) {
     res.status(404);
     throw new Error("Income not found.");
   }
+
+  const t = await sequelize.transaction();
+
+  try {
+    await income.destroy({ transaction: t });
+
+    await t.commit();
+
+    res.status(200).json({
+      message: `Income deleted successfully.`,
+    });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
+
+/*
+
+Delete income controller (END)
+
+*/
 
 module.exports = {
   getUserIncome,

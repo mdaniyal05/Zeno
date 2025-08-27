@@ -214,16 +214,19 @@ const createUserTransaction = asyncHandler(async (req, res) => {
 
     const userId = req.user.userId;
 
-    const newTransaction = await Transaction.create({
-      transactionAmount,
-      transactionType,
-      paymentMethod,
-      transactionDate,
-      description,
-      userId,
-      accountId,
-      savingId,
-    });
+    const newTransaction = await Transaction.create(
+      {
+        transactionAmount,
+        transactionType,
+        paymentMethod,
+        transactionDate,
+        description,
+        userId,
+        accountId,
+        savingId,
+      },
+      { transaction: t }
+    );
 
     if (newTransaction) {
       await t.commit();

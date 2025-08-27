@@ -169,14 +169,17 @@ const createUserExpense = asyncHandler(async (req, res) => {
       t,
     });
 
-    const newExpense = await Expense.create({
-      expenseAmount,
-      expenseType,
-      expenseDate,
-      merchant,
-      userId,
-      categoryId,
-    });
+    const newExpense = await Expense.create(
+      {
+        expenseAmount,
+        expenseType,
+        expenseDate,
+        merchant,
+        userId,
+        categoryId,
+      },
+      { transaction: t }
+    );
 
     if (newExpense) {
       await t.commit();
