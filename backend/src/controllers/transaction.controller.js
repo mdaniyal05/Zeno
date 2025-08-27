@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transaction.model");
 const Account = require("../models/account.model");
 const Saving = require("../models/saving.model");
+const sequelize = require("../db/db");
 const notifyEmail = require("../utils/notifyEmail");
 
 const getUserTransaction = asyncHandler(async (req, res) => {
@@ -185,261 +186,257 @@ const createUserTransaction = asyncHandler(async (req, res) => {
   }
 });
 
+/*
+
+Update controller and logic for transaction feature
+
+*/
+
+const validateUpdateInputs = (
+  res,
+  reqBody,
+  newAccount,
+  newSaving,
+  transaction
+) => {
+  if (reqBody.transactionAmount <= 0) {
+    res.status(400);
+    throw new Error("Transaction amount must be greater than 0.");
+  }
+
+  if (reqBody.transactionType === "Saving" && !reqBody.savingId) {
+    res.status(400);
+    throw new Error(
+      "Please provide the saving field for a Saving transaction."
+    );
+  }
+
+  if (newSaving && newSaving.status !== "Active") {
+    res.status(400);
+    throw new Error("Selected saving must  be active.");
+  }
+
+  if (
+    transaction.transactionType === "Saving" &&
+    (reqBody.transactionType === "Expense" ||
+      reqBody.transactionType === "Income")
+  ) {
+    res.status(400);
+    throw new Error(
+      "You cannot change saving transaction into epxense or income."
+    );
+  }
+
+  if (
+    reqBody.transactionType === "Saving" &&
+    (transaction.transactionType === "Expense" ||
+      transaction.transactionType === "Income")
+  ) {
+    res.status(400);
+    throw new Error(
+      "You cannot change income or expense transaction into saving."
+    );
+  }
+
+  if (
+    reqBody.transactionType === "Saving" &&
+    newAccount.accountType !== "Savings"
+  ) {
+    res.status(400);
+    throw new Error("Saving transaction must be linked to a Savings account.");
+  }
+
+  if (
+    (reqBody.transactionType === "Expense" ||
+      reqBody.transactionType === "Income") &&
+    newAccount.accountType === "Savings"
+  ) {
+    res.status(400);
+    throw new Error("Expense or Income cannot be linked to a Savings account.");
+  }
+
+  if (
+    reqBody.transactionType === "Expense" &&
+    newAccount.accountBalance < reqBody.transactionAmount
+  ) {
+    res.status(400);
+    throw new Error(
+      "Expense transaction amount cannot be greater than account balance."
+    );
+  }
+
+  if (
+    (reqBody.transactionType === "Expense" ||
+      reqBody.transactionType === "Income") &&
+    reqBody.savingId
+  ) {
+    res.status(400);
+    throw new Error(
+      "Do not provide saving for Expense or Income transactions."
+    );
+  }
+};
+
+const calculateBalances = async ({
+  reqBody,
+  transaction,
+  oldAccount,
+  newAccount,
+  oldSaving,
+  newSaving,
+  userEmail,
+  t,
+}) => {
+  const oldTransactionAmount = transaction.transactionAmount;
+  const newTransactionAmount = reqBody.transactionAmount;
+
+  if (
+    reqBody.transactionType === "Saving" ||
+    reqBody.transactionType === "Income"
+  ) {
+    if (newAccount.accountId !== oldAccount.accountId) {
+      oldAccount.accountBalance -= oldTransactionAmount;
+      newAccount.accountBalance += newTransactionAmount;
+
+      if (oldAccount === "Savings") {
+        oldSaving.currentAmount -= oldTransactionAmount;
+      }
+    }
+
+    if (transaction.transactionType === "Expense") {
+      oldAccount.accountBalance += oldTransactionAmount * 2;
+    }
+
+    if (newTransactionAmount !== oldTransactionAmount) {
+      oldAccount.accountBalance -= oldTransactionAmount;
+      oldAccount.accountBalance += newTransactionAmount;
+    }
+
+    await oldAccount.save({ transaction: t });
+    await newAccount.save({ transaction: t });
+  }
+
+  if (reqBody.transactionType === "Saving") {
+    if (newSaving.savingId !== oldSaving.savingId) {
+      oldSaving.currentAmount -= oldTransactionAmount;
+
+      newSaving.currentAmount += newTransactionAmount;
+    }
+
+    if (newTransactionAmount !== oldTransactionAmount) {
+      oldSaving.currentAmount -= oldTransactionAmount;
+      oldSaving.currentAmount += newTransactionAmount;
+    }
+
+    if (
+      newSaving.currentAmount >= newSaving.targetAmount &&
+      newSaving.status !== "Completed"
+    ) {
+      newSaving.status = "Completed";
+      const message =
+        "Congratulations! You have reached your savings target. Keep up the good financial record.";
+      await notifyEmail(
+        userEmail,
+        message,
+        `Savings target of: ${newSaving.targetAmount} completed.`
+      );
+    }
+
+    await oldSaving.save({ transaction: t });
+    await newSaving.save({ transaction: t });
+  }
+
+  if (reqBody.transactionType === "Expense") {
+    if (newAccount.accountId !== oldAccount.accountId) {
+      oldAccount.accountBalance += oldTransactionAmount;
+      newAccount.accountBalance -= newTransactionAmount;
+    }
+
+    if (transaction.transactionType === "Income") {
+      oldAccount.accountBalance -= oldTransactionAmount * 2;
+    }
+
+    if (newTransactionAmount !== oldTransactionAmount) {
+      oldAccount.accountBalance += oldTransactionAmount;
+      oldAccount.accountBalance -= newTransactionAmount;
+    }
+
+    await oldAccount.save({ transaction: t });
+    await newAccount.save({ transaction: t });
+  }
+};
+
 const updateUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
 
-  let checkCalculation = false;
-
-  if (transaction) {
-    const account = await Account.findByPk(transaction.accountId);
-    const newAccount = await Account.findByPk(req.body.accountId);
-
-    const saving = await Saving.findOne({
-      where: { savingId: transaction.savingId },
-    });
-    const newSaving = await Saving.findOne({
-      where: { savingId: req.body.savingId },
-    });
-
-    if (req.body.transactionAmount <= 0) {
-      res.status(400);
-      throw new Error("Negative values and zero are not allowed.");
-    }
-
-    if (
-      req.body.transactionType === transaction.transactionType &&
-      req.body.accountId === account.accountId
-    ) {
-      checkCalculation = true;
-    }
-
-    if (
-      req.body.transactionType === "Saving" &&
-      newAccount.accountType === "Savings"
-    ) {
-      if (!req.body.savingId) {
-        res.status(400);
-        throw new Error("Please provide the saving field.");
-      }
-
-      if (newAccount.accountId !== transaction.accountId) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        newAccount.accountBalance =
-          newAccount.accountBalance + req.body.transactionAmount;
-
-        await account.save();
-        await newAccount.save();
-
-        checkCalculation = true;
-      }
-
-      if (newSaving.savingId !== transaction.savingId) {
-        saving.currentAmount =
-          saving.currentAmount - transaction.transactionAmount;
-
-        newSaving.currentAmount =
-          newSaving.currentAmount + req.body.transactionAmount;
-
-        if (newSaving.currentAmount >= newSaving.targetAmount) {
-          newSaving.status = "Completed";
-
-          const message =
-            "Congratulations! You have reached your savings target. Keep up the good financial record.";
-
-          notifyEmail(
-            req.user.email,
-            message,
-            `Savings target of: ${newSaving.targetAmount} completed.`
-          );
-        }
-
-        await saving.save();
-        await newSaving.save();
-
-        checkCalculation = true;
-      }
-
-      if (req.body.transactionAmount !== transaction.transactionAmount) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        account.accountBalance =
-          account.accountBalance + req.body.transactionAmount;
-
-        saving.currentAmount =
-          saving.currentAmount - transaction.transactionAmount;
-
-        saving.currentAmount =
-          saving.currentAmount + req.body.transactionAmount;
-
-        if (saving.currentAmount >= saving.targetAmount) {
-          saving.status = "Completed";
-
-          const message =
-            "Congratulations! You have reached your savings target. Keep up the good financial record.";
-
-          notifyEmail(
-            req.user.email,
-            message,
-            `Savings target of: ${saving.targetAmount} completed.`
-          );
-        }
-
-        await account.save();
-        await saving.save();
-
-        checkCalculation = true;
-      }
-    }
-
-    if (
-      req.body.transactionType === "Expense" &&
-      newAccount.accountType !== "Savings"
-    ) {
-      if (req.body.savingId) {
-        res.status(400);
-        throw new Error(
-          "Please set saving to none when doing income or expense transaction."
-        );
-      }
-
-      if (account.accountType === "Income") {
-        account.accountBalance =
-          account.accountBalance + transaction.transactionAmount;
-
-        await account.save();
-      }
-
-      if (account.accountType === "Savings") {
-        saving.currentAmount =
-          saving.currentAmount - transaction.transactionAmount;
-
-        await saving.save();
-      }
-
-      if (newAccount.accountId !== transaction.accountId) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        await account.save();
-
-        if (req.body.transactionAmount < newAccount.accountBalance) {
-          newAccount.accountBalance =
-            newAccount.accountBalance + req.body.transactionAmount;
-
-          await newAccount.save();
-        } else {
-          res.status(400);
-          throw new Error(
-            "Transaction amount cannot be greater than account balance."
-          );
-        }
-
-        checkCalculation = true;
-      }
-
-      if (req.body.transactionAmount !== transaction.transactionAmount) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        account.accountBalance =
-          account.accountBalance + req.body.transactionAmount;
-
-        await account.save();
-      }
-
-      checkCalculation = true;
-    }
-
-    if (
-      req.body.transactionType === "Income" &&
-      newAccount.accountType !== "Savings"
-    ) {
-      if (req.body.savingId) {
-        res.status(400);
-        throw new Error(
-          "Please set saving to none when doing income or expense transaction."
-        );
-      }
-
-      if (account.accountType === "Expense") {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        await account.save();
-      }
-
-      if (account.accountType === "Savings") {
-        saving.currentAmount =
-          saving.currentAmount - transaction.transactionAmount;
-
-        await saving.save();
-      }
-
-      if (newAccount.accountId !== transaction.accountId) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        await account.save();
-
-        newAccount.accountBalance =
-          newAccount.accountBalance + req.body.transactionAmount;
-
-        await newAccount.save();
-
-        checkCalculation = true;
-      }
-
-      if (req.body.transactionAmount !== transaction.transactionAmount) {
-        account.accountBalance =
-          account.accountBalance - transaction.transactionAmount;
-
-        account.accountBalance =
-          account.accountBalance + req.body.transactionAmount;
-
-        await account.save();
-
-        checkCalculation = true;
-      }
-    }
-
-    if (checkCalculation) {
-      transaction.transactionAmount =
-        req.body.transactionAmount || transaction.transactionAmount;
-      transaction.transactionType =
-        req.body.transactionType || transaction.transactionType;
-      transaction.paymentMethod =
-        req.body.paymentMethod || transaction.paymentMethod;
-      transaction.transactionDate =
-        req.body.transactionDate || transaction.transactionDate;
-      transaction.description = req.body.description || transaction.description;
-      transaction.accountId = req.body.accountId || transaction.accountId;
-      transaction.savingId = req.body.savingId || transaction.savingId;
-
-      const updatedTransaction = await transaction.save();
-
-      res.status(200).json({
-        transactionAmount: updatedTransaction.transactionAmount,
-        transactionType: updatedTransaction.transactionType,
-        paymentMethod: updatedTransaction.paymentMethod,
-        transactionDate: updatedTransaction.transactionDate,
-        description: updatedTransaction.description,
-        accountId: updatedTransaction.accountId,
-        message: "Transaction updated successfully.",
-      });
-    } else {
-      throw new Error(
-        "Unable to create transaction. Please check the types you have selected. (Saving type will not work with any other type except saving and expense or income type will only work with current and default types.)"
-      );
-    }
-  } else {
+  if (!transaction) {
     res.status(404);
     throw new Error("Transaction not found.");
   }
+
+  const t = await sequelize.transaction();
+
+  try {
+    const oldAccount = await Account.findByPk(transaction.accountId, {
+      transaction: t,
+    });
+
+    const newAccount = await Account.findByPk(req.body.accountId, {
+      transaction: t,
+    });
+
+    const oldSaving = transaction.savingId
+      ? await Saving.findByPk(transaction.savingId, { transaction: t })
+      : null;
+
+    const newSaving = req.body.savingId
+      ? await Saving.findByPk(req.body.savingId, { transaction: t })
+      : null;
+
+    validateUpdateInputs(res, req.body, newAccount, newSaving, transaction);
+
+    await calculateBalances({
+      transaction,
+      reqBody: req.body,
+      oldAccount,
+      newAccount,
+      oldSaving,
+      newSaving,
+      t,
+      userEmail: req.user.email,
+    });
+
+    Object.assign(transaction, {
+      transactionAmount: req.body.transactionAmount,
+      transactionType: req.body.transactionType,
+      paymentMethod: req.body.paymentMethod,
+      transactionDate: req.body.transactionDate,
+      description: req.body.description,
+      accountId: req.body.accountId,
+      savingId: req.body.savingId,
+    });
+
+    await transaction.save({ transaction: t });
+
+    await t.commit();
+
+    res.status(200).json({
+      ...transaction.toJSON(),
+      message: "Transaction updated successfully.",
+    });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
+
+/*
+
+Update controller and logic for transaction feature (END)
+
+*/
 
 const deleteUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
@@ -457,7 +454,7 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
     }
 
     if (
-      transaction.transactionType === "Savings" ||
+      transaction.transactionType === "Saving" ||
       transaction.transactionType === "Income"
     ) {
       account.accountBalance =
