@@ -154,12 +154,10 @@ const createUserExpense = asyncHandler(async (req, res) => {
   try {
     const category = await Category.findByPk(categoryId, { transaction: t });
 
-    const budget = await Budget.findOne(
-      {
-        where: { status: "Active", userId: userId },
-      },
-      { transaction: t }
-    );
+    const budget = await Budget.findOne({
+      where: { status: "Active", userId: userId },
+      transaction: t,
+    });
 
     validateCreateInputs(res, expenseAmount, expenseType, category);
 
@@ -316,12 +314,10 @@ const updateUserExpense = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
-    const budget = await Budget.findOne(
-      {
-        where: { status: "Active", userId: userId },
-      },
-      { transaction: t }
-    );
+    const budget = await Budget.findOne({
+      where: { status: "Active", userId: userId },
+      transaction: t,
+    });
 
     validateUpdateInputs(req.body, res, newCategory);
 
@@ -364,41 +360,66 @@ Update expense controller (END)
 
 */
 
+/*
+
+Delete expense controller
+
+*/
+
 const deleteUserExpense = asyncHandler(async (req, res) => {
   const expenseId = req.params.id;
   const expense = await Expense.findByPk(expenseId);
 
-  const category = await Category.findByPk(expense.categoryId);
-
-  if (expense && category) {
-    const budget = await Budget.findOne({
-      where: { status: "Active", userId: req.user.userId },
-    });
-
-    if (budget.status === "Active") {
-      budget.amountSpent = budget.amountSpent - expense.expenseAmount;
-
-      budget.amountRemaining = budget.amountRemaining + expense.expenseAmount;
-
-      await budget.save();
-    }
-
-    if (category.isActive === true) {
-      category.limitRemainingAmount =
-        category.limitRemainingAmount + expense.expenseAmount;
-
-      await category.save();
-    }
-
-    await Expense.destroy({ where: { expenseId: expenseId } });
-    res.status(200).json({
-      message: `Expense deleted successfully.`,
-    });
-  } else {
+  if (!expense) {
     res.status(404);
     throw new Error("Expense not found.");
   }
+
+  const t = await sequelize.transaction();
+
+  try {
+    const category = await Category.findByPk(expense.categoryId, {
+      transaction: t,
+    });
+
+    const budget = await Budget.findOne({
+      where: { status: "Active", userId: req.user.userId },
+      transaction: t,
+    });
+
+    if (category) {
+      if (category.isActive === true) {
+        category.limitRemainingAmount += expense.expenseAmount;
+      }
+
+      await category.save({ transaction: t });
+    }
+
+    if (budget) {
+      budget.amountSpent -= expense.expenseAmount;
+      budget.amountRemaining += expense.expenseAmount;
+
+      await budget.save({ transaction: t });
+    }
+    await expense.destroy({ transaction: t });
+
+    await t.commit();
+
+    res.status(200).json({
+      message: `Expense deleted successfully.`,
+    });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
 });
+
+/*
+
+Delete expense controller (END)
+
+*/
 
 module.exports = {
   getUserExpense,
