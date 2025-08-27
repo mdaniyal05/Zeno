@@ -438,44 +438,70 @@ Update controller and logic for transaction feature (END)
 
 */
 
+/*
+
+Delete controller and logic for transaction feature
+
+*/
+
 const deleteUserTransaction = asyncHandler(async (req, res) => {
   const transactionId = req.params.id;
   const transaction = await Transaction.findByPk(transactionId);
 
-  if (transaction) {
-    const account = await Account.findByPk(transaction.accountId);
-    const saving = await Saving.findByPk(transaction.savingId);
+  if (!transaction) {
+    res.status(404);
+    throw new Error("Transaction not found.");
+  }
 
-    if (saving && transaction.transactionType === "Saving") {
-      saving.currentAmount =
-        saving.currentAmount - transaction.transactionAmount;
+  const t = await sequelize.transaction();
 
-      await saving.save();
+  try {
+    const account = await Account.findByPk(transaction.accountId, {
+      transaction: t,
+    });
+
+    const saving = transaction.savingId
+      ? await Saving.findByPk(transaction.savingId, { transaction: t })
+      : null;
+
+    if (saving) {
+      saving.currentAmount -= transaction.transactionAmount;
+
+      await saving.save({ transaction: t });
     }
 
-    if (
-      transaction.transactionType === "Saving" ||
-      transaction.transactionType === "Income"
-    ) {
-      account.accountBalance =
-        account.accountBalance - transaction.transactionAmount;
-    } else if (transaction.transactionType === "Expense") {
-      account.accountBalance =
-        account.accountBalance + transaction.transactionAmount;
+    if (account) {
+      if (transaction.transactionType === "Expense") {
+        account.accountBalance += transaction.transactionAmount;
+      } else if (
+        transaction.transactionType === "Saving" ||
+        transaction.transactionType === "Income"
+      ) {
+        account.accountBalance -= transaction.transactionAmount;
+      }
+
+      await account.save({ transaction: t });
     }
 
-    await account.save();
+    await transaction.destroy({ transaction: t });
 
-    await Transaction.destroy({ where: { transactionId: transactionId } });
+    await t.commit();
 
     res.status(200).json({
       message: `Transaction deleted successfully.`,
     });
-  } else {
-    res.status(404);
-    throw new Error("Transaction not found.");
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
   }
 });
+
+/*
+
+Delete controller and logic for transaction feature (END)
+
+*/
 
 module.exports = {
   getUserTransaction,
