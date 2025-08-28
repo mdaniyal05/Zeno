@@ -1,3 +1,4 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Budget = require("../models/budget.model");
 

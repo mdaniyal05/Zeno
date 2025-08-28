@@ -1,3 +1,4 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Saving = require("../models/saving.model");
 const Transaction = require("../models/transaction.model");

@@ -1,7 +1,14 @@
+const sequelize = require("../db/db");
 const asyncHandler = require("express-async-handler");
 const Otp = require("../models/otp.model");
 const generateOtp = require("../utils/generateOtp");
 const verifyEmail = require("../utils/verificationEmail");
+
+/*
+
+Generate OTP controller
+
+*/
 
 const generateOTP = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -68,5 +75,11 @@ const generateOTP = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+/*
+
+Generate OTP controller (END)
+
+*/
 
 module.exports = generateOTP;
