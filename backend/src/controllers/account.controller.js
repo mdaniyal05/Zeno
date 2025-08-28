@@ -119,7 +119,7 @@ const createUserAccount = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -171,7 +171,7 @@ const updateUserAccount = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -218,7 +218,7 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });

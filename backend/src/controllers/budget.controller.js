@@ -109,7 +109,7 @@ const createUserBudget = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -160,7 +160,7 @@ const updateUserBudget = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -198,7 +198,7 @@ const deleteUserBudget = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });

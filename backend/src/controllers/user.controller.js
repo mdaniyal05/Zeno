@@ -81,14 +81,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
-  }
-
-  if (user) {
-  } else {
-    res.status(404);
-    throw new Error("User not found.");
   }
 });
 
@@ -130,7 +124,7 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
       });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });

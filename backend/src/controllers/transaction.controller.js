@@ -238,7 +238,7 @@ const createUserTransaction = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -490,7 +490,7 @@ const updateUserTransaction = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
@@ -555,7 +555,7 @@ const deleteUserTransaction = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 });
