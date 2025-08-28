@@ -46,6 +46,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const user = await User.findByPk(userId);
 
+  if (!req.body.firstName || !req.body.lastName) {
+    res.status(400);
+    throw new Error("First and last name required.");
+  }
+
   if (!user) {
     res.status(404);
     throw new Error("User not found.");

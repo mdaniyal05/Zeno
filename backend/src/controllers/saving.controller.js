@@ -121,6 +121,16 @@ const updateUserSaving = asyncHandler(async (req, res) => {
   const savingId = req.params.id;
   const saving = await Saving.findByPk(savingId);
 
+  if (
+    !req.body.title ||
+    !req.body.targetAmount ||
+    !req.body.description ||
+    !req.body.accountId
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (!saving) {
     res.status(404);
     throw new Error("Saving not found.");

@@ -122,6 +122,16 @@ const updateUserCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.id;
   const category = await Category.findByPk(categoryId);
 
+  if (
+    !req.body.categoryName ||
+    !req.body.categoryType ||
+    !req.body.description ||
+    !req.body.limit
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (!category) {
     res.status(404);
     throw new Error("Category not found.");

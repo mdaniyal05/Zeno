@@ -140,6 +140,17 @@ const updateUserAccount = asyncHandler(async (req, res) => {
   const accountId = req.params.id;
   const account = await Account.findByPk(accountId);
 
+  if (
+    !req.body.accountName ||
+    !req.body.accountType ||
+    !req.body.accountBalance ||
+    !req.body.bankName ||
+    !req.body.accountNumber
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (!account) {
     res.status(404);
     throw new Error("Account not found.");

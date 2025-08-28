@@ -262,6 +262,18 @@ const validateUpdateInputs = (
   newSaving,
   transaction
 ) => {
+  if (
+    !reqBody.transactionAmount ||
+    !reqBody.transactionType ||
+    !reqBody.paymentMethod ||
+    !reqBody.transactionDate ||
+    !reqBody.description ||
+    !reqBody.accountId
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (reqBody.transactionAmount <= 0) {
     res.status(400);
     throw new Error("Transaction amount must be greater than 0.");

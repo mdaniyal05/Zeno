@@ -131,6 +131,16 @@ const updateUserBudget = asyncHandler(async (req, res) => {
   const budgetId = req.params.id;
   const budget = await Budget.findByPk(budgetId);
 
+  if (
+    !req.body.startDate ||
+    !req.body.endDate ||
+    !req.body.budgetAmount ||
+    !req.body.description
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (!budget) {
     res.status(404);
     throw new Error("Budget not found.");

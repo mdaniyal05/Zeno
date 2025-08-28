@@ -119,6 +119,15 @@ const updateUserIncome = asyncHandler(async (req, res) => {
   const incomeId = req.params.id;
   const income = await Income.findByPk(incomeId);
 
+  if (
+    !req.body.incomeAmount ||
+    !req.body.incomeDate ||
+    !req.body.incomeSource
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (!income) {
     res.status(404);
     throw new Error("Income not found.");

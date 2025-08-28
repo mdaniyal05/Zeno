@@ -209,6 +209,17 @@ Update expense controller
 */
 
 const validateUpdateInputs = (reqBody, res, newCategory) => {
+  if (
+    !reqBody.expenseAmount ||
+    !reqBody.expenseType ||
+    !reqBody.expenseDate ||
+    !reqBody.merchant ||
+    !reqBody.categoryId
+  ) {
+    res.status(400);
+    throw new Error("All fields are required.");
+  }
+
   if (reqBody.expenseAmount <= 0) {
     res.status(400);
     throw new Error("Expense amount must be greater than 0.");
