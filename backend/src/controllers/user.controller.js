@@ -7,36 +7,52 @@ const cookieOptions = {
   sameSite: "strict",
 };
 
+/*
+
+Get user profile controller
+
+*/
+
 const getUserProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  const user = await User.findByPk(userId);
+  const user = await User.findByPk(userId, {
+    attributes: { exclude: ["password", "refreshToken"] },
+  });
 
-  if (user) {
-    res.status(200).json({
-      userId: user.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      dateOfBirth: user.dateOfBirth,
-      about: user.about,
-      email: user.email,
-    });
-  } else {
+  if (!user) {
     res.status(404);
     throw new Error("User not found.");
   }
+
+  res.status(200).json({
+    ...user.toJSON(),
+  });
 });
+
+/*
+
+Get user profile controlle (END)
+
+*/
+
+/*
+
+Update user profile controller
+
+*/
 
 const updateUserProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const user = await User.findByPk(userId);
 
-  if (user) {
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
-    user.about = req.body.about || user.about;
-    user.email = req.body.email || user.email;
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
 
+  const t = await sequelize.transaction();
+
+  try {
     if (req.body.password) {
       if (req.body.password === req.body.confirmPassword) {
         user.password = req.body.password;
@@ -46,27 +62,63 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       }
     }
 
-    const updatedUser = await user.save();
+    Object.assign(user, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      about: req.body.about,
+    });
+
+    await user.save({ transaction: t });
+
+    await t.commit();
 
     res.status(200).json({
-      userId: updatedUser.userId,
-      fullName: `${updatedUser.firstName} ${updatedUser.lastName}`,
-      dateOfBirth: updatedUser.dateOfBirth,
-      about: updatedUser.about,
-      email: updatedUser.email,
+      userId: user.userId,
+      fullName: `${user.firstName} ${user.lastName}`,
+      dateOfBirth: user.dateOfBirth,
+      about: user.about,
     });
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
+  }
+
+  if (user) {
   } else {
     res.status(404);
     throw new Error("User not found.");
   }
 });
 
+/*
+
+Update user profile controller (END)
+
+*/
+
+/*
+
+Delete user profile controller
+
+*/
+
 const deleteUserProfile = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const user = await User.findByPk(userId);
 
-  if (user) {
-    await User.destroy({ where: { userId: userId } });
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+
+  const t = await sequelize.transaction();
+
+  try {
+    await user.destroy({ transaction: t });
+
+    await t.commit();
 
     res
       .status(200)
@@ -74,13 +126,20 @@ const deleteUserProfile = asyncHandler(async (req, res) => {
       .clearCookie("refreshToken", cookieOptions)
       .json({
         message:
-          "Your profile and all your information has been deleted successfully. We are really sad to see you go.",
+          "Your profile and all your information is deleted successfully. We are really sad to see you go.",
       });
-  } else {
-    res.status(404);
-    throw new Error("User not found.");
+  } catch (error) {
+    await t.rollback();
+    res.status(400);
+    throw new Error(error.message);
   }
 });
+
+/*
+
+Delete user profile controller
+
+*/
 
 module.exports = {
   getUserProfile,
