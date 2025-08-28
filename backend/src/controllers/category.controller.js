@@ -39,7 +39,7 @@ const getAllUserCategories = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const categories = await Category.findAll({ where: { userId: userId } });
 
-  if (!categories) {
+  if (categories.length === 0) {
     res.status(404);
     throw new Error("No categories found.");
   }

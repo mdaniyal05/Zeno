@@ -41,7 +41,7 @@ const getAllUserExpenses = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const expenses = await Expense.findAll({ where: { userId: userId } });
 
-  if (!expenses) {
+  if (expenses.length === 0) {
     res.status(404);
     throw new Error("No expenses found.");
   }

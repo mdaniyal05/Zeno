@@ -41,7 +41,7 @@ const getAllUserTransactions = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const transactions = await Transaction.findAll({ where: { userId: userId } });
 
-  if (!transactions) {
+  if (transactions.length === 0) {
     res.status(404);
     throw new Error("No transactions found.");
   }

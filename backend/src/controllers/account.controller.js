@@ -40,7 +40,7 @@ const getAllUserAccounts = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const accounts = await Account.findAll({ where: { userId: userId } });
 
-  if (!accounts) {
+  if (accounts.length === 0) {
     res.status(404);
     throw new Error("No accounts found.");
   }

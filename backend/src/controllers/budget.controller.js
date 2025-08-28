@@ -38,7 +38,7 @@ const getAllUserBudgets = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const budgets = await Budget.findAll({ where: { userId: userId } });
 
-  if (!budgets) {
+  if (budgets.length === 0) {
     res.status(404);
     throw new Error("No budgets found.");
   }

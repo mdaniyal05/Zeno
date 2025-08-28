@@ -38,7 +38,7 @@ const getAllUserIncomes = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const incomes = await Income.findAll({ where: { userId: userId } });
 
-  if (!incomes) {
+  if (incomes.length === 0) {
     res.status(404);
     throw new Error("No incomes found.");
   }

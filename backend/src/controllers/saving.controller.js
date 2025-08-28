@@ -39,7 +39,7 @@ const getAllUserSavings = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
   const savings = await Saving.findAll({ where: { userId: userId } });
 
-  if (!savings) {
+  if (savings.length === 0) {
     res.status(404);
     throw new Error("No savings found.");
   }
