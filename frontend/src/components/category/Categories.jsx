@@ -95,7 +95,7 @@ export default function Categories() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this category?"
+                          "Are you sure you want to delete this category? All related expenses will be deleted. All your tracked data for this category will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

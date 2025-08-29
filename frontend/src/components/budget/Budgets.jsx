@@ -87,7 +87,7 @@ export default function Budgets() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this budget?"
+                          "Are you sure you want to delete this budget? All your tracked data for this budget will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

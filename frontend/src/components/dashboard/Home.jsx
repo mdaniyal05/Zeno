@@ -81,7 +81,7 @@ export default function Home() {
             caption={"Savings Rate"}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
           <MetricCard
             title={"💸"}
             value={`${budgetUtilization} %`}
@@ -99,12 +99,12 @@ export default function Home() {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <ActiveBudgetPieChart dataset={activeBudgetPieChart} />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TotalIncomeExpenseSavingPieChart
             dataset={currentYearTotalIncomeExpenseSavingPieChartDataset}
           />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+          <ActiveBudgetPieChart dataset={activeBudgetPieChart} />
         </Grid>
         {insights.map((insight, index) => (
           <Grid size={{ xs: 12, sm: 4, lg: 2 }} key={index}>

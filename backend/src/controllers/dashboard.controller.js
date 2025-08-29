@@ -21,6 +21,12 @@ const months = [
   { month: "Dec" },
 ];
 
+const colors = [
+  "hsl(210.2, 100%, 35.1%)",
+  "hsl(210, 98.4%, 47.8%)",
+  "hsl(209.8, 100%, 64.9%)",
+];
+
 // Create monthly income, expense and saving dataset
 
 const monthlyIncomeExpenseSaving = (
@@ -95,12 +101,6 @@ const totalIncomeExpenseSaving = (
       Number(totalExpenseData[0].allExpense || 0) +
       Number(totalSavingData[0].allSaving || 0);
 
-    const colors = [
-      "hsl(220, 25%, 65%)",
-      "hsl(220, 25%, 45%)",
-      "hsl(220, 25%, 30%)",
-    ];
-
     return [
       ...totalIncomeData.map((obj, idx) => ({
         id: idx,
@@ -141,11 +141,6 @@ const totalIncomeExpenseSaving = (
 const activeBudget = (currentBudget) => {
   if (currentBudget) {
     const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
-    const colors = [
-      "hsl(220, 25%, 65%)",
-      "hsl(220, 25%, 45%)",
-      "hsl(220, 25%, 30%)",
-    ];
 
     const labelMap = {
       budgetAmount: "Budget amount",

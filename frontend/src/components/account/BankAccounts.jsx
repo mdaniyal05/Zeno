@@ -88,7 +88,7 @@ export default function BankAccounts() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this bank account?"
+                          "Are you sure you want to delete this bank account? All related transactions will be deleted. All your tracked data for this bank account will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

@@ -7,8 +7,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import MenuButton from "./MenuButton";
 import MenuContent from "./MenuContent";
 import { useLogoutMutation } from "../../../redux/slices/authApiSlice";
 import { useDeleteProfileMutation } from "../../../redux/slices/userApiSlice";
@@ -16,6 +14,7 @@ import { logout } from "../../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import AlertDialog from "../../ui/AlertDialog";
 
 function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
   const dispatch = useDispatch();
@@ -25,18 +24,6 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
 
   const [logoutApiCall] = useLogoutMutation();
   const [deleteProfile] = useDeleteProfileMutation();
-
-  const deletProfileHandler = async () => {
-    try {
-      await deleteProfile();
-      navigate("/");
-      toast.success(
-        "Profile deleted successfully. We are sad to see you leave."
-      );
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
-    }
-  };
 
   const logoutHandler = async () => {
     try {
@@ -81,9 +68,6 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
               {userInfo.fullName}
             </Typography>
           </Stack>
-          <MenuButton showBadge>
-            <NotificationsRoundedIcon />
-          </MenuButton>
         </Stack>
         <Divider />
         <Stack sx={{ flexGrow: 1 }}>
@@ -110,15 +94,24 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
           >
             Logout
           </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            fullWidth
-            startIcon={<DeleteIcon />}
-            onClick={deletProfileHandler}
-          >
-            Delete Profile
-          </Button>
+          <AlertDialog
+            icon={<DeleteIcon />}
+            title={"Confirmation"}
+            contentText={
+              "Are you sure you want to delete your profile? All your data will be lost."
+            }
+            mutation={() =>
+              deleteProfile().then(
+                navigate("/").then(
+                  toast.success(
+                    "Profile deleted successfully. Sad to see your leave."
+                  )
+                )
+              )
+            }
+            changeIconType={true}
+            buttonText={"Delete Profile"}
+          />
         </Stack>
       </Stack>
     </Drawer>

@@ -82,7 +82,7 @@ export default function Savings() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this saving? All your tracked data for this saving will be lost."
+                          "Are you sure you want to delete this saving? All related transactions will be deleted. All your tracked data for this saving will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

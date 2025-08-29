@@ -81,7 +81,7 @@ export default function Expenses() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this expense?"
+                          "Are you sure you want to delete this expense? All your tracked data for this expense will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

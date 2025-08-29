@@ -84,7 +84,7 @@ export default function Transactions() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this transaction?"
+                          "Are you sure you want to delete this transaction? All your tracked data for this transaction will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>

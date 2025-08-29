@@ -12,7 +12,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialog({ icon, contentText, title, mutation }) {
+export default function AlertDialog({
+  icon,
+  contentText,
+  title,
+  mutation,
+  changeIconType = false,
+  buttonText = "",
+}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -25,7 +32,20 @@ export default function AlertDialog({ icon, contentText, title, mutation }) {
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleClickOpen}>{icon}</IconButton>
+      {changeIconType ? (
+        <Button
+          variant="outlined"
+          color="error"
+          fullWidth
+          startIcon={icon}
+          onClick={handleClickOpen}
+        >
+          {buttonText}
+        </Button>
+      ) : (
+        <IconButton onClick={handleClickOpen}>{icon}</IconButton>
+      )}
+
       <Dialog
         open={open}
         slots={{

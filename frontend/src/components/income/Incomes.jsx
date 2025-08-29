@@ -78,7 +78,7 @@ export default function Incomes() {
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
-                          "Are you sure you want to delete this income?"
+                          "Are you sure you want to delete this income? All your tracked data for this income will be lost."
                         }
                         title={"Confirmation"}
                         mutation={() =>
