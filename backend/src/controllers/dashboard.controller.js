@@ -21,6 +21,8 @@ const months = [
   { month: "Dec" },
 ];
 
+// Create monthly income, expense and saving dataset
+
 const monthlyIncomeExpenseSaving = (
   monthlyIncomeData,
   monthlyExpenseData,
@@ -40,6 +42,10 @@ const monthlyIncomeExpenseSaving = (
     };
   });
 };
+
+// Create monthly income, expense and saving dataset (END)
+
+// Create last month daily income, expense and saving dataset
 
 const dailyIncomeExpenseSaving = (
   dailyIncome,
@@ -69,6 +75,10 @@ const dailyIncomeExpenseSaving = (
     };
   });
 };
+
+// Create last month daily income, expense and saving dataset (END)
+
+// Create current year total all income, expense and saving dataset
 
 const totalIncomeExpenseSaving = (
   totalIncomeData,
@@ -124,6 +134,10 @@ const totalIncomeExpenseSaving = (
   return [];
 };
 
+// Create current year total all income, expense and saving dataset (END)
+
+// Create current active budget dataset
+
 const activeBudget = (currentBudget) => {
   if (currentBudget) {
     const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
@@ -153,11 +167,19 @@ const activeBudget = (currentBudget) => {
   return [];
 };
 
+// Create current active budget dataset (END)
+
+// Calculate monthly income dataset
+
 const monthlyIncomeCalculation = (monthlyIncome) =>
   months.map((month) => {
     const income = monthlyIncome.find((i) => i.month === month.month) || {};
     return { month: month.month, totalIncome: Number(income.totalIncome) || 0 };
   });
+
+// Calculate monthly income dataset (END)
+
+// Calculate monthly expense dataset
 
 const monthlyExpenseCalculation = (monthlyExpense) =>
   months.map((month) => {
@@ -168,11 +190,23 @@ const monthlyExpenseCalculation = (monthlyExpense) =>
     };
   });
 
+// Calculate monthly expense dataset (END)
+
+// Calculate monthly saving dataset
+
 const monthlySavingCalculation = (monthlySaving) =>
   months.map((month) => {
     const saving = monthlySaving.find((s) => s.month === month.month) || {};
     return { month: month.month, totalSaving: Number(saving.totalSaving) || 0 };
   });
+
+// Calculate monthly saving dataset (END)
+
+/*
+
+Calculate all the dashboard data controller
+
+*/
 
 const getUserDashboardData = asyncHandler(async (req, res) => {
   const userId = req.user.userId;
@@ -185,6 +219,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
   const t = await sequelize.transaction();
 
   try {
+    // Get monthly income from DB
+
     const monthlyIncome = await Income.findAll({
       attributes: [
         [Sequelize.fn("TO_CHAR", Sequelize.col("incomeDate"), "Mon"), "month"],
@@ -202,6 +238,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
+    // Get monthly expense from DB
+
     const monthlyExpense = await Expense.findAll({
       attributes: [
         [Sequelize.fn("TO_CHAR", Sequelize.col("expenseDate"), "Mon"), "month"],
@@ -218,6 +256,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       raw: true,
       transaction: t,
     });
+
+    // Get monthly saving from DB
 
     const monthlySaving = await Transaction.findAll({
       attributes: [
@@ -246,6 +286,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
+    // Get current year total income from DB
+
     const totalIncome = await Income.findAll({
       attributes: [
         [Sequelize.fn("SUM", Sequelize.col("incomeAmount")), "allIncome"],
@@ -261,6 +303,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
+    // Get current year total expense from DB
+
     const totalExpense = await Expense.findAll({
       attributes: [
         [Sequelize.fn("SUM", Sequelize.col("expenseAmount")), "allExpense"],
@@ -275,6 +319,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       raw: true,
       transaction: t,
     });
+
+    // Get current year total saving from DB
 
     const totalSaving = await Transaction.findAll({
       attributes: [
@@ -294,6 +340,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       raw: true,
       transaction: t,
     });
+
+    // Get last month daily total income from DB
 
     const dailyIncomeLastMonth = await Income.findAll({
       attributes: [
@@ -324,6 +372,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
+    // Get last month daily total expense from DB
+
     const dailyExpenseLastMonth = await Expense.findAll({
       attributes: [
         [Sequelize.fn("TO_CHAR", Sequelize.col("expenseDate"), "DD"), "day"],
@@ -352,6 +402,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       raw: true,
       transaction: t,
     });
+
+    // Get last month daily total saving from DB
 
     const dailySavingLastMonth = await Transaction.findAll({
       attributes: [
@@ -389,16 +441,24 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       transaction: t,
     });
 
+    // Get current active budget from DB
+
     const currentBudget = await Budget.findOne({
       where: { status: "Active", userId },
       transaction: t,
     });
 
+    // Calculate all income, expense and saving
+
     const allIncome = Number(totalIncome[0]?.allIncome || 0);
     const allExpense = Number(totalExpense[0]?.allExpense || 0);
     const allSaving = Number(totalSaving[0]?.allSaving || 0);
 
+    // Calculate net balance
+
     const netBalance = allIncome - allExpense;
+
+    // Calculate savings rate
 
     let savingsRate = 0;
 
@@ -406,6 +466,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       savingsRate =
         allIncome > 0 ? ((allSaving / allIncome) * 100).toFixed(2) : 0;
     }
+
+    // Calculate budget utilization
 
     let budgetUtilization = 0;
 
@@ -415,6 +477,8 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
         100
       ).toFixed(2);
     }
+
+    // Create insights
 
     const insights = [];
 
@@ -444,51 +508,39 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
       insights.push("✅ Your savings rate is greater than 20%. Great job!");
     }
 
+    // Create datasets for specific charts
+
     const monthlyIncomeDataset = monthlyIncomeCalculation(monthlyIncome);
     const monthlyExpenseDataset = monthlyExpenseCalculation(monthlyExpense);
     const monthlySavingDataset = monthlySavingCalculation(monthlySaving);
 
-    const IncomeExpenseSavingDataset = monthlyIncomeExpenseSaving(
-      monthlyIncome,
-      monthlyExpense,
-      monthlySaving
-    );
+    const monthlyIncomeExpenseSavingBarChartDataset =
+      monthlyIncomeExpenseSaving(monthlyIncome, monthlyExpense, monthlySaving);
 
-    const dailyIncomeExpenseSavingDataset = dailyIncomeExpenseSaving(
-      dailyIncomeLastMonth,
-      dailyExpenseLastMonth,
-      dailySavingLastMonth,
-      currentYear,
-      lastMonthNum
-    );
+    const lastMonthDailyIncomeExpenseSavingLineChartDataset =
+      dailyIncomeExpenseSaving(
+        dailyIncomeLastMonth,
+        dailyExpenseLastMonth,
+        dailySavingLastMonth,
+        currentYear,
+        lastMonthNum
+      );
 
-    const totalIncomeExpenseSavingDataset = totalIncomeExpenseSaving(
-      totalIncome,
-      totalExpense,
-      totalSaving
-    );
+    const currentYearTotalIncomeExpenseSavingPieChartDataset =
+      totalIncomeExpenseSaving(totalIncome, totalExpense, totalSaving);
 
-    const activeBudgetDataset = activeBudget(currentBudget);
+    const activeBudgetPieChartDataset = activeBudget(currentBudget);
 
     await t.commit();
 
     res.status(200).json({
-      IncomeExpenseSavingDataset,
-      totalIncomeExpenseSavingDataset,
-      dailyIncomeExpenseSavingDataset,
-      activeBudgetDataset,
+      monthlyIncomeExpenseSavingBarChartDataset,
+      currentYearTotalIncomeExpenseSavingPieChartDataset,
+      lastMonthDailyIncomeExpenseSavingLineChartDataset,
+      activeBudgetPieChartDataset,
       monthlyIncomeDataset,
       monthlyExpenseDataset,
       monthlySavingDataset,
-      monthlyIncome,
-      monthlyExpense,
-      monthlySaving,
-      totalIncome,
-      totalExpense,
-      totalSaving,
-      dailyIncomeLastMonth,
-      dailyExpenseLastMonth,
-      dailySavingLastMonth,
       netBalance,
       savingsRate,
       budgetUtilization,
@@ -502,5 +554,11 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     );
   }
 });
+
+/*
+
+Calculate all the dashboard data controller (END)
+
+*/
 
 module.exports = getUserDashboardData;

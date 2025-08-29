@@ -10,17 +10,19 @@ import ActiveBudgetPieChart from "./components/ActiveBudgetPieChart";
 import TotalIncomeExpenseSavingPieChart from "./components/TotalIncomeExpenseSavingPieChart";
 
 export default function Home() {
-  const [IncomeExpenseSavingBarchart, setIncomeExpenseSavingBarchart] =
-    React.useState([]);
   const [
-    dailyIncomeExpenseSavingLinechart,
-    setDailyIncomeExpenseSavingLineChart,
+    monthlyIncomeExpenseSavingBarChart,
+    setMonthlyIncomeExpenseSavingBarChart,
   ] = React.useState([]);
-  const [activeBudgetPieChart, setActiveBudgetPiechart] = React.useState([]);
   const [
-    totalIncomeExpenseSavingPiechart,
-    setTotalIncomeExpenseSavingPiechart,
+    lastMonthDailyIncomeExpenseSavingLineChart,
+    setLastMonthDailyIncomeExpenseSavingLineChart,
   ] = React.useState([]);
+  const [
+    currentYearTotalIncomeExpenseSavingPieChartDataset,
+    setCurrentYearTotalIncomeExpenseSavingPieChartDataset,
+  ] = React.useState([]);
+  const [activeBudgetPieChart, setActiveBudgetPieChart] = React.useState([]);
   const [netBalance, setNetBalance] = React.useState("");
   const [savingsRate, setSavingsRate] = React.useState("");
   const [budgetUtilization, setBudgetUtilization] = React.useState("");
@@ -30,25 +32,29 @@ export default function Home() {
 
   React.useEffect(() => {
     if (data) {
-      setIncomeExpenseSavingBarchart(data.IncomeExpenseSavingDataset);
-      setDailyIncomeExpenseSavingLineChart(
-        data.dailyIncomeExpenseSavingDataset
+      setMonthlyIncomeExpenseSavingBarChart(
+        data.monthlyIncomeExpenseSavingBarChartDataset
       );
-      setActiveBudgetPiechart(data.activeBudgetDataset);
+      setLastMonthDailyIncomeExpenseSavingLineChart(
+        data.lastMonthDailyIncomeExpenseSavingLineChartDataset
+      );
+      setActiveBudgetPieChart(data.activeBudgetPieChartDataset);
       setNetBalance(data.netBalance);
       setSavingsRate(data.savingsRate);
       setBudgetUtilization(data.budgetUtilization);
       setInsights(data.insights);
 
       if (
-        data.totalIncomeExpenseSavingDataset[0]?.value === 0 &&
-        data.totalIncomeExpenseSavingDataset[1]?.value === 0 &&
-        data.totalIncomeExpenseSavingDataset[2]?.value === 0
+        data.currentYearTotalIncomeExpenseSavingPieChartDataset[0]?.value ===
+          0 &&
+        data.currentYearTotalIncomeExpenseSavingPieChartDataset[1]?.value ===
+          0 &&
+        data.currentYearTotalIncomeExpenseSavingPieChartDataset[2]?.value === 0
       ) {
-        setTotalIncomeExpenseSavingPiechart([]);
+        setCurrentYearTotalIncomeExpenseSavingPieChartDataset([]);
       } else {
-        setTotalIncomeExpenseSavingPiechart(
-          data.totalIncomeExpenseSavingDataset
+        setCurrentYearTotalIncomeExpenseSavingPieChartDataset(
+          data.currentYearTotalIncomeExpenseSavingPieChartDataset
         );
       }
     }
@@ -84,18 +90,20 @@ export default function Home() {
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <IncomeExpenseSavingLineChart
-            dataset={dailyIncomeExpenseSavingLinechart}
+            dataset={lastMonthDailyIncomeExpenseSavingLineChart}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingBarChart dataset={IncomeExpenseSavingBarchart} />
+          <IncomeExpenseSavingBarChart
+            dataset={monthlyIncomeExpenseSavingBarChart}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <ActiveBudgetPieChart dataset={activeBudgetPieChart} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TotalIncomeExpenseSavingPieChart
-            dataset={totalIncomeExpenseSavingPiechart}
+            dataset={currentYearTotalIncomeExpenseSavingPieChartDataset}
           />
         </Grid>
         {insights.map((insight, index) => (
