@@ -400,8 +400,12 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
 
     const netBalance = allIncome - allExpense;
 
-    const savingsRate =
-      allIncome > 0 ? ((allSaving / allIncome) * 100).toFixed(2) : 0;
+    let savingsRate = 0;
+
+    if (allSaving > 0) {
+      savingsRate =
+        allIncome > 0 ? ((allSaving / allIncome) * 100).toFixed(2) : 0;
+    }
 
     let budgetUtilization = 0;
 

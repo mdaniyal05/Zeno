@@ -34,11 +34,11 @@ export default function IncomeExpenseSavingLineChart({ dataset }) {
     <Card variant="outlined" sx={{ width: "100%" }}>
       <CardContent>
         <Typography component="h2" variant="subtitle2" gutterBottom>
-          Income VS Expense VS Saving
+          Last Month Income VS Expense VS Saving
         </Typography>
         <Stack sx={{ justifyContent: "space-between" }}>
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            Monthly Income, Expense and Saving
+            Income, Expense and Saving
           </Typography>
         </Stack>
         <LineChart

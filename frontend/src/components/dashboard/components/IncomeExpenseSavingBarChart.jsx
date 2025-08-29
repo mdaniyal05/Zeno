@@ -17,7 +17,7 @@ export default function IncomeExpenseSavingBarChart({ dataset }) {
     <Card variant="outlined" sx={{ width: "100%" }}>
       <CardContent>
         <Typography component="h2" variant="subtitle2" gutterBottom>
-          Income VS Expense VS Saving
+          Current Year Income VS Expense VS Saving
         </Typography>
         <Stack sx={{ justifyContent: "space-between" }}>
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
