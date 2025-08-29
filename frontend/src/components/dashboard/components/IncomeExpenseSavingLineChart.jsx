@@ -47,7 +47,7 @@ export default function IncomeExpenseSavingLineChart({ dataset }) {
           xAxis={[
             {
               scaleType: "point",
-              dataKey: "month",
+              dataKey: "day",
               height: 24,
             },
           ]}

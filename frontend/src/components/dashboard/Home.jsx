@@ -10,10 +10,17 @@ import ActiveBudgetPieChart from "./components/ActiveBudgetPieChart";
 import TotalIncomeExpenseSavingPieChart from "./components/TotalIncomeExpenseSavingPieChart";
 
 export default function Home() {
-  const [IncomeExpenseSaving, setIncomeExpenseSaving] = React.useState([]);
-  const [activeBudget, setActiveBudget] = React.useState([]);
-  const [totalIncomeExpenseSaving, setTotalIncomeExpenseSaving] =
+  const [IncomeExpenseSavingBarchart, setIncomeExpenseSavingBarchart] =
     React.useState([]);
+  const [
+    dailyIncomeExpenseSavingLinechart,
+    setDailyIncomeExpenseSavingLineChart,
+  ] = React.useState([]);
+  const [activeBudgetPieChart, setActiveBudgetPiechart] = React.useState([]);
+  const [
+    totalIncomeExpenseSavingPiechart,
+    setTotalIncomeExpenseSavingPiechart,
+  ] = React.useState([]);
   const [netBalance, setNetBalance] = React.useState("");
   const [savingsRate, setSavingsRate] = React.useState("");
   const [budgetUtilization, setBudgetUtilization] = React.useState("");
@@ -23,8 +30,11 @@ export default function Home() {
 
   React.useEffect(() => {
     if (data) {
-      setIncomeExpenseSaving(data.IncomeExpenseSavingDataset);
-      setActiveBudget(data.activeBudgetDataset);
+      setIncomeExpenseSavingBarchart(data.IncomeExpenseSavingDataset);
+      setDailyIncomeExpenseSavingLineChart(
+        data.dailyIncomeExpenseSavingDataset
+      );
+      setActiveBudgetPiechart(data.activeBudgetDataset);
       setNetBalance(data.netBalance);
       setSavingsRate(data.savingsRate);
       setBudgetUtilization(data.budgetUtilization);
@@ -35,9 +45,11 @@ export default function Home() {
         data.totalIncomeExpenseSavingDataset[1]?.value === 0 &&
         data.totalIncomeExpenseSavingDataset[2]?.value === 0
       ) {
-        setTotalIncomeExpenseSaving([]);
+        setTotalIncomeExpenseSavingPiechart([]);
       } else {
-        setTotalIncomeExpenseSaving(data.totalIncomeExpenseSavingDataset);
+        setTotalIncomeExpenseSavingPiechart(
+          data.totalIncomeExpenseSavingDataset
+        );
       }
     }
   }, [data]);
@@ -71,17 +83,19 @@ export default function Home() {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingLineChart dataset={IncomeExpenseSaving} />
+          <IncomeExpenseSavingLineChart
+            dataset={dailyIncomeExpenseSavingLinechart}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <IncomeExpenseSavingBarChart dataset={IncomeExpenseSaving} />
+          <IncomeExpenseSavingBarChart dataset={IncomeExpenseSavingBarchart} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-          <ActiveBudgetPieChart dataset={activeBudget} />
+          <ActiveBudgetPieChart dataset={activeBudgetPieChart} />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
           <TotalIncomeExpenseSavingPieChart
-            dataset={totalIncomeExpenseSaving}
+            dataset={totalIncomeExpenseSavingPiechart}
           />
         </Grid>
         {insights.map((insight, index) => (
