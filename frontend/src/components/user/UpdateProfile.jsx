@@ -75,7 +75,6 @@ export default function UpdateProfile(props) {
   const [dateOfBirth, setDateOfBirth] = React.useState(null);
   const [about, setAbout] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("");
-  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
@@ -90,7 +89,6 @@ export default function UpdateProfile(props) {
       setDateOfBirth(data.dateOfBirth || "");
       setAbout(data.about || "");
       setPhoneNumber(data.phoneNumber || "");
-      setEmail(data.email || "");
     }
   }, [data]);
 
@@ -105,7 +103,6 @@ export default function UpdateProfile(props) {
         dateOfBirth,
         about,
         phoneNumber,
-        email,
         password,
         confirmPassword,
       }).unwrap();
@@ -191,19 +188,6 @@ export default function UpdateProfile(props) {
                 variant="outlined"
                 value={about}
                 onChange={(event) => setAbout(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
               />
             </FormControl>
             <FormControl>
