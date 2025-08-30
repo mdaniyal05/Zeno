@@ -104,7 +104,7 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
               deleteProfile().then(
                 navigate("/").then(
                   toast.success(
-                    "Profile deleted successfully. Sad to see your leave."
+                    "Profile deleted successfully. Sad to see you leave."
                   )
                 )
               )

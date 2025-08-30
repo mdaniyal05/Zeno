@@ -157,23 +157,14 @@ const registerUser = asyncHandler(async (req, res) => {
     if (newUser) {
       await otp.destroy({ transaction: t });
 
-      const { accessToken, refreshToken } =
-        await generateAccessAndRefreshTokens(res, newUser.userId);
-
       await t.commit();
 
-      res
-        .status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
-        .json({
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          userId: newUser.userId,
-          fullName: `${newUser.firstName} ${newUser.lastName}`,
-          email: newUser.email,
-          message: "User registered successfully.",
-        });
+      res.status(200).json({
+        userId: newUser.userId,
+        fullName: `${newUser.firstName} ${newUser.lastName}`,
+        email: newUser.email,
+        message: "User registered successfully.",
+      });
     }
   } catch (error) {
     await t.rollback();
