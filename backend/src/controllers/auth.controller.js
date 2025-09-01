@@ -53,11 +53,12 @@ const generateAccessAndRefreshTokens = async (res, userId) => {
     return { accessToken, refreshToken };
   } catch (error) {
     await t.rollback();
-    res.status(500);
-    throw new Error(
-      "Something went wrong while generating refresh and access token." ||
-        error.message
-    );
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
+    throw new Error(error.message);
   }
 };
 
@@ -109,6 +110,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const otp = await Otp.findOne({ where: { email: email }, transaction: t });
 
+    if (!otp) {
+      res.status(400);
+      throw new Error("No OTP found for this email.");
+    }
+
     if (otp.isBlocked) {
       const currentTime = new Date();
       if (currentTime < otp.blockUntil) {
@@ -157,27 +163,21 @@ const registerUser = asyncHandler(async (req, res) => {
     if (newUser) {
       await otp.destroy({ transaction: t });
 
-      const { accessToken, refreshToken } =
-        await generateAccessAndRefreshTokens(res, newUser.userId);
-
       await t.commit();
 
-      res
-        .status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
-        .json({
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          userId: newUser.userId,
-          fullName: `${newUser.firstName} ${newUser.lastName}`,
-          email: newUser.email,
-          message: "User registered successfully.",
-        });
+      res.status(200).json({
+        fullName: `${newUser.firstName} ${newUser.lastName}`,
+        email: newUser.email,
+        message: "User registered successfully. Now, you can login.",
+      });
     }
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -234,7 +234,11 @@ const loginUser = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -278,7 +282,11 @@ const logoutUser = asyncHandler(async (req, res) => {
       });
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });

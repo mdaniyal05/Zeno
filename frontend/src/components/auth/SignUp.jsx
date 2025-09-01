@@ -116,8 +116,8 @@ export default function SignUp(props) {
         OTP,
       }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate("/home");
-      toast.success("You are registered successfully. Welcome!");
+      navigate("/signin");
+      toast.success("You are registered successfully. Now, you can login.");
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }

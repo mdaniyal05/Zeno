@@ -101,7 +101,11 @@ const createUserCategory = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -167,7 +171,11 @@ const updateUserCategory = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -210,7 +218,11 @@ const deleteUserCategory = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });

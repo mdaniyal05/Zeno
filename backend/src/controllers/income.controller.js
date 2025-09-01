@@ -98,7 +98,11 @@ const createUserIncome = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -157,7 +161,11 @@ const updateUserIncome = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });
@@ -195,7 +203,11 @@ const deleteUserIncome = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });

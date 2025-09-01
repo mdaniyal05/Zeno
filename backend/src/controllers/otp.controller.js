@@ -71,7 +71,11 @@ const generateOTP = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     await t.rollback();
-    res.status(500);
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
     throw new Error(error.message);
   }
 });

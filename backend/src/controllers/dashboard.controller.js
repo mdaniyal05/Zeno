@@ -543,10 +543,12 @@ const getUserDashboardData = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     await t.rollback();
-    res.status(500);
-    throw new Error(
-      error.message || "Unable to calculate dashboard data. Server error."
-    );
+
+    if (res.statusCode === 200) {
+      res.status(500);
+    }
+
+    throw new Error(error.message);
   }
 });
 
