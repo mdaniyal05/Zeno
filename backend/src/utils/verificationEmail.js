@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const mailSender = require("./mailSender");
 
-const verifyEmail = async (email, otp) => {
+const verifyEmail = (email, otp) => {
   const templatePath = path.join(__dirname, "../html", "otpVerification.html");
   let html = fs.readFileSync(templatePath, "utf-8");
 

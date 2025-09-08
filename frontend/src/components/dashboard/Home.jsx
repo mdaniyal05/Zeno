@@ -98,16 +98,16 @@ export default function Home() {
             dataset={monthlyIncomeExpenseSavingBarChart}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
           <TotalIncomeExpenseSavingPieChart
             dataset={currentYearTotalIncomeExpenseSavingPieChartDataset}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
           <ActiveBudgetPieChart dataset={activeBudgetPieChart} />
         </Grid>
         {insights.map((insight, index) => (
-          <Grid size={{ xs: 12, sm: 4, lg: 2 }} key={index}>
+          <Grid size={{ xs: 12, sm: 4, lg: 4 }} key={index}>
             <MetricCard title={"🧐"} value={""} caption={insight} />
           </Grid>
         ))}

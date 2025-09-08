@@ -123,7 +123,7 @@ const createCalculations = async ({
       saving.status = "Completed";
       const message =
         "Congratulations! You have reached your savings target. Keep up the good financial record.";
-      await notifyEmail(
+      notifyEmail(
         userEmail,
         message,
         `Savings target of: ${saving.targetAmount} completed.`
@@ -414,7 +414,7 @@ const calculateBalances = async ({
       newSaving.status = "Completed";
       const message =
         "Congratulations! You have reached your savings target. Keep up the good financial record.";
-      await notifyEmail(
+      notifyEmail(
         userEmail,
         message,
         `Savings target of: ${newSaving.targetAmount} completed.`

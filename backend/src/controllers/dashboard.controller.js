@@ -140,10 +140,9 @@ const totalIncomeExpenseSaving = (
 
 const activeBudget = (currentBudget) => {
   if (currentBudget) {
-    const keysToExtract = ["budgetAmount", "amountSpent", "amountRemaining"];
+    const keysToExtract = ["amountSpent", "amountRemaining"];
 
     const labelMap = {
-      budgetAmount: "Budget amount",
       amountRemaining: "Amount remaining",
       amountSpent: "Amount spent",
     };
