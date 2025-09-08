@@ -221,8 +221,6 @@ const loginUser = asyncHandler(async (req, res) => {
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .json({
-          accessToken: accessToken,
-          refreshToken: refreshToken,
           userId: userExists.userId,
           fullName: `${userExists.firstName} ${userExists.lastName}`,
           email: userExists.email,
@@ -347,7 +345,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookie("refreshToken", refreshToken, cookieOptions)
       .json({
         accessToken: accessToken,
-        refreshToken: refreshToken,
         message: "Access token refreshed.",
       });
   } catch (error) {
