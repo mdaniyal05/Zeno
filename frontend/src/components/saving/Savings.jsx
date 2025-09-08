@@ -78,7 +78,14 @@ export default function Savings() {
                     <TableCell align="left">
                       {row.createdAt.slice(0, 10)}
                     </TableCell>
-                    <TableCell align="left">
+                    <TableCell
+                      align="left"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
@@ -92,7 +99,7 @@ export default function Savings() {
                         }
                       />
                       <Link to={`/update-saving/${row.savingId}`}>
-                        <IconButton sx={{ ml: 1 }}>
+                        <IconButton>
                           <EditIcon />
                         </IconButton>
                       </Link>

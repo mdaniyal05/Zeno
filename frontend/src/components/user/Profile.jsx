@@ -122,10 +122,19 @@ export default function Profile(props) {
                 variant="outlined"
               />
             </FormControl>
-            <ButtonComponent
-              link={`/update-profile/${userInfo.userId}`}
-              text={"Update Profile"}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mt: "0.5rem",
+              }}
+            >
+              <ButtonComponent
+                link={`/update-profile/${userInfo.userId}`}
+                text={"Update Profile"}
+              />
+            </Box>
           </Box>
         </Card>
       </ProfileContainer>

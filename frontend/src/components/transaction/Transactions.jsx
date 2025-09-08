@@ -80,7 +80,14 @@ export default function Transactions() {
                     <TableCell align="left">
                       {row.createdAt.slice(0, 10)}
                     </TableCell>
-                    <TableCell align="left">
+                    <TableCell
+                      align="left"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
                       <AlertDialog
                         icon={<DeleteIcon />}
                         contentText={
@@ -94,7 +101,7 @@ export default function Transactions() {
                         }
                       />
                       <Link to={`/update-transaction/${row.transactionId}`}>
-                        <IconButton sx={{ ml: 1 }}>
+                        <IconButton>
                           <EditIcon />
                         </IconButton>
                       </Link>
