@@ -3,6 +3,16 @@
 A full-stack personal finance management application that helps individuals stay in control of their money.
 Track income, expenses, savings, budgets, and categories — all visualized through a dashboard with charts.
 
+<hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
+
+![image1](./appImages/dashboard1.png)
+
+<hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
+
+![image2](./appImages/dashboard2.png)
+
+<hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
+
 ## 🚀 Features
 
 - 🔐 Authentication & Authorization – Secure register and login using JWT access and refresh tokens (HTTP-only cookies)
@@ -14,7 +24,7 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 - 🎯 Budgets – One active budget at a time with start/end dates
 - 💵 Savings Accounts – Track progress toward savings goals
 - ✉️ Email Reminders – Notifications via Nodemailer
-- 🔍 Search & Filter – Easily navigate stored financial records
+- 🔍 Search & Filter – Easily navigate stored financial records in form of tables
 
 ## 🛠️ Tech Stack
 
@@ -56,15 +66,18 @@ Create a .env file based on .env.example:
 ```
 PORT=<server-port>
 NODE_ENV=<development>
+
 DB_HOST=<localhost>
 DB_PORT=<DB-port>
 DB_USER=<DB-username>
 DB_PASS=<DB-password>
 DB_NAME=<DB-name>
+
 ACCESS_TOKEN_SECRET=<access-token-secret>
 REFRESH_TOKEN_SECRET=<refresh-token-secret>
 ACCESS_TOKEN_EXPIRY=<expiry-time>
 REFRESH_TOKEN_EXPIRY=<expiry-time>
+
 MAIL_HOST=<email-host>
 MAIL_USER=<email-address>
 MAIL_PASS=<email-app-password>
@@ -103,7 +116,7 @@ PostgreSQL managed with Sequelize ORM. You can manage your database visually wit
 📂 Zeno
 ├─ README.md
 ├─ backend
-│  ├─ .env.sample
+│  ├─ .env.example
 │  ├─ .gitignore
 │  ├─ .prettierignore
 │  ├─ .prettierrc
