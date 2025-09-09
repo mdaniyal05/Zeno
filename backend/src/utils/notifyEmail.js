@@ -2,17 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const mailSender = require("./mailSender");
 
-const notifyEmail = (email, message, title) => {
+const notifyEmail = async (email, subject, text) => {
   const templatePath = path.join(__dirname, "../html", "notifyUser.html");
-  let html = fs.readFileSync(templatePath, "utf-8");
 
-  html = html.replace("{{message}}", message);
+  let html = fs.readFileSync(templatePath, "utf-8");
+  html = html.replace("{{message}}", text);
 
   try {
-    mailSender(email, title, html);
-    return true;
+    await mailSender(email, subject, text, html);
   } catch (error) {
-    throw new Error(`Error occured while sending email: ${error}`);
+    console.error(error);
   }
 };
 

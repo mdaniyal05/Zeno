@@ -121,12 +121,14 @@ const createCalculations = async ({
       saving.status !== "Completed"
     ) {
       saving.status = "Completed";
+
       const message =
         "Congratulations! You have reached your savings target. Keep up the good financial record.";
-      notifyEmail(
+
+      await notifyEmail(
         userEmail,
-        message,
-        `Savings target of: ${saving.targetAmount} completed.`
+        `Savings target of: ${saving.targetAmount} completed.`,
+        message
       );
     }
 
@@ -412,12 +414,14 @@ const calculateBalances = async ({
       newSaving.status !== "Completed"
     ) {
       newSaving.status = "Completed";
+
       const message =
         "Congratulations! You have reached your savings target. Keep up the good financial record.";
-      notifyEmail(
+
+      await notifyEmail(
         userEmail,
-        message,
-        `Savings target of: ${newSaving.targetAmount} completed.`
+        `Savings target of: ${newSaving.targetAmount} completed.`,
+        message
       );
     }
 

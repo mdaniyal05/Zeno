@@ -57,18 +57,13 @@ const generateOTP = asyncHandler(async (req, res) => {
 
     await otp.save({ transaction: t });
 
-    const verify = verifyEmail(email, OTP);
+    await verifyEmail(email, "Email Verification", OTP);
 
-    if (verify) {
-      await t.commit();
+    await t.commit();
 
-      res.status(200).json({
-        message: "OTP sent successfully.",
-      });
-    } else {
-      res.status(500);
-      throw new Error("Unable to send OTP. Server error.");
-    }
+    res.status(200).json({
+      message: "OTP sent successfully.",
+    });
   } catch (error) {
     await t.rollback();
 

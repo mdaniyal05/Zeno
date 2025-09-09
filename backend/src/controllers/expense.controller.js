@@ -103,10 +103,10 @@ const createCalculations = async ({
       const message =
         "Your spending has gone over the allocated budget. You crossed the set limit and spent more than planned, so it may be a good time to review your recent expenses and adjust for better control.";
 
-      notifyEmail(
+      await notifyEmail(
         userEmail,
-        message,
-        `Budget of amount: ${budget.budgetAmount} exceeded.`
+        `Budget of amount: ${budget.budgetAmount} exceeded.`,
+        message
       );
     }
 
@@ -122,10 +122,10 @@ const createCalculations = async ({
     const message =
       "Your spending in this category has gone over the limit. You’ve spent more than the planned limit, so it’s a good idea to review your expenses here and adjust to stay on track.";
 
-    notifyEmail(
+    await notifyEmail(
       userEmail,
-      message,
-      `Category: ${category.categoryName} limit exceeded.`
+      `Category: ${category.categoryName} limit exceeded.`,
+      message
     );
   }
 
@@ -265,10 +265,10 @@ const calculateBalances = async ({
       const message =
         "Your spending in this category has gone over the limit. You’ve spent more than the planned limit, so it’s a good idea to review your expenses here and adjust to stay on track.";
 
-      notifyEmail(
+      await notifyEmail(
         userEmail,
-        message,
-        `Category: ${newCategory.categoryName} limit exceeded.`
+        `Category: ${newCategory.categoryName} limit exceeded.`,
+        message
       );
     }
 
@@ -299,10 +299,10 @@ const calculateBalances = async ({
       const message =
         "Your spending has gone over the allocated budget. You crossed the set limit and spent more than planned, so it may be a good time to review your recent expenses and adjust for better control.";
 
-      notifyEmail(
+      await notifyEmail(
         userEmail,
-        message,
-        `Budget of amount: ${budget.budgetAmount} exceeded.`
+        `Budget of amount: ${budget.budgetAmount} exceeded.`,
+        message
       );
     }
 
