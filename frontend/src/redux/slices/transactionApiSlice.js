@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const TRANSACTION_URL = "/api/v1/transactions";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let TRANSACTION_URL;
+
+if (import.meta.env.PROD) {
+  TRANSACTION_URL = `${API_URL}/api/v1/transactions`;
+} else {
+  TRANSACTION_URL = "/api/v1/transactions";
+}
 
 export const transactionApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

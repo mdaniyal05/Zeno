@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const DASHBOARD_URL = "/api/v1/dashboard";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let DASHBOARD_URL;
+
+if (import.meta.env.PROD) {
+  DASHBOARD_URL = `${API_URL}/api/v1/dashboard`;
+} else {
+  DASHBOARD_URL = "/api/v1/dashboard";
+}
 
 export const dashboardApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

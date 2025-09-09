@@ -18,7 +18,20 @@ const {
   errorHandler,
 } = require("./middlewares/errorHandler.middleware");
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+const whiteList = [`${process.env.CLIENT_URL}`];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const BUDGET_URL = "/api/v1/budgets";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let BUDGET_URL;
+
+if (import.meta.env.PROD) {
+  BUDGET_URL = `${API_URL}/api/v1/budgets`;
+} else {
+  BUDGET_URL = "/api/v1/budgets";
+}
 
 export const budgetApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

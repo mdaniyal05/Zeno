@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const ACCOUNT_URL = "/api/v1/accounts";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let ACCOUNT_URL;
+
+if (import.meta.env.PROD) {
+  ACCOUNT_URL = `${API_URL}/api/v1/accounts`;
+} else {
+  ACCOUNT_URL = "/api/v1/accounts";
+}
 
 export const bankAccountApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

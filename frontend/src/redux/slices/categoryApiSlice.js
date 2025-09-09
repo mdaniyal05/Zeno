@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const CATEGORY_URL = "/api/v1/categories";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let CATEGORY_URL;
+
+if (import.meta.env.PROD) {
+  CATEGORY_URL = `${API_URL}/api/v1/categories`;
+} else {
+  CATEGORY_URL = "/api/v1/categories";
+}
 
 export const categoryApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const USER_URL = "/api/v1/users";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let USER_URL;
+
+if (import.meta.env.PROD) {
+  USER_URL = `${API_URL}/api/v1/users`;
+} else {
+  USER_URL = "/api/v1/users";
+}
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

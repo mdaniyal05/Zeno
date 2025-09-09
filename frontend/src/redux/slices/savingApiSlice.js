@@ -1,6 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
-const SAVING_URL = "/api/v1/savings";
+const API_URL = import.meta.env.VITE_API_URL;
+
+let SAVING_URL;
+
+if (import.meta.env.PROD) {
+  SAVING_URL = `${API_URL}/api/v1/savings`;
+} else {
+  SAVING_URL = "/api/v1/savings";
+}
 
 export const savingApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
