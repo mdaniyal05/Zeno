@@ -1,7 +1,7 @@
 const sequelize = require("./db");
 
 const syncModels = async () => {
-  await sequelize.sync({ match: /Tracker$/ });
+  await sequelize.sync();
 };
 
 module.exports = syncModels;
