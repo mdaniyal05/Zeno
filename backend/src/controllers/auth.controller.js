@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "strict" : "none",
+  sameSite: process.env.NODE_ENV === "production" ? "strict" : "None",
 };
 
 /*
@@ -344,7 +344,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookie("accessToken", accessToken, cookieOptions)
       .cookie("refreshToken", refreshToken, cookieOptions)
       .json({
-        accessToken: accessToken,
         message: "Access token refreshed.",
       });
   } catch (error) {
