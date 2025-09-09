@@ -18,7 +18,7 @@ const {
   errorHandler,
 } = require("./middlewares/errorHandler.middleware");
 
-const whiteList = [`${process.env.CLIENT_URL}`];
+const whiteList = [`${process.env.CLIENT_URL}`, "http://localhost:3000"];
 
 const corsOptions = {
   origin: function (origin, callback) {
