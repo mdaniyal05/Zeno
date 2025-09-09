@@ -6,7 +6,7 @@ const mailSender = async (email, subject, text, html) => {
   try {
     const message = {
       to: email,
-      from: process.env.SENDER_MAIL,
+      from: process.env.MAIL_SENDER,
       subject: subject,
       text: text,
       html: html,
