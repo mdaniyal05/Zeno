@@ -61,9 +61,11 @@ const User = sequelize.define(
 );
 
 User.beforeSave(async (user, options) => {
-  const salt = await bcrypt.genSalt(12);
-  const hashedPassword = await bcrypt.hash(user.password, salt);
-  user.password = hashedPassword;
+  if (user.changed("password")) {
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+  }
 });
 
 module.exports = User;
