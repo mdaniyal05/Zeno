@@ -1,7 +1,7 @@
 # 💰 Zeno Finance Tracker
 
 A full-stack personal finance management application that helps individuals stay in control of their money.
-Track income, expenses, savings, budgets, and categories — all visualized through a dashboard with charts.
+Track income, expenses, savings, budgets, and categories — all visualized through an interactive dashboard with charts.
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
@@ -15,45 +15,52 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 
 ## 🚀 Features
 
-- 🔐 Authentication & Authorization – Secure register and login using JWT access and refresh tokens (HTTP-only cookies)
-- 🔐 OTP Email Verification – Secure email verification using OTP system
-- 🏦 Bank Accounts Management – Create real or virtual accounts for tracking
-- 💸 Expense Tracking – Categorize expenses with limits to avoid overspending
-- 💰 Income Tracking – Record multiple sources of income
-- 📊 Dashboard & Charts – Visual representation of financial health
-- 🎯 Budgets – One active budget at a time with start/end dates
-- 💵 Savings Accounts – Track progress toward savings goals
-- ✉️ Email Reminders – Notifications via Nodemailer
-- 🔍 Search & Filter – Easily navigate stored financial records in form of tables
+- 🔐 Authentication & Authorization – Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
+- 🔐 OTP Email Verification – Secure verification flow powered by SendGrid
+- 🏦 Bank Accounts Management – Create real or virtual accounts to track money
+- 💸 Expense Tracking – Categorize and set spending limits to avoid overspending
+- 💰 Income Tracking – Record multiple income streams
+- 📊 Dashboard & Charts – Visualize financial health through charts
+- 🎯 Budgets – Create and manage one active budget with timeframes
+- 💵 Savings Accounts – Track progress toward saving objectives
+- ✉️ Email Reminders – Automated notifications via SendGrid
+- 🔍 Search & Filter – Easily explore financial records in tabular form
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 
-- ⚛️ React (with Vite)
+- ⚛️ React (Vite)
 - 🎨 Material UI (MUI)
 - 📅 Day.js
-- 📈 MUI X Charts, Data Grid
+- 📈 MUI X Charts & Data Grid
 - 🔄 Redux Toolkit
 - 🌐 React Router v7
 
 ### Backend
 
-- 🟢 Node.js, Express.js
-- 🐘 PostgreSQL with Sequelize ORM
+- 🟢 Node.js + Express.js
+- 🐘 PostgreSQL + Sequelize ORM
 - 🔑 JWT (with HTTP-only cookies)
-- 📧 Nodemailer
-- 🔐 bcryptjs for password hashing
+- 📧 SendGrid (for mailing)
+- 🔐 bcryptjs (password hashing)
 
 ### Dev Tools
 
 Nodemon, ESLint, Prettier, PgAdmin, Postman
 
+## 🌐 Deployment
+
+- Frontend (Vercel): [https://zeno-finance-tracker-client.vercel.app](https://zeno-finance-tracker-client.vercel.app)
+- Backend (Render): [https://zeno-backend-uf2p.onrender.com](https://zeno-backend-uf2p.onrender.com/)
+- Database (Supabase): PostgreSQL hosted on Supabase
+- Mailing Service: SendGrid
+
 ## ⚡ Getting Started
 
 ### 1️⃣ Clone the repo
 ```
-https://github.com/[username]/Zeno.git
+git clone https://github.com/[username]/Zeno.git
 cd Zeno
 ```
 
@@ -64,28 +71,58 @@ npm install
 ```
 Create a .env file based on .env.example:
 ```
-PORT=<server-port>
-NODE_ENV=<development>
+# ==========================
+# 🌱 Development Environment
+# ==========================
+PORT=5000
+NODE_ENV=development
 
-DB_HOST=<localhost>
-DB_PORT=<DB-port>
-DB_USER=<DB-username>
-DB_PASS=<DB-password>
-DB_NAME=<DB-name>
+# Local PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=your_local_user
+DB_PASS=your_local_password
+DB_NAME=zeno_dev
 
-ACCESS_TOKEN_SECRET=<access-token-secret>
-REFRESH_TOKEN_SECRET=<refresh-token-secret>
-ACCESS_TOKEN_EXPIRY=<expiry-time>
-REFRESH_TOKEN_EXPIRY=<expiry-time>
+# JWT Secrets
+ACCESS_TOKEN_SECRET=your_dev_access_secret
+REFRESH_TOKEN_SECRET=your_dev_refresh_secret
+ACCESS_TOKEN_EXPIRY=15m
+REFRESH_TOKEN_EXPIRY=7d
 
-MAIL_HOST=<email-host>
-MAIL_USER=<email-address>
-MAIL_PASS=<email-app-password>
-FROM_MAIL=<sending-email-from>
+# SendGrid (optional in dev, but can test with a sandbox)
+MAIL_SENDER=dev@example.com
+SENDGRID_API_KEY=your_dev_sendgrid_key
+
+
+# ==========================
+# 🚀 Production Environment
+# ==========================
+PORT=8080
+NODE_ENV=production
+
+# Supabase PostgreSQL
+DB_URL=your_supabase_connection_string
+
+# JWT Secrets
+ACCESS_TOKEN_SECRET=your_prod_access_secret
+REFRESH_TOKEN_SECRET=your_prod_refresh_secret
+ACCESS_TOKEN_EXPIRY=15m
+REFRESH_TOKEN_EXPIRY=7d
+
+# Frontend (deployed on Vercel)
+CLIENT_URL=https://your-frontend.vercel.app
+
+# SendGrid (production)
+MAIL_SENDER=your_verified_sendgrid_email
+SENDGRID_API_KEY=your_prod_sendgrid_key
+
+
 ```
 Start backend:
 ```
-npm run dev
+npm run dev   # for development
+npm start     # for production
 ```
 
 ### 3️⃣ Frontend Setup
@@ -93,7 +130,8 @@ npm run dev
 ```
 cd frontend
 npm install
-npm run dev
+npm run dev   # development
+npm run build # production build
 ```
 
 ## 📊 Database
@@ -114,197 +152,22 @@ PostgreSQL managed with Sequelize ORM. You can manage your database visually wit
 
 ```
 📂 Zeno
-├─ README.md
 ├─ backend
-│  ├─ .env.example
-│  ├─ .gitignore
-│  ├─ .prettierignore
-│  ├─ .prettierrc
-│  ├─ package-lock.json
 │  ├─ package.json
 │  └─ src
-│     ├─ app.js
 │     ├─ controllers
-│     │  ├─ account.controller.js
-│     │  ├─ auth.controller.js
-│     │  ├─ budget.controller.js
-│     │  ├─ category.controller.js
-│     │  ├─ dashboard.controller.js
-│     │  ├─ expense.controller.js
-│     │  ├─ income.controller.js
-│     │  ├─ otp.controller.js
-│     │  ├─ saving.controller.js
-│     │  ├─ transaction.controller.js
-│     │  └─ user.controller.js
 │     ├─ db
-│     │  ├─ db.js
-│     │  └─ syncModels.js
 │     ├─ html
-│     │  ├─ notifyUser.html
-│     │  └─ otpVerification.html
-│     ├─ index.js
 │     ├─ middlewares
-│     │  ├─ auth.middleware.js
-│     │  └─ errorHandler.middleware.js
 │     ├─ models
-│     │  ├─ account.model.js
-│     │  ├─ budget.model.js
-│     │  ├─ category.model.js
-│     │  ├─ expense.model.js
-│     │  ├─ income.model.js
-│     │  ├─ otp.model.js
-│     │  ├─ saving.model.js
-│     │  ├─ transaction.model.js
-│     │  └─ user.model.js
 │     ├─ routes
-│     │  ├─ account.route.js
-│     │  ├─ auth.route.js
-│     │  ├─ budget.route.js
-│     │  ├─ category.route.js
-│     │  ├─ dashboard.route.js
-│     │  ├─ expense.route.js
-│     │  ├─ income.route.js
-│     │  ├─ otp.route.js
-│     │  ├─ saving.route.js
-│     │  ├─ transaction.route.js
-│     │  └─ user.route.js
-│     ├─ sql
-│     │  └─ personalFinanceTracker.sql
 │     └─ utils
-│        ├─ generateJwtToken.js
-│        ├─ generateOtp.js
-│        ├─ mailSender.js
-│        ├─ notifyEmail.js
-│        └─ verificationEmail.js
 └─ frontend
-   ├─ .gitignore
-   ├─ eslint.config.js
-   ├─ index.html
-   ├─ package-lock.json
    ├─ package.json
    ├─ src
-   │  ├─ App.jsx
    │  ├─ components
-   │  │  ├─ account
-   │  │  │  ├─ BankAccounts.jsx
-   │  │  │  ├─ CreateBankAccount.jsx
-   │  │  │  └─ UpdateBankAccount.jsx
-   │  │  ├─ auth
-   │  │  │  ├─ PrivateRoute.jsx
-   │  │  │  ├─ SignIn.jsx
-   │  │  │  └─ SignUp.jsx
-   │  │  ├─ budget
-   │  │  │  ├─ Budgets.jsx
-   │  │  │  ├─ CreateBudget.jsx
-   │  │  │  └─ UpdateBudget.jsx
-   │  │  ├─ category
-   │  │  │  ├─ Categories.jsx
-   │  │  │  ├─ CreateCategory.jsx
-   │  │  │  └─ UpdateCategory.jsx
-   │  │  ├─ dashboard
-   │  │  │  ├─ Dashboard.jsx
-   │  │  │  ├─ Home.jsx
-   │  │  │  └─ components
-   │  │  │     ├─ ActiveBudgetPieChart.jsx
-   │  │  │     ├─ AppNavbar.jsx
-   │  │  │     ├─ Header.jsx
-   │  │  │     ├─ IncomeExpenseSavingBarChart.jsx
-   │  │  │     ├─ IncomeExpenseSavingLineChart.jsx
-   │  │  │     ├─ MainGrid.jsx
-   │  │  │     ├─ MenuButton.jsx
-   │  │  │     ├─ MenuContent.jsx
-   │  │  │     ├─ MetricCard.jsx
-   │  │  │     ├─ NavbarBreadcrumbs.jsx
-   │  │  │     ├─ OptionsMenu.jsx
-   │  │  │     ├─ PageViewsBarChart.jsx
-   │  │  │     ├─ SideMenu.jsx
-   │  │  │     ├─ SideMenuMobile.jsx
-   │  │  │     └─ TotalIncomeExpenseSavingPieChart.jsx
-   │  │  ├─ expense
-   │  │  │  ├─ CreateExpense.jsx
-   │  │  │  ├─ Expenses.jsx
-   │  │  │  └─ UpdateExpense.jsx
-   │  │  ├─ income
-   │  │  │  ├─ CreateIncome.jsx
-   │  │  │  ├─ Incomes.jsx
-   │  │  │  └─ UpdateIncome.jsx
-   │  │  ├─ saving
-   │  │  │  ├─ CreateSaving.jsx
-   │  │  │  ├─ Savings.jsx
-   │  │  │  └─ UpdateSaving.jsx
-   │  │  ├─ shared-theme
-   │  │  │  ├─ AppTheme.jsx
-   │  │  │  ├─ ColorModeIconDropdown.jsx
-   │  │  │  ├─ ColorModeSelect.jsx
-   │  │  │  ├─ customizations
-   │  │  │  │  ├─ dataDisplay.jsx
-   │  │  │  │  ├─ feedback.jsx
-   │  │  │  │  ├─ inputs.jsx
-   │  │  │  │  ├─ navigation.jsx
-   │  │  │  │  └─ surfaces.jsx
-   │  │  │  └─ themePrimitives.jsx
-   │  │  ├─ transaction
-   │  │  │  ├─ CreateTransaction.jsx
-   │  │  │  ├─ Transactions.jsx
-   │  │  │  └─ UpdateTransaction.jsx
-   │  │  ├─ ui
-   │  │  │  ├─ AlertDialog.jsx
-   │  │  │  ├─ ButtonComponent.jsx
-   │  │  │  ├─ Hero.jsx
-   │  │  │  ├─ NavBar.jsx
-   │  │  │  └─ Search.jsx
-   │  │  └─ user
-   │  │     ├─ Profile.jsx
-   │  │     └─ UpdateProfile.jsx
-   │  ├─ index.css
-   │  ├─ main.jsx
    │  ├─ pages
-   │  │  ├─ account
-   │  │  │  ├─ CreateBankAccountPage.jsx
-   │  │  │  └─ UpdateBankAccountPage.jsx
-   │  │  ├─ auth
-   │  │  │  ├─ SignInPage.jsx
-   │  │  │  └─ SignUpPage.jsx
-   │  │  ├─ budget
-   │  │  │  ├─ CreateBudgetPage.jsx
-   │  │  │  └─ UpdateBudgetPage.jsx
-   │  │  ├─ category
-   │  │  │  ├─ CreateCategoryPage.jsx
-   │  │  │  └─ UpdateCategoryPage.jsx
-   │  │  ├─ dashboard
-   │  │  │  └─ HomePage.jsx
-   │  │  ├─ expense
-   │  │  │  ├─ CreateExpensePage.jsx
-   │  │  │  └─ UpdateExpensePage.jsx
-   │  │  ├─ income
-   │  │  │  ├─ CreateIncomePage.jsx
-   │  │  │  └─ UpdateIncomePage.jsx
-   │  │  ├─ saving
-   │  │  │  ├─ CreateSavingPage.jsx
-   │  │  │  └─ UpdateSavingPage.jsx
-   │  │  ├─ transaction
-   │  │  │  ├─ CreateTransactionPage.jsx
-   │  │  │  └─ UpdateTransactionPage.jsx
-   │  │  ├─ ui
-   │  │  │  └─ LandingPage.jsx
-   │  │  └─ user
-   │  │     └─ UpdateProfilePage.jsx
    │  └─ redux
-   │     ├─ slices
-   │     │  ├─ apiSlice.js
-   │     │  ├─ authApiSlice.js
-   │     │  ├─ authSlice.js
-   │     │  ├─ bankAccountApiSlice.js
-   │     │  ├─ baseQueryWithReauth.js
-   │     │  ├─ budgetApiSlice.js
-   │     │  ├─ categoryApiSlice.js
-   │     │  ├─ dashboardApiSlice.js
-   │     │  ├─ expenseApiSlice.js
-   │     │  ├─ incomeApiSlice.js
-   │     │  ├─ otpApiSlice.js
-   │     │  ├─ savingApiSlice.js
-   │     │  ├─ transactionApiSlice.js
-   │     │  └─ userApiSlice.js
-   │     └─ store.js
-   └─ vite.config.js
 ```
+
+✨ Zeno Finance Tracker – helping you master your money.
