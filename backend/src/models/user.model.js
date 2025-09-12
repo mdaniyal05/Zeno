@@ -49,12 +49,6 @@ const User = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: {
-          args: [8, 16],
-          msg: "Password must be between 8 and 16 characters",
-        },
-      },
     },
     refreshToken: {
       type: DataTypes.STRING,
