@@ -83,8 +83,8 @@ export default function UpdateBudget(props) {
     if (data) {
       setBudgetAmount(data.budgetAmount || "");
       setDescription(data.description || "");
-      setStartDate(data.startDate || "");
-      setEndDate(data.endDate || "");
+      setStartDate(data.startDate || null);
+      setEndDate(data.endDate || null);
     }
   }, [data]);
 
@@ -142,8 +142,10 @@ export default function UpdateBudget(props) {
               <FormLabel htmlFor="startDate">Start Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(startDate)}
-                  onChange={(value) => setStartDate(value)}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={(value) =>
+                    setStartDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>
@@ -151,8 +153,10 @@ export default function UpdateBudget(props) {
               <FormLabel htmlFor="endDate">End Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(endDate)}
-                  onChange={(value) => setEndDate(value)}
+                  value={endDate ? dayjs(endDate) : null}
+                  onChange={(value) =>
+                    setEndDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

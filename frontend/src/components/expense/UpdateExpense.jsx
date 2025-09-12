@@ -88,7 +88,7 @@ export default function UpdateExpense(props) {
     if (expenseData) {
       setExpenseAmount(expenseData.expenseAmount || "");
       setExpenseType(expenseData.expenseType || "");
-      setExpenseDate(expenseData.expenseDate || "");
+      setExpenseDate(expenseData.expenseDate || null);
       setCategoryId(expenseData.categoryId || "");
       setMerchant(expenseData.merchant || "");
     }
@@ -201,8 +201,10 @@ export default function UpdateExpense(props) {
               <FormLabel htmlFor="expenseDate">Expense Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(expenseDate)}
-                  onChange={(value) => setExpenseDate(value)}
+                  value={expenseDate ? dayjs(expenseDate) : null}
+                  onChange={(value) =>
+                    setExpenseDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

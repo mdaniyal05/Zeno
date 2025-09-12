@@ -184,8 +184,10 @@ export default function CreateExpense(props) {
               <FormLabel htmlFor="expenseDate">Expense Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={expenseDate}
-                  onChange={(value) => setExpenseDate(value)}
+                  value={expenseDate ? dayjs(expenseDate) : null}
+                  onChange={(value) =>
+                    setExpenseDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

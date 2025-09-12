@@ -94,7 +94,7 @@ export default function UpdateTransaction(props) {
       setTransactionAmount(transaction.transactionAmount || "");
       setTransactionType(transaction.transactionType || "");
       setPaymentMethod(transaction.paymentMethod || "");
-      setTransactionDate(transaction.transactionDate || "");
+      setTransactionDate(transaction.transactionDate || null);
       setDescription(transaction.description || "");
       setAccountId(transaction.accountId || "");
       setSavingId(transaction.savingId || "None");
@@ -234,8 +234,12 @@ export default function UpdateTransaction(props) {
               <FormLabel htmlFor="transactionDate">Transaction Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(transactionDate)}
-                  onChange={(value) => setTransactionDate(value)}
+                  value={transactionDate ? dayjs(transactionDate) : null}
+                  onChange={(value) =>
+                    setTransactionDate(
+                      value ? value.format("YYYY-MM-DD") : null
+                    )
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

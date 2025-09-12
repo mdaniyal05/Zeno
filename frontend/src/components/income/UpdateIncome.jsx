@@ -80,7 +80,7 @@ export default function UpdateIncome(props) {
   React.useEffect(() => {
     if (data) {
       setIncomeAmount(data.incomeAmount || "");
-      setIncomeDate(data.incomeDate || "");
+      setIncomeDate(data.incomeDate || null);
       setIncomeSource(data.incomeSource || "");
     }
   }, [data]);
@@ -151,8 +151,10 @@ export default function UpdateIncome(props) {
               <FormLabel htmlFor="incomeDate">Income Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(incomeDate)}
-                  onChange={(value) => setIncomeDate(value)}
+                  value={incomeDate ? dayjs(incomeDate) : null}
+                  onChange={(value) =>
+                    setIncomeDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

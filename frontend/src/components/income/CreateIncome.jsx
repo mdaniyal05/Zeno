@@ -137,8 +137,10 @@ export default function CreateIncome(props) {
               <FormLabel htmlFor="incomeDate">Income Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={incomeDate}
-                  onChange={(value) => setIncomeDate(value)}
+                  value={incomeDate ? dayjs(incomeDate) : null}
+                  onChange={(value) =>
+                    setIncomeDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

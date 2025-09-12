@@ -125,8 +125,10 @@ export default function CreateBudget(props) {
               <FormLabel htmlFor="startDate">Start Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={startDate}
-                  onChange={(value) => setStartDate(value)}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={(value) =>
+                    setStartDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>
@@ -134,8 +136,10 @@ export default function CreateBudget(props) {
               <FormLabel htmlFor="endDate">End Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={endDate}
-                  onChange={(value) => setEndDate(value)}
+                  value={endDate ? dayjs(endDate) : null}
+                  onChange={(value) =>
+                    setEndDate(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>

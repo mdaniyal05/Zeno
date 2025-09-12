@@ -214,8 +214,12 @@ export default function CreateTransaction(props) {
               <FormLabel htmlFor="transactionDate">Transaction Date</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={transactionDate}
-                  onChange={(value) => setTransactionDate(value)}
+                  value={transactionDate ? dayjs(transactionDate) : null}
+                  onChange={(value) =>
+                    setTransactionDate(
+                      value ? value.format("YYYY-MM-DD") : null
+                    )
+                  }
                 />
               </LocalizationProvider>
             </FormControl>
