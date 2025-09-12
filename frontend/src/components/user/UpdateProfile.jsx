@@ -86,7 +86,7 @@ export default function UpdateProfile(props) {
     if (data) {
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
-      setDateOfBirth(data.dateOfBirth || "");
+      setDateOfBirth(data.dateOfBirth || null);
       setAbout(data.about || "");
       setPhoneNumber(data.phoneNumber || "");
     }
@@ -172,8 +172,10 @@ export default function UpdateProfile(props) {
               <FormLabel htmlFor="dob">Date of Birth</FormLabel>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  value={dayjs(dateOfBirth)}
-                  onChange={(value) => setDateOfBirth(value)}
+                  value={dateOfBirth ? dayjs(dateOfBirth) : null}
+                  onChange={(value) =>
+                    setDateOfBirth(value ? value.format("YYYY-MM-DD") : null)
+                  }
                 />
               </LocalizationProvider>
             </FormControl>
