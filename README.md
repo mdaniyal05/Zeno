@@ -5,11 +5,11 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
-![image1](./frontend/public/dashboard1.png)
+![image1](./images/1.png)
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
-![image2](./frontend//public//dashboard2.png)
+![image2](./images/2.png)
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
