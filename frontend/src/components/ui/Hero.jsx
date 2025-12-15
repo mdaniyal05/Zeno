@@ -98,6 +98,11 @@ export default function Hero() {
             top of your financial goals with simple, powerful tools designed to
             make budgeting effortless.
           </Typography>
+          <div>
+            <p style={{color: "red"}}>
+              The Email Service is Down due to free trial of SendGrid. It will be fixed soon.
+            </p>
+          </div>
           <Link to={"/signin"} style={{ textDecoration: "none" }}>
             <Stack
               direction={{ xs: "column", sm: "row" }}
