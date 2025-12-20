@@ -99,8 +99,9 @@ export default function Hero() {
             make budgeting effortless.
           </Typography>
           <div>
-            <p style={{color: "red"}}>
-              The Email Service is Down due to free trial of SendGrid. It will be fixed soon.
+            <p style={{ color: "red" }}>
+              The Email Service is Down due to free trial of SendGrid. It will
+              be fixed soon.
             </p>
           </div>
           <Link to={"/signin"} style={{ textDecoration: "none" }}>
