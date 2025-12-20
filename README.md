@@ -16,14 +16,14 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 ## 🚀 Features
 
 - 🔐 Authentication & Authorization – Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
-- 🔐 OTP Email Verification – Secure verification flow powered by SendGrid
+- 🔐 OTP Email Verification – Secure verification flow powered by Brevo
 - 🏦 Bank Accounts Management – Create real or virtual accounts to track money
 - 💸 Expense Tracking – Categorize and set spending limits to avoid overspending
 - 💰 Income Tracking – Record multiple income streams
 - 📊 Dashboard & Charts – Visualize financial health through charts
 - 🎯 Budgets – Create and manage one active budget with timeframes
 - 💵 Savings Accounts – Track progress toward saving objectives
-- ✉️ Email Reminders – Automated notifications via SendGrid
+- ✉️ Email Reminders – Automated notifications via Brevo
 - 🔍 Search & Filter – Easily explore financial records in tabular form
 
 ## 🛠️ Tech Stack
@@ -42,7 +42,7 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 - 🟢 Node.js + Express.js
 - 🐘 PostgreSQL + Sequelize ORM
 - 🔑 JWT (with HTTP-only cookies)
-- 📧 SendGrid (for mailing)
+- 📧 Brevo (for mailing)
 - 🔐 bcryptjs (password hashing)
 
 ### Dev Tools
@@ -53,8 +53,8 @@ Nodemon, ESLint, Prettier, PgAdmin, Postman
 
 - Frontend (Vercel): [https://zeno-finance-tracker-client.vercel.app](https://zeno-finance-tracker-client.vercel.app)
 - Backend (Render): [https://zeno-backend-uf2p.onrender.com](https://zeno-backend-uf2p.onrender.com/)
-- Database (Supabase): PostgreSQL hosted on Supabase
-- Mailing Service: SendGrid
+- Database (Neon): PostgreSQL hosted on Neon
+- Mailing Service: Brevo
 
 ## ⚡ Getting Started
 
@@ -90,9 +90,9 @@ REFRESH_TOKEN_SECRET=your_dev_refresh_secret
 ACCESS_TOKEN_EXPIRY=15m
 REFRESH_TOKEN_EXPIRY=7d
 
-# SendGrid (optional in dev, but can test with a sandbox)
-MAIL_SENDER=dev@example.com
-SENDGRID_API_KEY=your_dev_sendgrid_key
+# Brevo (development)
+SENDER_EMAIL=dev@example.com
+BREVO_API_KEY=your_brevo_api_key
 
 
 # ==========================
@@ -101,8 +101,8 @@ SENDGRID_API_KEY=your_dev_sendgrid_key
 PORT=8080
 NODE_ENV=production
 
-# Supabase PostgreSQL
-DB_URL=your_supabase_connection_string
+# Neon PostgreSQL
+DB_URL=your_neon_connection_string
 
 # JWT Secrets
 ACCESS_TOKEN_SECRET=your_prod_access_secret
@@ -113,9 +113,9 @@ REFRESH_TOKEN_EXPIRY=7d
 # Frontend (deployed on Vercel)
 CLIENT_URL=https://your-frontend.vercel.app
 
-# SendGrid (production)
-MAIL_SENDER=your_verified_sendgrid_email
-SENDGRID_API_KEY=your_prod_sendgrid_key
+# Brevo (production)
+SENDER_EMAIL=dev@example.com
+BREVO_API_KEY=your_brevo_api_key
 
 
 ```
