@@ -81,7 +81,7 @@ export default function Home() {
             caption={"Savings Rate"}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+        <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
           <MetricCard
             title={"💸"}
             value={`${budgetUtilization} %`}
