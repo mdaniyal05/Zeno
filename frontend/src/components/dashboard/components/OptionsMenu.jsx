@@ -24,8 +24,9 @@ export default function OptionsMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [logoutApiCall] = useLogoutMutation();
-  const [deleteProfile] = useDeleteProfileMutation();
+  const [logoutApiCall, { isLoading: logoutLoading }] = useLogoutMutation();
+  const [deleteProfile, { isLoading: deleteLoading }] =
+    useDeleteProfileMutation();
 
   const logoutHandler = async () => {
     try {
@@ -86,7 +87,7 @@ export default function OptionsMenu() {
             startIcon={<LogoutRoundedIcon />}
             onClick={logoutHandler}
           >
-            Logout
+            {logoutLoading ? "Loading...." : "Log Out"}
           </Button>
         </Stack>
         <Stack
@@ -114,7 +115,7 @@ export default function OptionsMenu() {
               )
             }
             changeIconType={true}
-            buttonText={"Delete Profile"}
+            buttonText={deleteLoading ? "Loading...." : "Delete Profile"}
           />
         </Stack>
       </Menu>
