@@ -22,8 +22,9 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [logoutApiCall] = useLogoutMutation();
-  const [deleteProfile] = useDeleteProfileMutation();
+  const [logoutApiCall, { isLoading: logoutLoading }] = useLogoutMutation();
+  const [deleteProfile, { isLoading: deleteLoading }] =
+    useDeleteProfileMutation();
 
   const logoutHandler = async () => {
     try {
@@ -92,7 +93,7 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
             startIcon={<LogoutRoundedIcon />}
             onClick={logoutHandler}
           >
-            Logout
+            {logoutLoading ? "Loading...." : "Log Out"}
           </Button>
           <AlertDialog
             icon={<DeleteIcon />}
@@ -110,7 +111,7 @@ function SideMenuMobile({ open, toggleDrawer, onMenuItemClick, activeItem }) {
               )
             }
             changeIconType={true}
-            buttonText={"Delete Profile"}
+            buttonText={deleteLoading ? "Loading...." : "Delete Profile"}
           />
         </Stack>
       </Stack>
