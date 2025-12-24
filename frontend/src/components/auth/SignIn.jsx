@@ -67,7 +67,7 @@ export default function SignIn(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -163,7 +163,7 @@ export default function SignIn(props) {
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained">
-              Sign in
+              {isLoading ? "Loading...." : "Sign In"}
             </Button>
           </Box>
           <Divider>or</Divider>

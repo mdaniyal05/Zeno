@@ -75,8 +75,8 @@ export default function SignUp(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [register] = useRegisterMutation();
-  const [generateOTP] = useGenerateOtpMutation();
+  const [register, { isLoading: registerLoading }] = useRegisterMutation();
+  const [generateOTP, { isLoading: otpLoading }] = useGenerateOtpMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -203,7 +203,7 @@ export default function SignUp(props) {
                   />
                 </FormControl>
                 <Button type="submit" fullWidth variant="contained">
-                  Verify
+                  {otpLoading ? "Loading...." : "Verify"}
                 </Button>
               </Box>
             </Card>
@@ -284,7 +284,7 @@ export default function SignUp(props) {
                   />
                 </FormControl>
                 <Button type="submit" fullWidth variant="contained">
-                  Sign up
+                  {registerLoading ? "Loading...." : "Sign Up"}
                 </Button>
               </Box>
               <Divider>
