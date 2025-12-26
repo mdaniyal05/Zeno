@@ -1,7 +1,7 @@
 # Zeno Finance Tracker
 
-A full-stack personal finance management application that helps individuals stay in control of their money.
-Track income, expenses, savings, budgets, and categories — all visualized through an interactive dashboard with charts.
+A Full Stack personal finance management application that helps individuals stay in control of their money.
+Track income, expenses, savings, budgets, and categories. All visualized through an interactive dashboard with charts.
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
@@ -15,16 +15,16 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 
 ## Features
 
-- Authentication & Authorization – Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
-- OTP Email Verification – Secure verification flow powered by Brevo
-- Bank Accounts Management – Create real or virtual accounts to track money
-- Expense Tracking – Categorize and set spending limits to avoid overspending
-- Income Tracking – Record multiple income streams
-- Dashboard & Charts – Visualize financial health through charts
-- Budgets – Create and manage one active budget with timeframes
-- Savings Accounts – Track progress toward saving objectives
-- Email Reminders – Automated notifications via Brevo
-- Search & Filter – Easily explore financial records in tabular form
+- Authentication & Authorization: Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
+- OTP Email Verification: Secure verification flow powered by Brevo
+- Bank Accounts Management: Create real or virtual accounts to track money
+- Expense Tracking: Categorize and set spending limits to avoid overspending
+- Income Tracking: Record multiple income streams
+- Dashboard & Charts: Visualize financial health through charts
+- Budgets: Create and manage one active budget with timeframes
+- Savings Accounts: Track progress toward saving objectives
+- Email Reminders: Automated notifications via Brevo
+- Search & Filter: Easily explore financial records in tabular form
 
 ## Tech Stack
 
