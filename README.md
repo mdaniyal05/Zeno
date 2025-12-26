@@ -1,4 +1,4 @@
-# 💰 Zeno Finance Tracker
+# Zeno Finance Tracker
 
 A full-stack personal finance management application that helps individuals stay in control of their money.
 Track income, expenses, savings, budgets, and categories — all visualized through an interactive dashboard with charts.
@@ -13,58 +13,58 @@ Track income, expenses, savings, budgets, and categories — all visualized thro
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
 
-## 🚀 Features
+## Features
 
-- 🔐 Authentication & Authorization – Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
-- 🔐 OTP Email Verification – Secure verification flow powered by Brevo
-- 🏦 Bank Accounts Management – Create real or virtual accounts to track money
-- 💸 Expense Tracking – Categorize and set spending limits to avoid overspending
-- 💰 Income Tracking – Record multiple income streams
-- 📊 Dashboard & Charts – Visualize financial health through charts
-- 🎯 Budgets – Create and manage one active budget with timeframes
-- 💵 Savings Accounts – Track progress toward saving objectives
-- ✉️ Email Reminders – Automated notifications via Brevo
-- 🔍 Search & Filter – Easily explore financial records in tabular form
+- Authentication & Authorization – Secure register/login with JWT access & refresh tokens (HTTP-only cookies)
+- OTP Email Verification – Secure verification flow powered by Brevo
+- Bank Accounts Management – Create real or virtual accounts to track money
+- Expense Tracking – Categorize and set spending limits to avoid overspending
+- Income Tracking – Record multiple income streams
+- Dashboard & Charts – Visualize financial health through charts
+- Budgets – Create and manage one active budget with timeframes
+- Savings Accounts – Track progress toward saving objectives
+- Email Reminders – Automated notifications via Brevo
+- Search & Filter – Easily explore financial records in tabular form
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 
-- ⚛️ React (Vite)
-- 🎨 Material UI (MUI)
-- 📅 Day.js
-- 📈 MUI X Charts & Data Grid
-- 🔄 Redux Toolkit
-- 🌐 React Router v7
+- React (Vite)
+- Material UI (MUI)
+- Day.js
+- MUI X Charts & Data Grid
+- Redux Toolkit
+- React Router v7
 
 ### Backend
 
-- 🟢 Node.js + Express.js
-- 🐘 PostgreSQL + Sequelize ORM
-- 🔑 JWT (with HTTP-only cookies)
-- 📧 Brevo (for mailing)
-- 🔐 bcryptjs (password hashing)
+- Node.js + Express.js
+- PostgreSQL + Sequelize ORM
+- JWT (with HTTP-only cookies)
+- Brevo (for mailing)
+- bcryptjs (password hashing)
 
 ### Dev Tools
 
 Nodemon, ESLint, Prettier, PgAdmin, Postman
 
-## 🌐 Deployment
+## Deployment
 
 - Frontend (Vercel): [https://zeno-finance-tracker-client.vercel.app](https://zeno-finance-tracker-client.vercel.app)
 - Backend (Render): [https://zeno-backend-uf2p.onrender.com](https://zeno-backend-uf2p.onrender.com/)
 - Database (Neon): PostgreSQL hosted on Neon
 - Mailing Service: Brevo
 
-## ⚡ Getting Started
+## Getting Started
 
-### 1️⃣ Clone the repo
+### Clone the repo
 ```
 git clone https://github.com/[username]/Zeno.git
 cd Zeno
 ```
 
-### 2️⃣ Backend Setup
+### Backend Setup
 ```
 cd backend
 npm install
@@ -72,7 +72,7 @@ npm install
 Create a .env file based on .env.example:
 ```
 # ==========================
-# 🌱 Development Environment
+# Development Environment
 # ==========================
 PORT=5000
 NODE_ENV=development
@@ -96,7 +96,7 @@ BREVO_API_KEY=your_brevo_api_key
 
 
 # ==========================
-# 🚀 Production Environment
+# Production Environment
 # ==========================
 PORT=8080
 NODE_ENV=production
@@ -125,7 +125,7 @@ npm run dev   # for development
 npm start     # for production
 ```
 
-### 3️⃣ Frontend Setup
+### Frontend Setup
 
 ```
 cd frontend
@@ -134,7 +134,7 @@ npm run dev   # development
 npm run build # production build
 ```
 
-## 📊 Database
+## Database
 
 PostgreSQL managed with Sequelize ORM. You can manage your database visually with PgAdmin. Supports models for:
 
@@ -147,27 +147,5 @@ PostgreSQL managed with Sequelize ORM. You can manage your database visually wit
 - Category
 - Budget
 - Account
-
-## 📂 Project Structure
-
-```
-📂 Zeno
-├─ backend
-│  ├─ package.json
-│  └─ src
-│     ├─ controllers
-│     ├─ db
-│     ├─ html
-│     ├─ middlewares
-│     ├─ models
-│     ├─ routes
-│     └─ utils
-└─ frontend
-   ├─ package.json
-   ├─ src
-   │  ├─ components
-   │  ├─ pages
-   │  └─ redux
-```
 
 ✨ Zeno Finance Tracker – helping you master your money.
