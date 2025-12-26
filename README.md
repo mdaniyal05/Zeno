@@ -1,6 +1,6 @@
 # Zeno Finance Tracker
 
-A Full Stack personal finance management application that helps individuals stay in control of their money.
+A Full Stack finance management application that helps individuals stay in control of their money.
 Track income, expenses, savings, budgets, and categories. All visualized through an interactive dashboard with charts.
 
 <hr style="border: 0; height: 2px; background: linear-gradient(to right, #FF6384, #36A2EB);" />
@@ -148,4 +148,4 @@ PostgreSQL managed with Sequelize ORM. You can manage your database visually wit
 - Budget
 - Account
 
-✨ Zeno Finance Tracker – helping you master your money.
+Zeno Finance Tracker helping you master your money.
